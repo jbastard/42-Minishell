@@ -30,6 +30,6 @@
 # include <term.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libft/includes/libft.h"
+# include "../libft/include/libft.h"
 
-# endif
+#endif

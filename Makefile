@@ -16,10 +16,10 @@ LIBFT_FILE	=	libft.a
 LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
 
 #SRCS FILES
-C_FILES		=	main.c \
+C_FILES		=	main.c
 
-SRC			=	$(addprefix $(SRC_DIR), $(C_FILE))
-OBJ			=	$(addprefix $(OBJ_DIR), $(C_FILE:.c=.o))
+SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
+OBJ			=	$(addprefix $(OBJ_DIR), $(C_FILES:.c=.o))
 
 #OBJ CREATION IN OBJ DIR
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
