@@ -2,7 +2,8 @@ NAME		= minishell
 
 #COMPILATION
 CC			= cc
-FLAGS		= -Wall -Wextra -Werror -lreadline -g
+CFLAGS		= -Wall -Wextra -Werror -g
+LFLAGS		= -lreadline
 
 #FILES DIRECTORIES
 SRC_DIR		=	srcs/
@@ -19,33 +20,32 @@ LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
 C_FILES		=	main.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
-OBJ			=	$(addprefix $(OBJ_DIR), $(C_FILES:.c=.o))
+OBJS		=	$(addprefix $(OBJS_DIR), $(C_FILES:.c=.o))
 
 #OBJ CREATION IN OBJ DIR
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(FLAG) -c $< -o $@
+$(OBJS_DIR)%.o: $(SRC_DIR)%.c
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 all : $(NAME)
 
 #CLONE AND MAKE LIBFT
 $(LIBFT_LIB):
 	@if [ ! -d "$(LIBFT_PATH)" ]; then \
-		git clone $(LIBFT_GIT) $(LIBFT_PATH) ${SILENT};\
+		git clone $(LIBFT_GIT) $(LIBFT_PATH); \
 	fi
-	@make -C $(LIBFT_PATH) ${SILENT}
+	@make -C $(LIBFT_PATH)
 
-$(NAME): $(LIBFT_LIB) $(OBJ)
-	@$(CC) $(FLAGS) $(OBJ) $(LIBFT_LIB) -o $(NAME)
+$(NAME): $(LIBFT_LIB) $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME) $(LFLAGS)
 
 clean :
 	rm -rf $(OBJS_DIR)
-	make clean -C $(LIBFT_PATH) ${SILENT}
+	rm -rf $(LIBFT_PATH)
 
-fclean :
+fclean : clean
 	rm -f $(NAME)
 	rm -rf $(OBJS_DIR)
-	rm -rf $(LIBFT_PATH)
 
 re : fclean all
 
