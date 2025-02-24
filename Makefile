@@ -12,6 +12,7 @@ OBJS_DIR	=	objs/
 CORE_DIR	=	core/
 ERROR_DIR	=	error/
 PARSING_DIR	=	parsing/
+BUILT-IN_DIR=	built-in/
 
 #LIBFT
 LIBFT_GIT	=	https://github.com/jbastard/42-Libft.git
@@ -23,7 +24,8 @@ LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
 C_FILES		=	$(CORE_DIR)main.c \
 				$(ERROR_DIR)error_handler.c \
 				$(PARSING_DIR)signal_handler.c \
-
+				$(PARSING_DIR)cmd_parsing.c \
+				$(BUILT-IN_DIR)echo.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))
