@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/24 07:51:28 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/02/24 08:31:35 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	sig_handler(int signum)
 		rl_clear_visible_line();;
 		rl_redisplay();
 	}
+	else
+		printf("%d\n", signum);
 }
 
 int		main(int ac, char **av, char **envp)

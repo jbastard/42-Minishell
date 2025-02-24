@@ -23,11 +23,14 @@ C_FILES		=	$(CORE_DIR)main.c \
 				$(ERROR_DIR)error_handler.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
-OBJS		=	$(addprefix $(OBJS_DIR), $(C_FILES:.c=.o))
+OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))
 
 $(OBJS_DIR)%.o: $(SRC_DIR)%.c | $(OBJS_DIR)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR):
+	@mkdir -p $(OBJS_DIR)
 
 all : $(NAME)
 
