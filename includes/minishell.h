@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/24 11:42:20 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:36:27 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,15 @@
 # define PROMPT "minishell> "
 
 //ERROR
-	//ERROR_HANDLER
+	//ERROR_HANDLER.C
 void 	exit_error(char *source);
 
 //PARSING
-	//SIGNAL_HANDLER
+	//SIGNAL_HANDLER.C
 void	sig_handler();
 void 	do_nothing(int signal);
 void 	ctrl_c(int signal);
+	//CMD_PARSING.C
+char*	get_cmd(char **envp);
 
 #endif
