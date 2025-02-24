@@ -9,6 +9,8 @@ LFLAGS		= -lreadline
 SRC_DIR		=	srcs/
 INC_DIR		=	includes/
 OBJS_DIR	=	objs/
+CORE_DIR	=	core/
+ERROR_DIR	=	error/
 
 #LIBFT
 LIBFT_GIT	=	https://github.com/jbastard/42-Libft.git
@@ -17,14 +19,14 @@ LIBFT_FILE	=	libft.a
 LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
 
 #SRCS FILES
-C_FILES		=	main.c
+C_FILES		=	$(CORE_DIR)main.c \
+				$(ERROR_DIR)error_handler.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(addprefix $(OBJS_DIR), $(C_FILES:.c=.o))
 
-#OBJ CREATION IN OBJ DIR
-$(OBJS_DIR)%.o: $(SRC_DIR)%.c
-	@mkdir -p $(OBJS_DIR)
+$(OBJS_DIR)%.o: $(SRC_DIR)%.c | $(OBJS_DIR)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 all : $(NAME)

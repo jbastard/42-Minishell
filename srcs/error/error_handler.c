@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/22 20:55:01 by jbastard         ###   ########.fr       */
+/*   Created: 2025/02/24 07:52:57 by jbastard          #+#    #+#             */
+/*   Updated: 2025/02/24 07:58:55 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include <stdio.h>
+#include "../../includes/minishell.h"
 
-int main(void)
+void 	exit_error(char *source)
 {
-	printf("Test des branches");
+	perror(source);
+	exit(EXIT_FAILURE);
 }
