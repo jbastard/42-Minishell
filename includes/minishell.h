@@ -36,7 +36,7 @@
 
 //ERROR
 	//ERROR_HANDLER.C
-void 	exit_error(char *source);
+void 	exit_error(char *source, int isper, int isexit);
 
 //PARSING
 	//SIGNAL_HANDLER.C

@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/24 12:39:08 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:24:43 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		main(int ac, char **av, char **envp)
 	{
 		input = get_cmd(envp);
 		if (!input)
-			return (printf("exit\n"), exit(1), 0);
+			exit_error("", 0, 0);
 		free(input);
 	}
 }
