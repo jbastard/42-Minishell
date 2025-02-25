@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/25 16:40:54 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:46:02 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,35 @@
 # define NAME "minishell"
 
 typedef struct s_minishell t_minishell;
+typedef struct s_builtin t_builtin;
+typedef struct s_cmd t_cmd;
+typedef struct s_var t_var;
 
-typedef struct s_builtin {
+struct s_builtin {
 	char	*cmd_name;
 	int		(*cmd)(char **, t_minishell *);
 	int		size;
-}	t_builtin;
+};
 
-typedef struct s_var {
+struct	s_var {
 	char			*name;
 	char			*value;
 	struct s_var	*next;
-} t_var;
+};
 
-struct s_minishell {
+struct	s_minishell {
 	t_builtin	*builtins;
 	t_var		*local_vars;
+	t_cmd		*cmd;
 	char		**env;
 	char		*prompt;
+};
+
+struct	s_cmd {
+	int		id;
+	char	*cmd_path;
+	char	**args;
+	t_cmd	*next;
 };
 
 //ERROR
