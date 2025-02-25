@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_parsing.c                                      :+:      :+:    :+:   */
+/*   utils0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 12:34:15 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/25 16:33:06 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/02/25 16:35:38 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/02/25 16:37:09 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	update_prompt(t_minishell *main)
+int	count_args(char **args)
 {
-	char	buffer[PATH_MAX];
-	if (main->prompt)
-		free(main->prompt);
-	getcwd(buffer, PATH_MAX);
-	main->prompt = ft_strjoin(buffer, ">");
+	int	i = 0, count = 0;
+	while (args[i])
+	{
+		i++;
+		count++;
+	}
+	return (count);
 }
 
-char	*get_cmd(t_minishell *main)
+void	free_tab(char **tabl)
 {
-	char	*line;
-	
-	// update_prompt(main);
-	line = readline(main->prompt);
-	return (line);
+	int	i;
+
+	i = 0;
+	while (tabl[i])
+	{
+		free(tabl[i]);
+		i++;
+	}
+	free(tabl);
 }

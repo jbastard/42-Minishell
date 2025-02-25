@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 11:58:57 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/25 15:08:30 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/02/25 12:15:00 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/02/25 15:08:56 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	echo_command(char **args, t_minishell *main)
+int	exit_command(char **args, t_minishell *main)
 {
-	int	newl;
-	int	i;
+	int				words;
+	int				i;
 
 	(void)main;
-	newl = 1;
 	i = 0;
-	if (!(ft_strncmp(args[i], "-n", 2)))
+	words = count_args(args);
+	if (words == 0)
+		exit_error("", 0, 0);
+	if (words >= 1)
 	{
-		newl = 0;
-		i++;
+		while (args[0][i])
+		{
+			if (ft_isalpha(args[0][i++]))
+				exit_error("bash: exit: numeric argument required\n", 0, 2);
+		}
 	}
-	while (args[i])
-	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (newl)
-		printf("\n");
+	if (words == 1)
+		exit_error("", 0, (unsigned char)ft_atoi(args[0]));
+	if (words >= 2)
+			exit_error("exit\nbash: exit: too many arguments\n", 0, -1);
 	return (0);
 }
