@@ -5,3 +5,5 @@ Juste zap les parties que to connais deja mais dans l'idée ca eclaire sur les b
 
 Le valgrind rc permet de supprimer les leaks de read_line, attention grep leak aussi faudra pas se laisser avoir
 pour utiliser cest juste : valgrind ./minishell dans le repo avec le .valgrindrc
+
+acess pour verifier la prescence du binaire 
