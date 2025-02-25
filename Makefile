@@ -33,21 +33,20 @@ SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))
 
 $(OBJS_DIR)%.o: $(SRC_DIR)%.c
-	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 all : $(NAME)
 
-#CLONE AND MAKE LIBFT
 $(LIBFT_LIB):
-	make -C $(LIBFT_PATH)
+	@make -C $(LIBFT_PATH)
 
 $(NAME): $(LIBFT_LIB) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME) $(LFLAGS)
 
 clean :
-	rm -rf $(OBJS_DIR)
-	make fclean -C $(LIBFT_PATH)
+	@rm -rf $(OBJS_DIR)
+	@make fclean -C $(LIBFT_PATH)
 
 fclean : clean
 	rm -f $(NAME)

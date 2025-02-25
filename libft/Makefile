@@ -10,12 +10,9 @@ REMOVE			= rm -f
 
 #visual
 MAKEFLAGS		+= --no-print-directory
-
 RM_LINE			= @tput cuu1 && tput el
-SLEEP 			= sleep 0.02
-
-DEF_COLOR		= \033[0;39m
 GREEN			= \033[0;92m
+DEF_COLOR		= \033[0;39m
 
 FILES =	\
 		${FT_PRINTF_PATH}ft_dprintf.c \
@@ -87,7 +84,7 @@ clean:
 	@echo "Cleaning libft objects"
 	@${REMOVE} ${OFILES}
 
-fclean: 
+fclean:
 	@echo "Removing ${NAME} and dependencies"
 	@${REMOVE} ${OFILES}
 	@${REMOVE} ${NAME}
