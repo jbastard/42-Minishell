@@ -25,7 +25,7 @@ char	*get_cmd(t_minishell *main)
 {
 	char	*line;
 	
-	// update_prompt(main);
+	update_prompt(main);
 	line = readline(main->prompt);
 	return (line);
 }
