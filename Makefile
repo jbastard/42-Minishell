@@ -5,6 +5,9 @@ CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g
 LFLAGS		= -lreadline
 
+#VISUAL
+MAKEFLAGS		+= --no-print-directory
+
 #FILES DIRECTORIES
 SRC_DIR		=	srcs/
 INC_DIR		=	includes/
@@ -29,29 +32,25 @@ C_FILES		=	$(CORE_DIR)main.c \
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))
 
-$(OBJS_DIR)%.o: $(SRC_DIR)%.c | $(OBJS_DIR)
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR):
-	@mkdir -p $(OBJS_DIR)
+$(OBJS_DIR)%.o: $(SRC_DIR)%.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 all : $(NAME)
 
 #CLONE AND MAKE LIBFT
 $(LIBFT_LIB):
-	@make -C $(LIBFT_PATH)
+	make -C $(LIBFT_PATH)
 
 $(NAME): $(LIBFT_LIB) $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME) $(LFLAGS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_LIB) -o $(NAME) $(LFLAGS)
 
 clean :
 	rm -rf $(OBJS_DIR)
-	make clean -C $(LIBFT_PATH)
+	make fclean -C $(LIBFT_PATH)
 
 fclean : clean
 	rm -f $(NAME)
-	rm -rf $(OBJS_DIR)
 
 re : fclean all
 
