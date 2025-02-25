@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_parsing.c                                      :+:      :+:    :+:   */
+/*   handle_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 12:34:15 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/25 16:33:06 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/02/25 16:39:38 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/02/25 16:40:16 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	update_prompt(t_minishell *main)
+void	handle_commands(char **args, t_minishell *main)
 {
-	char	buffer[PATH_MAX];
-	if (main->prompt)
-		free(main->prompt);
-	getcwd(buffer, PATH_MAX);
-	main->prompt = ft_strjoin(buffer, ">");
-}
+	int	i;
 
-char	*get_cmd(t_minishell *main)
-{
-	char	*line;
-	
-	// update_prompt(main);
-	line = readline(main->prompt);
-	return (line);
+	i = 0;
+	while (main->builtins[i].cmd_name)
+	{
+		if (!ft_strncmp(main->builtins[i].cmd_name, args[0], main->builtins[i].size))
+			main->builtins[i].cmd(args + 1, main);
+		i++;
+	}
 }

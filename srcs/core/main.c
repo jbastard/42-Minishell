@@ -3,28 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/24 15:24:43 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:43:28 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		main(int ac, char **av, char **envp)
+int	main()
 {
-	char	*input;
-
-	(void)av;
-	(void)ac;
-	(void)envp;
+	char		*line;
+	t_minishell	main;
+	
+	main = init_minishell();
 	sig_handler();
-	while (1)
+	while(1)
 	{
-		input = get_cmd(envp);
-		if (!input)
-			exit_error("", 0, 0);
-		free(input);
+		line = get_cmd(&main);
+		if (!line)
+			break ;
+		if (line[0] != 0)
+			add_history(line);
+		handle_commands(ft_split(line, ' '), &main);
+		free(line);
 	}
+	rl_clear_history();
 }
