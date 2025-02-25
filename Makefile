@@ -15,7 +15,6 @@ PARSING_DIR	=	parsing/
 BUILT-IN_DIR=	built-in/
 
 #LIBFT
-LIBFT_GIT	=	https://github.com/jbastard/42-Libft.git
 LIBFT_PATH	=	libft/
 LIBFT_FILE	=	libft.a
 LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
@@ -41,9 +40,6 @@ all : $(NAME)
 
 #CLONE AND MAKE LIBFT
 $(LIBFT_LIB):
-	@if [ ! -d "$(LIBFT_PATH)" ]; then \
-		git clone $(LIBFT_GIT) $(LIBFT_PATH); \
-	fi
 	@make -C $(LIBFT_PATH)
 
 $(NAME): $(LIBFT_LIB) $(OBJS)
@@ -51,7 +47,7 @@ $(NAME): $(LIBFT_LIB) $(OBJS)
 
 clean :
 	rm -rf $(OBJS_DIR)
-	rm -rf $(LIBFT_PATH)
+	make clean -C $(LIBFT_PATH)
 
 fclean : clean
 	rm -f $(NAME)
