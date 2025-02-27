@@ -15,7 +15,7 @@ OBJS_DIR	=	objs/
 CORE_DIR	=	core/
 ERROR_DIR	=	error/
 PARSING_DIR	=	parsing/
-BUILT-IN_DIR=	built-in/
+BUILT-IN_DIR=	built_in/
 UTILS_DIR	=	utils/
 EXEC_DIR	=	exec/
 

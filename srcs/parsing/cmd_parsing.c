@@ -6,47 +6,65 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 12:34:15 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/25 17:59:24 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:48:21 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void 	append_nodes(t_cmd *cmd)
+void	split_into_toks(t_minishell *mnsl, char *line)
 {
 
-}
+	int	i;
+	int q_temp;
+	int q_flag;
 
-/// transformer
-void 	parse_exec_cmd(char *line, t_minishell minishell)
-{
-	char	**split_line;
-	t_cmd	*cmd_list;
-
-	cmd_list = malloc(sizeof (t_cmd));
-	split_line = ft_ws_split(line);
-
-	while (split_line)
+	i = 0;
+	q_flag = 0;
+	while (line[i])
 	{
-		append_nodes(cmd_list, );
+		if (line[i] == '\'')
+			q_flag = SQUOTES;
+		if (line[i] == '"')
+			q_flag = DQUOTES;
+		q_temp = q_flag;
+		while (line[i] <= 32 && q_flag == 0)
+			i++;
+		while (line[i] > 32)
+			printf("%c", line[i]);
+		if (line[i] == '\'' && q_flag == SQUOTES)
+			q_flag = 0;
+		if (line[i] == '"' && q_flag == DQUOTES)
+			q_flag = 0;
 	}
 }
 
-void	update_prompt(t_minishell *main)
+void 	lex_line(t_minishell *mnsl, char *line)
 {
-	char	buffer[PATH_MAX];
-	if (main->prompt)
-		free(main->prompt);
-	getcwd(buffer, PATH_MAX);
-	main->prompt = ft_strjoin(buffer, ">");
+	int		i;
+	char	**splited_line;
+
+	i = 0;
+	splited_line = split_cmd(line, mnsl);
+	while (splited_line[i])
+		printf("%s\n", splited_line[i++]);
 }
 
-char	*get_cmd(t_minishell *main)
+void	update_prompt(t_minishell *mnsl)
+{
+	char	buffer[PATH_MAX];
+	if (mnsl->prompt)
+		free(mnsl->prompt);
+	getcwd(buffer, PATH_MAX);
+	mnsl->prompt = ft_strjoin(buffer, ">");
+}
+
+char	*get_cmd(t_minishell *mnsl)
 {
 	char	*line;
 	
-	update_prompt(main);
-	line = readline(main->prompt);
+	update_prompt(mnsl);
+	line = readline(mnsl->prompt);
 	return (line);
 }
 

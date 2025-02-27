@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/25 17:46:02 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:38:26 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@
 # include "../libft/include/libft.h"
 
 # define NAME "minishell"
+# define SQUOTES '\''
+# define DQUOTES '"'
 
 typedef struct s_minishell t_minishell;
 typedef struct s_builtin t_builtin;
 typedef struct s_cmd t_cmd;
 typedef struct s_var t_var;
+typedef	struct s_token t_token;
 
 struct s_builtin {
 	char	*cmd_name;
