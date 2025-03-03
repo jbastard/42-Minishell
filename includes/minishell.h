@@ -38,6 +38,7 @@
 # define SQUOTES '\''
 # define DQUOTES '"'
 
+
 typedef struct s_minishell t_minishell;
 typedef struct s_builtin t_builtin;
 typedef struct s_cmd t_cmd;
