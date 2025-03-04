@@ -18,6 +18,7 @@ PARSING_DIR	=	parsing/
 BUILT-IN_DIR=	built_in/
 UTILS_DIR	=	utils/
 EXEC_DIR	=	exec/
+LEXING_DIR	=	lexing/
 
 #LIBFT
 LIBFT_PATH	=	libft/
@@ -31,6 +32,8 @@ C_FILES		=	$(CORE_DIR)main.c \
 				$(ERROR_DIR)error_handler.c \
 				$(PARSING_DIR)signal_handler.c \
 				$(PARSING_DIR)cmd_parsing.c \
+				$(LEXING_DIR)line_lexer.c \
+				$(LEXING_DIR)utils_lexer.c \
 				$(BUILT-IN_DIR)cd.c \
 				$(BUILT-IN_DIR)echo.c \
 				$(BUILT-IN_DIR)env.c \

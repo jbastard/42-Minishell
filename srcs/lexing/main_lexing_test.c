@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_lexing_test.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 11:02:28 by jbastard         ###   ########.fr       */
+/*   Created: 2025/03/04 10:46:20 by jbastard          #+#    #+#             */
+/*   Updated: 2025/03/04 10:47:36 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,11 @@ void    print_tokens(t_token *tokens)
 	}
 }
 
-int	main()
+int main(void)
 {
-	char		*line;
-	t_minishell	main;
-	t_token *tokens;
+	char    *input = "echo \'Path: $HOME\'";
+	t_token *tokens = lexer(input);
 
-	main = init_minishell();
-	sig_handler();
-	while(1)
-	{
-		line = get_cmd(&main);
-		if (!line) {
-			break ;
-		}
-		if (line[0] != 0) {
-			add_history(line);
-		}
-
-		/// l output du lexer renvoie donc une pointeur vers la liste chainee comprenant chaque token, on doit
-		/// integrer le parsing pour recuperer et comparer les commande pour reagir en consequences.
-		tokens = lexer(line);
-		print_tokens(tokens);
-
-		handle_commands(ft_split(line, ' '), &main);
-		free(line);
-	}
-	rl_clear_history();
+	print_tokens(tokens);
+	return (0);
 }

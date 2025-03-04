@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/26 15:38:26 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:11:11 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,22 @@
 # define NAME "minishell"
 # define SQUOTES '\''
 # define DQUOTES '"'
-
+#define TOKEN_WORD 1
+#define TOKEN_PIPE 2
+#define TOKEN_REDIR 3
+#define TOKEN_ENV_VAR 4
+#define TOKEN_HEREDOC 5
+#define TOKEN_APPEND  6
+#define TOKEN_SINGLE_QUOTED 7
+#define TOKEN_DOUBLE_QUOTED 8
+#define TOKEN_SEMICOLON 9
 
 typedef struct s_minishell t_minishell;
+
 typedef struct s_builtin t_builtin;
 typedef struct s_cmd t_cmd;
 typedef struct s_var t_var;
 typedef	struct s_token t_token;
-
 struct s_builtin {
 	char	*cmd_name;
 	int		(*cmd)(char **, t_minishell *);
@@ -60,17 +68,27 @@ struct	s_var {
 struct	s_minishell {
 	t_builtin	*builtins;
 	t_var		*local_vars;
-	t_cmd		*cmd;
+	t_token		*tokens;
 	char		**env;
 	char		*prompt;
 };
 
-struct	s_cmd {
-	int		id;
-	char	*cmd_path;
-	char	**args;
-	t_cmd	*next;
-};
+typedef struct s_token
+{
+	char            *value;
+	int             type;
+	struct s_token  *next;
+}               t_token;
+
+typedef struct s_lexer
+{
+	const char  *input;
+	t_token     *tokens;
+	char        buffer[1024];
+	int         i;
+	int         j;
+	char        quote;
+} t_lexer;
 
 //ERROR
 	//ERROR_HANDLER.C
@@ -110,9 +128,25 @@ t_builtin	*init_builtins(void);
 	//UTILS0.C
 int		count_args(char **args);
 void	free_tab(char **tabl);
+int		is_special_char(char c);
+int 	is_whitespaces(char c);
 
 //EXEC
 	//HANDLE_COMMANDS.C
 void	handle_commands(char **args, t_minishell *main);
+
+//LEXING
+	//LINE_LEXER.C
+t_token *new_token(char *value, int type);
+void 	add_token(t_token **head, char *value, int type);
+void 	handle_buffer(t_lexer	*lexer);
+void 	init_lexer(t_lexer *lexer, const char *input);
+t_token	*lexer(char *input);
+	//UTILS_LEXER.C
+void 	handle_env_var(t_lexer *lexer);
+void 	handle_single_quotes(t_lexer *lexer);
+void 	handle_double_quotes(t_lexer *lexer);
+void 	handle_special_char(t_lexer *lexer);
+void 	handle_double_char_op(t_lexer *lexer);
 
 #endif

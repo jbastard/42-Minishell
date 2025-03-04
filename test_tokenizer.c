@@ -6,11 +6,11 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 09:22:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/03 13:13:46 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:58:00 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "/includes/minishell.h"
 
 #define TOKEN_WORD 1
 #define TOKEN_PIPE 2
@@ -100,23 +100,27 @@ void 	add_token(t_token **head, char *value, int type)
 ///On ajoute $ au buffer puis on recupere les charactere suivant (alnum ou _) pour les ajouter au buffer
 void handle_env_var(t_lexer *lexer)
 {
-	if (lexer->j > 0)
-	{
-		lexer->buffer[lexer->j] = '\0';
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
-		lexer->j = 0;
-	}
-	lexer->buffer[lexer->j++] = '$';
-	while (lexer->input[lexer->i + 1]
-			&& (ft_isalnum(lexer->input[lexer->i + 1])
-			|| lexer->input[lexer->i + 1] == '_'))
-		lexer->buffer[lexer->j++] = lexer->input[++lexer->i];
+	char	var_name[1024];
+	char 	*env_value;
+	int		k;
+
+		k = 0;
+	lexer->i++;
+	if (ft_isdigit(lexer->input[lexer->i] || lexer->input[lexer->i] == '?'))
+		var_name[k++] = lexer->input[lexer->i++];
+	else
+		while (ft_isalnum(lexer->input[lexer->i])
+				|| lexer->input[lexer->i] == ' ')
+			var_name[k++] = lexer->input[lexer->i++];
 	lexer->buffer[lexer->j] = '\0';
-	add_token(&(lexer->tokens), lexer->buffer, TOKEN_ENV_VAR);
-	lexer->j = 0;
+	env_value = getenv(var_name);
+	if (env_value)
+		while (*env_value)
+			lexer->buffer[lexer->j++] = *env_value++;
 }
 
-///@brief On traite ici les single quotes on rempli le buffer avec tout les charactere qui suivent la quote jusqu a celle d apres
+///@brief On traite ici les single quotes on rempli le buffer
+/// avec tout les charactere qui suivent la quote jusqu a celle d apres
 /// on saute la quote d ouverture et de fermeture
 void 	handle_single_quotes(t_lexer *lexer)
 {
@@ -124,16 +128,17 @@ void 	handle_single_quotes(t_lexer *lexer)
 	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\'')
 		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	if (lexer->input[lexer->i] != '\'')
-		printf("Appliquer la gestion d erreur pour les s_quotes non fermees\n");
+		ft_dprintf(STDERR_FILENO, "Appliquer la gestion d erreur pour les d_quotes non fermees\n");
 	else
 		lexer->i++;
 	lexer->buffer[lexer->j] = '\0';
-	add_token(&(lexer->tokens), lexer->buffer, TOKEN_SINGLE_QUOTED);
+	add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
 	lexer->j = 0;
 }
 
 ///@brief de la meme maniere que pour les simples on rempli le buffer avec le contenu entre les quotes
-/// Ici on traite les variables d environnement (comme en bash) en l identifiant avec le $
+/// Ici on traite les variables d environnement (comme en bash) en l identifiant avec le $ elles sont directement
+/// traduites et ajoutee
 void 	handle_double_quotes(t_lexer *lexer)
 {
 	lexer->i++;
@@ -145,8 +150,8 @@ void 	handle_double_quotes(t_lexer *lexer)
 			lexer->buffer[lexer->j++] = lexer->input[lexer->i];
 		lexer->i++;
 	}
-	if (lexer->input[lexer->i] != '\'')
-		printf("Appliquer la gestion d erreur pour les d_quotes non fermees\n");
+	if (lexer->input[lexer->i] != '\"')
+		ft_dprintf(STDERR_FILENO, "Appliquer la gestion d erreur pour les d_quotes non fermees\n");
 	else
 		lexer->i++;
 	lexer->buffer[lexer->j] = '\0';
@@ -278,7 +283,7 @@ void    print_tokens(t_token *tokens)
 
 int main(void)
 {
-	char    *input = "echo \"Path: $PATH\"";
+	char    *input = "echo \'Path: $HOME\'";
 	t_token *tokens = lexer(input);
 
 	print_tokens(tokens);
