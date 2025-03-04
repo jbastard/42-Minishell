@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 10:45:07 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:32:20 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,19 @@ void 	handle_single_quotes(t_lexer *lexer)
 ///@brief de la meme maniere que pour les simples on rempli le buffer avec le contenu entre les quotes
 /// Ici on traite les variables d environnement (comme en bash) en l identifiant avec le $ elles sont directement
 /// traduites et ajoutee
-void 	handle_double_quotes(t_lexer *lexer)
+void handle_double_quotes(t_lexer *lexer)
 {
 	lexer->i++;
-	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\"')
+	while (lexer->input[lexer->i])
 	{
-		if (lexer->input[lexer->i] == '$')
+		if (lexer->input[lexer->i] == '\"')
+			return;
+		else if (lexer->input[lexer->i] == '$')
 			handle_env_var(lexer);
 		else
-			lexer->buffer[lexer->j++] = lexer->input[lexer->i];
-		lexer->i++;
+			lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	}
-	if (lexer->input[lexer->i] != '\"')
-		printf("Appliquer la gestion d erreur pour les d_quotes non fermees\n");
-	else
-		lexer->i++;
-	lexer->buffer[lexer->j] = '\0';
-	add_token(&(lexer->tokens), lexer->buffer, TOKEN_DOUBLE_QUOTED);
-	lexer->j = 0;
+	fprintf(stderr, "Quotes non fermees, mettre un msg d erreur\n");
 }
 
 ///@brief On rempli un token avec le contenu du buffer avant le charactere special

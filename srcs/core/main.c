@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 11:02:28 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:32:42 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void    print_tokens(t_token *tokens)
 			type_str = "DOUBLE_QUOTED";
 		else
 			type_str = "UNKNOWN";
-		printf("Token: %-10s | Type: %s\n", tokens->value, type_str);
+		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
 		tokens = tokens->next;
 	}
 }
@@ -45,7 +45,6 @@ int	main()
 {
 	char		*line;
 	t_minishell	main;
-	t_token *tokens;
 
 	main = init_minishell();
 	sig_handler();
@@ -61,8 +60,8 @@ int	main()
 
 		/// l output du lexer renvoie donc une pointeur vers la liste chainee comprenant chaque token, on doit
 		/// integrer le parsing pour recuperer et comparer les commande pour reagir en consequences.
-		tokens = lexer(line);
-		print_tokens(tokens);
+		main.tokens = lexer(line);
+		print_tokens(main.tokens);
 
 		handle_commands(ft_split(line, ' '), &main);
 		free(line);
