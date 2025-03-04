@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/04 11:11:11 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:25:12 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
 # define DQUOTES '"'
 #define TOKEN_WORD 1
 #define TOKEN_PIPE 2
-#define TOKEN_REDIR 3
-#define TOKEN_ENV_VAR 4
+#define TOKEN_REDIR_IN 3
+#define TOKEN_REDIR_OUT 4
 #define TOKEN_HEREDOC 5
 #define TOKEN_APPEND  6
 #define TOKEN_SINGLE_QUOTED 7

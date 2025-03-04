@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 11:32:20 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 12:13:45 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,11 @@ void 	handle_special_char(t_lexer *lexer)
 	if (lexer->input[lexer->i] == ';')
 		add_token(&(lexer->tokens), lexer->buffer, TOKEN_SEMICOLON);
 	else if (lexer->input[lexer->i] == '|')
-			add_token(&(lexer->tokens), lexer->buffer, TOKEN_PIPE);
-		else
-			add_token(&(lexer->tokens), lexer->buffer, TOKEN_REDIR);
+		add_token(&(lexer->tokens), lexer->buffer, TOKEN_PIPE);
+	else if (lexer->input[lexer->i] == '<')
+		add_token(&(lexer->tokens), lexer->buffer, TOKEN_REDIR_IN);
+	else if (lexer->input[lexer->i] == '>')
+		add_token(&(lexer->tokens), lexer->buffer, TOKEN_REDIR_OUT);
 }
 
 ///@brief L objectif est de gerer les heredoc et les append, pour cela on recupere la charactere special et
@@ -109,6 +111,9 @@ void handle_double_char_op(t_lexer *lexer)
 	else
 	{
 		buffer[1] = '\0';
-		add_token(&(lexer->tokens), buffer, TOKEN_REDIR);
+		if (lexer->input[lexer->i] == '<')
+			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
+		if (lexer->input[lexer->i] == '>')
+			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
 	}
 }
