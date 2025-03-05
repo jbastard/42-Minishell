@@ -68,8 +68,8 @@ char	**change_env(char *env, t_minishell *main)
 
 int	export_command(char	**args, t_minishell *main)
 {
-	if (!args[0] || !is_valid_identifier(args[0]))
-		return (ft_printf("export: not a valid identifier"));
+	// if (!args[0] || !is_valid_identifier(args[0]))
+	// 	return (printf("export: not a valid identifier"));
 	if (char_in(args[0], '='))
 	{
 		if (!check_env(args[0], main))

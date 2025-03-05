@@ -40,8 +40,8 @@ char	**ft_unset_env(char **env, char *var)
 
 int	unset_command(char **args, t_minishell *main)
 {
-	if (!args[0] || !is_valid_identifier(args[0]))
-		return (ft_printf("unset: not a valid identifier\n"));
+	// if (!args[0] || !is_valid_identifier(args[0]))
+	// 	return (printf("unset: not a valid identifier\n"));
 	if (check_env(args[0], main))
 		main->env = ft_unset_env(main->env, args[0]);
 	return (0);
