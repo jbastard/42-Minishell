@@ -1,42 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   mordex.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 15:10:06 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/03/05 14:08:06 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/05 14:14:53 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	main()
+int	mordex_command(char **args, t_minishell *main)
 {
-	char		*line;
-	t_minishell	main;
-	char		**temp;
-	
-	main = init_minishell();
-	sig_handler();
-	while(1)
+	(void)args;
+	(void)main;
+	int		fd;
+	char	*line;
+
+	fd = open(MORDEX_PATH, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
 	{
-		line = get_cmd(&main);
-		if (!line)
-			break ;
-		if (line[0] != 0)
-		{
-			add_history(line);
-			temp = ft_split(line, ' ');
-			handle_commands(temp, &main);
-			free_tab(temp);
-			free(line);
-		}
+		printf("%s", line);
+		line = get_next_line(fd);
 	}
-	free(line);
-	free(main.prompt);
-	free(main.builtins);
-	free_tab(main.env);
-	rl_clear_history();
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/25 16:40:54 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:18:30 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL
 
 # define _POSIX_C_SOURCE 200809L
+# define MORDEX_PATH "libft/src/ft_dprintf/mordex.txt"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -79,11 +80,13 @@ int		env_command(char **args, t_minishell *main);
 	//EXIT.C
 int		exit_command(char **args, t_minishell *main);
 	//EXPORT.C
-// int	export_command(char **args, t_minishell *main);
+int	export_command(char **args, t_minishell *main);
 	//PWD.C
 int		pwd_command(char **args, t_minishell *main);
 	//UNSET.C
-// int	unset_command(char **args, t_minishell *main);
+int	unset_command(char **args, t_minishell *main);
+	//MORDEX.C
+int	mordex_command(char **args, t_minishell *main);
 
 //CORE
 	//INIT.C
@@ -95,6 +98,8 @@ t_builtin	*init_builtins(void);
 	//UTILS0.C
 int		count_args(char **args);
 void	free_tab(char **tabl);
+int		check_env(char *env, t_minishell *main);
+int		len_equal(char	*env);
 
 //EXEC
 	//HANDLE_COMMANDS.C
