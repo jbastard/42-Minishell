@@ -143,10 +143,10 @@ void 	handle_buffer(t_lexer	*lexer);
 void 	init_lexer(t_lexer *lexer, const char *input);
 t_token	*lexer(char *input);
 	//UTILS_LEXER.C
+void 	add_redirection_token(t_lexer *lexer, char c);
 void 	handle_env_var(t_lexer *lexer);
 void 	handle_single_quotes(t_lexer *lexer);
 void 	handle_double_quotes(t_lexer *lexer);
-void 	handle_special_char(t_lexer *lexer);
-void 	handle_double_char_op(t_lexer *lexer);
+void 	handle_special_char_op(t_lexer *lexer);
 
 #endif

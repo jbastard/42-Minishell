@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 12:13:45 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:41:46 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,52 +68,42 @@ void handle_double_quotes(t_lexer *lexer)
 	fprintf(stderr, "Quotes non fermees, mettre un msg d erreur\n");
 }
 
-///@brief On rempli un token avec le contenu du buffer avant le charactere special
-/// ensuite on place le charactere dans un token separe
-void 	handle_special_char(t_lexer *lexer)
+void 	add_redirection_token(t_lexer *lexer, char c)
 {
-	if (lexer->j > 0)
-	{
-		lexer->buffer[lexer->j] = '\0';
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
-		lexer->j = 0;
-	}
-	lexer->buffer[0] = lexer->input[lexer->i];
-	lexer->buffer[1] = '\0';
-	if (lexer->input[lexer->i] == ';')
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_SEMICOLON);
-	else if (lexer->input[lexer->i] == '|')
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_PIPE);
-	else if (lexer->input[lexer->i] == '<')
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_REDIR_IN);
-	else if (lexer->input[lexer->i] == '>')
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_REDIR_OUT);
-}
-
-///@brief L objectif est de gerer les heredoc et les append, pour cela on recupere la charactere special et
-/// si le charactere suivant n est pas le meme on traite le char actuel comme une redirection on le stock dans le buffer
-void handle_double_char_op(t_lexer *lexer)
-{
-	char	c = lexer->input[lexer->i];
-	char 	buffer[3];
+	char buffer[3];
 
 	buffer[0] = c;
+	buffer[1] = '\0';
+	buffer[2] = '\0';
 	if (lexer->input[lexer->i + 1] == c)
 	{
 		buffer[1] = c;
-		buffer[2] = '\0';
 		lexer->i++;
-		if (lexer->input[lexer->i] == '<')
+		if (c == '<')
 			add_token(&(lexer->tokens), buffer, TOKEN_HEREDOC);
-		else
+		else if (c == '>')
 			add_token(&(lexer->tokens), buffer, TOKEN_APPEND);
 	}
 	else
 	{
-		buffer[1] = '\0';
-		if (lexer->input[lexer->i] == '<')
+		if (c == '<')
 			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
-		if (lexer->input[lexer->i] == '>')
+		else if (c == '>')
 			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
+		else if (c == '|')
+					add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 	}
+	lexer->i++;
+}
+
+///@brief L objectif est de gerer les heredoc et les append, pour cela on recupere la charactere special et
+/// si le charactere suivant n est pas le meme on traite le char actuel comme une redirection on le stock dans le buffer
+void handle_special_char_op(t_lexer *lexer)
+{
+	char	c;
+
+	if (lexer->j > 0)
+		handle_buffer(lexer);
+	c = lexer->input[lexer->i];
+	add_redirection_token(lexer, c);
 }

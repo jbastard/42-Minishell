@@ -19,7 +19,7 @@ int is_whitespaces(char c)
 
 int	is_special_char(char c)
 {
-	return (c == '|' || c == '<' || c == '>' || c == ';');
+	return (c == '|' || c == '<' || c == '>');
 }
 
 int	count_args(char **args)

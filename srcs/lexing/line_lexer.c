@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 12:16:37 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:29:21 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,16 @@ t_token	*lexer(char *input)
 			handle_single_quotes(&lexer);
 		else if (lexer.input[lexer.i] == '\"')
 			handle_double_quotes(&lexer);
-		else if ((lexer.input[lexer.i] == '<'
-			  || lexer.input[lexer.i] == '>') && !lexer.quote)
-			handle_double_char_op(&lexer);
-		else if (is_special_char(lexer.input[lexer.i]) && !lexer.quote)
-			handle_special_char(&lexer);
+		else if (is_special_char(lexer.input[lexer.i])&& !lexer.quote)
+			handle_special_char_op(&lexer);
 		else if (lexer.input[lexer.i] == '$' && !lexer.quote)
 			handle_env_var(&lexer);
 		else if (is_whitespaces(lexer.input[lexer.i]) && !lexer.quote)
 			handle_buffer(&lexer);
-		else
+		if (!is_whitespaces(lexer.input[lexer.i])
+				&& !is_special_char(lexer.input[lexer.i])
+				&& lexer.input[lexer.i] != '\"'
+				&& lexer.input[lexer.i] != '\'')
 			lexer.buffer[lexer.j++] = lexer.input[lexer.i];
 		lexer.i++;
 	}
