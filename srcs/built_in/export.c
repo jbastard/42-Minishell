@@ -12,23 +12,70 @@
 
 #include "../../includes/minishell.h"
 
-// int	find_env_var(char **env, const char *var)
-// {
-// 	int i;
-// 	size_t len;
+char	**ft_realloc_env(char **args, char *env)
+{
+	int		count;
+	char	**new;
+	int		i1;
+	int		i2;
 
-// 	i = 0;
-// 	len = strlen(var);
-// 	while (env[i])
-// 	{
-// 		if ((!ft_strncmp(env[i], var, len))&& env[i][len] == '=')
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (-1);
-// }
+	count = count_args(args);
+	new = malloc(sizeof(char *) * (count + 2));
+	i1 = 0;
+	while (args[i1])
+	{
+		new[i1] = ft_strdup(args[i1]);
+		i1++;
+	}
+	i2 = 0;
+	new[i1] = ft_strdup(env);
+	new[i1 + 1] = NULL;
+	free_tab(args);
+	return (new);
+}
 
-// char	**ft_export(char **args, t_minishell *main)
-// {
+int	char_in(char *str, char c)
+{
+	int	i;
 
-// }
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	**change_env(char *env, t_minishell *main)
+{
+	int	i;
+
+	i = 0;
+	while (main->env[i])
+	{
+		if (!ft_strncmp(env, main->env[i], len_equal(env)))
+		{
+			free(main->env[i]);
+			main->env[i] = ft_strdup(env);
+			return (main->env);
+		}
+		i++;
+	}
+	return (main->env);
+}
+
+int	export_command(char	**args, t_minishell *main)
+{
+	// if (!args[0] || !is_valid_identifier(args[0]))
+	// 	return (printf("export: not a valid identifier"));
+	if (char_in(args[0], '='))
+	{
+		if (!check_env(args[0], main))
+			main->env = ft_realloc_env(main->env, args[0]);
+		else
+			main->env = change_env(args[0], main);
+	}
+	return (0);
+}

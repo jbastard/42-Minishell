@@ -41,6 +41,7 @@ C_FILES		=	$(CORE_DIR)main.c \
 				$(BUILT-IN_DIR)export.c \
 				$(BUILT-IN_DIR)pwd.c \
 				$(BUILT-IN_DIR)unset.c \
+				$(BUILT-IN_DIR)mordex.c \
 				$(UTILS_DIR)utils0.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))

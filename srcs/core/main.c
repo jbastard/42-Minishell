@@ -6,7 +6,11 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/04 12:34:52 by jbastard         ###   ########.fr       */
+=======
+/*   Updated: 2025/03/04 15:10:06 by nlecreux         ###   ########.fr       */
+>>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +51,12 @@ int	main()
 {
 	char		*line;
 	t_minishell	main;
+<<<<<<< HEAD
 
+=======
+	char		**temp;
+	
+>>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 	main = init_minishell();
 	sig_handler();
 	while(1)
@@ -55,6 +64,7 @@ int	main()
 		line = get_cmd(&main);
 		if (!line) {
 			break ;
+<<<<<<< HEAD
 		}
 		if (line[0] != 0) {
 			add_history(line);
@@ -67,6 +77,20 @@ int	main()
 
 //		handle_commands(ft_split(line, ' '), &main);
 		free(line);
+=======
+		if (line[0] != 0)
+		{
+			add_history(line);
+			temp = ft_split(line, ' ');
+			handle_commands(temp, &main);
+			free_tab(temp);
+			free(line);
+		}
+>>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 	}
+	free(line);
+	free(main.prompt);
+	free(main.builtins);
+	free_tab(main.env);
 	rl_clear_history();
 }

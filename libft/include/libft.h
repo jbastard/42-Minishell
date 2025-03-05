@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:00:11 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/25 12:59:01 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:39:08 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # include <fcntl.h>
 
 # include "ft_dprintf.h"
+# include "get_next_line.h"
 
 typedef struct s_list
 {
