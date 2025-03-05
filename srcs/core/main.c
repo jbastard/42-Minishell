@@ -6,11 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/04 12:34:52 by jbastard         ###   ########.fr       */
-=======
-/*   Updated: 2025/03/04 15:10:06 by nlecreux         ###   ########.fr       */
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
+/*   Updated: 2025/03/05 15:54:17 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,43 +46,26 @@ void    print_tokens(t_token *tokens)
 int	main()
 {
 	char		*line;
-	t_minishell	main;
-<<<<<<< HEAD
-
-=======
 	char		**temp;
-	
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
+	t_minishell	main;
+
 	main = init_minishell();
 	sig_handler();
 	while(1)
 	{
 		line = get_cmd(&main);
-		if (!line) {
+		if (!line)
 			break ;
-<<<<<<< HEAD
-		}
-		if (line[0] != 0) {
-			add_history(line);
-		}
-
-		/// l output du lexer renvoie donc une pointeur vers la liste chainee comprenant chaque token, on doit
-		/// integrer le parsing pour recuperer et comparer les commande pour reagir en consequences.
-		main.tokens = lexer(line);
-		print_tokens(main.tokens);
-
-//		handle_commands(ft_split(line, ' '), &main);
-		free(line);
-=======
 		if (line[0] != 0)
 		{
 			add_history(line);
+			main.tokens = lexer(line);
+			print_tokens(main.tokens);
 			temp = ft_split(line, ' ');
 			handle_commands(temp, &main);
 			free_tab(temp);
 			free(line);
 		}
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 	}
 	free(line);
 	free(main.prompt);

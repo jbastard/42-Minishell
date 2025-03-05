@@ -6,11 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/04 12:25:12 by jbastard         ###   ########.fr       */
-=======
-/*   Updated: 2025/03/05 14:18:30 by nlecreux         ###   ########.fr       */
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
+/*   Updated: 2025/03/05 15:53:48 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,13 +131,10 @@ t_builtin	*init_builtins(void);
 	//UTILS0.C
 int		count_args(char **args);
 void	free_tab(char **tabl);
-<<<<<<< HEAD
 int		is_special_char(char c);
 int 	is_whitespaces(char c);
-=======
 int		check_env(char *env, t_minishell *main);
 int		len_equal(char	*env);
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 
 //EXEC
 	//HANDLE_COMMANDS.C

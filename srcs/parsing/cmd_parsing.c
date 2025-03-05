@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 12:34:15 by jbastard          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/04 10:57:06 by jbastard         ###   ########.fr       */
-=======
-/*   Updated: 2025/03/04 15:07:23 by nlecreux         ###   ########.fr       */
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
+/*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
+/*   Updated: 2025/03/05 15:56:21 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-<<<<<<< HEAD
-void	update_prompt(t_minishell *mnsl)
-{
-	char	buffer[PATH_MAX];
-	if (mnsl->prompt)
-		free(mnsl->prompt);
-	getcwd(buffer, PATH_MAX);
-	mnsl->prompt = ft_strjoin(buffer, ">");
-=======
 int	count_chars_tab(char **tabl)
 {
 	int	count;
@@ -85,20 +72,14 @@ void	update_prompt(t_minishell *main)
 	else
 		main->prompt = ft_strjoin(buffer, "> ");
 	free_tab(temp);
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 }
 
 char	*get_cmd(t_minishell *mnsl)
 {
 	char	*line;
-	
-<<<<<<< HEAD
+
 	update_prompt(mnsl);
 	line = readline(mnsl->prompt);
-=======
-	update_prompt(main);
-	line = readline(main->prompt);
->>>>>>> ccd702188509158dda85c6eb911d41d2cfb05e18
 	return (line);
 }
 
