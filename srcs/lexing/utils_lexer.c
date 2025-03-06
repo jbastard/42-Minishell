@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/05 12:41:46 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:35:09 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 	buffer[0] = c;
 	buffer[1] = '\0';
 	buffer[2] = '\0';
-	if (lexer->input[lexer->i + 1] == c)
+	if (lexer->input[lexer->i + 1] && lexer->input[lexer->i + 1] == c)
 	{
 		buffer[1] = c;
 		lexer->i++;
@@ -91,9 +91,8 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 		else if (c == '>')
 			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
 		else if (c == '|')
-					add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
+			add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 	}
-	lexer->i++;
 }
 
 ///@brief L objectif est de gerer les heredoc et les append, pour cela on recupere la charactere special et

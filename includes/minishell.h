@@ -147,6 +147,7 @@ void 	add_token(t_token **head, char *value, int type);
 void 	handle_buffer(t_lexer	*lexer);
 void 	init_lexer(t_lexer *lexer, const char *input);
 t_token	*lexer(char *input);
+void 	free_lexer(t_token *token);
 	//UTILS_LEXER.C
 void 	add_redirection_token(t_lexer *lexer, char c);
 void 	handle_env_var(t_lexer *lexer);

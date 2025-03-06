@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/05 12:29:21 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:36:23 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_token	*lexer(char *input)
 			handle_single_quotes(&lexer);
 		else if (lexer.input[lexer.i] == '\"')
 			handle_double_quotes(&lexer);
-		else if (is_special_char(lexer.input[lexer.i])&& !lexer.quote)
+		else if (is_special_char(lexer.input[lexer.i]) && !lexer.quote)
 			handle_special_char_op(&lexer);
 		else if (lexer.input[lexer.i] == '$' && !lexer.quote)
 			handle_env_var(&lexer);
@@ -102,4 +102,20 @@ t_token	*lexer(char *input)
 	}
 	handle_buffer(&lexer);
 	return (lexer.tokens);
+}
+
+void 	free_lexer(t_token *token)
+{
+	t_token	*temp;
+
+	while (token->next)
+	{
+		if (token->value)
+			free(token->value);
+		temp = token;
+		if (token->next)
+			token = token->next;
+		free(temp);
+	}
+	free(token);
 }
