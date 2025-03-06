@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/06 15:35:09 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:12:31 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,26 @@ void handle_double_quotes(t_lexer *lexer)
 	fprintf(stderr, "Quotes non fermees, mettre un msg d erreur\n");
 }
 
+int 	is_multiple_chars(t_lexer *lexer, const char *line, char c)
+{
+	int i;
+
+	i = 0;
+	while (line[i] == c)
+		i++;
+	if (i > 2)
+	{
+		if (i == 3)
+			printf("minishell: syntax error near unexpected token `%c'\n", c);
+		else
+			printf("minishell: syntax "
+				   "error near unexpected token `%c%c'\n", c, c);
+		lexer->i += i;
+		return (0);
+	}
+	return (1);
+}
+
 void 	add_redirection_token(t_lexer *lexer, char c)
 {
 	char buffer[3];
@@ -75,6 +95,9 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 	buffer[0] = c;
 	buffer[1] = '\0';
 	buffer[2] = '\0';
+
+	if (!is_multiple_chars(lexer, lexer->input, c))
+		return ;
 	if (lexer->input[lexer->i + 1] && lexer->input[lexer->i + 1] == c)
 	{
 		buffer[1] = c;
