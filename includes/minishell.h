@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/05 15:53:48 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:13:18 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_token
 typedef struct s_lexer
 {
 	const char  *input;
+	size_t		input_len;
 	t_token     *tokens;
 	char        buffer[1024];
 	int         i;

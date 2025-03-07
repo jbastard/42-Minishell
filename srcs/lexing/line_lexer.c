@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/07 16:42:22 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:08:34 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void handle_buffer(t_lexer	*lexer)
 void init_lexer(t_lexer *lexer, const char *input)
 {
 	lexer->input = input;
+	lexer->input_len = ft_strlen(lexer->input);
 	lexer->tokens = NULL;
 	lexer->i = 0;
 	lexer->j = 0;
@@ -81,7 +82,7 @@ t_token	*lexer(char *input)
 	t_lexer lexer;
 
 	init_lexer(&lexer, input);
-	while (lexer.input[lexer.i])
+	while ((size_t)lexer.i < lexer.input_len)
 	{
 		if (lexer.input[lexer.i] == '\'')
 			handle_single_quotes(&lexer);
