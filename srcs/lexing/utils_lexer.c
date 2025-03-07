@@ -43,8 +43,8 @@ void 	handle_single_quotes(t_lexer *lexer)
 		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	if (lexer->input[lexer->i] != '\'')
 		printf("Appliquer la gestion d erreur pour les s_quotes non fermees\n");
-	else
-		lexer->i++;
+//	else
+//		lexer->i++;
 	lexer->buffer[lexer->j] = '\0';
 	add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
 	lexer->j = 0;
