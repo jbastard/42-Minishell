@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/06 17:12:31 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/08 14:56:16 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,14 @@ void handle_env_var(t_lexer *lexer)
 void 	handle_single_quotes(t_lexer *lexer)
 {
 	lexer->i++;
-	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\'')
-		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
-	if (lexer->input[lexer->i] != '\'')
-		printf("Appliquer la gestion d erreur pour les s_quotes non fermees\n");
-//	else
-//		lexer->i++;
-	lexer->buffer[lexer->j] = '\0';
-	add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
-	lexer->j = 0;
+	while (lexer->input[lexer->i])
+	{
+		if (lexer->input[lexer->i] == '\'')
+			return;
+		else
+			lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
+	}
+	fprintf(stderr, "Quotes non fermees, mettre un msg d erreur\n");
 }
 
 ///@brief de la meme maniere que pour les simples on rempli le buffer avec le contenu entre les quotes
@@ -82,7 +81,7 @@ int 	is_multiple_chars(t_lexer *lexer, const char *line, char c)
 		else
 			printf("minishell: syntax "
 				   "error near unexpected token `%c%c'\n", c, c);
-		lexer->i += i;
+		lexer->i += i - 1;
 		return (0);
 	}
 	return (1);
@@ -98,7 +97,7 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 
 	if (!is_multiple_chars(lexer, lexer->input, c))
 		return ;
-	if (lexer->input[lexer->i + 1] && lexer->input[lexer->i + 1] == c)
+	if (lexer->input[lexer->i + 1] == c)
 	{
 		buffer[1] = c;
 		lexer->i++;

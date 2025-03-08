@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/07 17:08:34 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:22:38 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,9 @@ void 	free_lexer(t_token *token)
 		if (token->value)
 			free(token->value);
 		temp = token;
-		if (token->next)
-			token = token->next;
+		token = token->next;
 		free(temp);
 	}
+	free(token->value);
 	free(token);
 }
