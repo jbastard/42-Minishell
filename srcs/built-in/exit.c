@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:15:00 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/05 14:17:27 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:14:08 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	exit_command(char **args, t_minishell *main)
 {
-	int				words;
-	int				i;
+	int	words;
+	int	i;
 
 	(void)main;
 	i = 0;
@@ -33,6 +33,6 @@ int	exit_command(char **args, t_minishell *main)
 	if (words == 1)
 		exit_error("", 0, (unsigned char)ft_atoi(args[0]));
 	if (words >= 2)
-			exit_error("exit\nbash: exit: too many arguments\n", 0, -1);
+		exit_error("exit\nbash: exit: too many arguments\n", 0, -1);
 	return (0);
 }

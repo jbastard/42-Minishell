@@ -25,8 +25,9 @@ LIBFT_FILE	=	libft.a
 LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
 
 #SRCS FILES
-C_FILES		=	$(CORE_DIR)main.c \
-				$(CORE_DIR)init.c \
+C_FILES		=	$(CORE_DIR)init.c \
+				$(CORE_DIR)main.c \
+				$(CORE_DIR)prompt.c \
 				$(EXEC_DIR)handle_commands.c \
 				$(ERROR_DIR)error_handler.c \
 				$(PARSING_DIR)signal_handler.c \
@@ -39,7 +40,8 @@ C_FILES		=	$(CORE_DIR)main.c \
 				$(BUILT-IN_DIR)pwd.c \
 				$(BUILT-IN_DIR)unset.c \
 				$(BUILT-IN_DIR)mordex.c \
-				$(UTILS_DIR)utils0.c
+				$(UTILS_DIR)utils0.c \
+				$(UTILS_DIR)utils1.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))

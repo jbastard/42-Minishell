@@ -1,55 +1,21 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 16:33:48 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/05 14:18:50 by nlecreux         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   init.c											 :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: nlecreux <nlecreux@student.42.fr>		  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/02/25 16:33:48 by nlecreux		  #+#	#+#			 */
+/*   Updated: 2025/03/05 16:49:11 by nlecreux		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_minishell	init_minishell(void)
-{
-	t_minishell	main;
-
-	main.builtins = init_builtins();
-	main.local_vars = NULL;
-	main.env = copy_env();
-	main.prompt = NULL;
-	return (main);
-}
-
-char	**copy_env(void)
-{
-	extern char	**environ;
-	int			i;
-	char		**new_env;
-
-	i = 0;
-	if (environ)
-	{
-		new_env = malloc(sizeof(char *) * (count_args(environ) + 1));
-		if (!new_env)
-			return (NULL);
-		while (environ[i])
-		{
-			new_env[i] = ft_strdup(environ[i]);
-			i++;
-		}
-		new_env[i] = NULL;
-		return (new_env);
-	}
-	return (NULL);
-}
-
 t_builtin	*init_builtins(void)
 {
 	t_builtin	*bi;
-	int	i;
+	int			i;
 
 	i = -1;
 	bi = malloc(9 * sizeof(t_builtin));
@@ -71,7 +37,66 @@ t_builtin	*init_builtins(void)
 	bi[6].cmd = exit_command;
 	bi[7].cmd_name = "mordex";
 	bi[7].cmd = mordex_command;
-	while (++i <= 7)
-		bi[i].size = ft_strlen(bi[i].cmd_name);
 	return (bi);
+}
+
+void	insert_sorted(t_env **sorted, t_env *new_node)
+{
+	t_env	*current;
+
+	if (!*sorted || ft_strncmp(new_node->key, (*sorted)->key,
+			len_equal(new_node->key)) < 0)
+	{
+		new_node->next = *sorted;
+		*sorted = new_node;
+		return ;
+	}
+	current = *sorted;
+	while (current->next && ft_strncmp(new_node->key, current->next->key,
+			len_equal(new_node->key)) > 0)
+		current = current->next;
+	new_node->next = current->next;
+	current->next = new_node;
+}
+
+void	sort_local_env(t_env **locals)
+{
+	t_env	*sorted;
+	t_env	*current;
+	t_env	*next;
+
+	sorted = NULL;
+	current = *locals;
+	while (current)
+	{
+		next = current->next;
+		insert_sorted(&sorted, current);
+		current = next;
+	}
+	*locals = sorted;
+}
+
+void	init_local_env(t_minishell *main)
+{
+	int	i;
+
+	i = 0;
+	while (main->env[i])
+	{
+		add_node_env(main->env[i], main);
+		i++;
+	}
+	sort_local_env(&(main->local_vars));
+}
+
+t_minishell	init_minishell(void)
+{
+	t_minishell	main;
+
+	main.builtins = init_builtins();
+	main.local_vars = NULL;
+	main.env = copy_env();
+	main.prompt = NULL;
+	init_local_env(&main);
+	return (main);
 }

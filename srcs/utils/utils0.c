@@ -6,15 +6,33 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:35:38 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/05 12:40:03 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:27:33 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+int	check_env(char *env, t_minishell *main)
+{
+	int	i;
+
+	i = 0;
+	while (main->env[i])
+	{
+		if (!ft_strncmp(env, main->env[i], len_equal(env)))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	count_args(char **args)
 {
-	int	i = 0, count = 0;
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
 	while (args[i])
 	{
 		i++;
@@ -36,18 +54,22 @@ void	free_tab(char **tabl)
 	free(tabl);
 }
 
-int	check_env(char *env, t_minishell *main)
+int	is_valid_identifier(const char *name)
 {
 	int	i;
 
 	i = 0;
-	while (main->env[i])
+	if (!name || !name[0])
+		return (0);
+	if (!(ft_isalpha(name[0]) || name[0] == '_'))
+		return (0);
+	while (name[i])
 	{
-		if (!ft_strncmp(env, main->env[i], len_equal(env)))
-			return (1);
+		if (!(ft_isalnum(name[i]) || name[i] == '_' || name[i] == '='))
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 int	len_equal(char	*env)
@@ -59,5 +81,3 @@ int	len_equal(char	*env)
 		i++;
 	return (i);
 }
-
-// int	is_valid_identifier()
