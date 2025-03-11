@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/08 15:19:08 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/11 14:16:11 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,27 @@ void    print_tokens(t_token *tokens)
 			type_str = "HEREDOC";
 		else if (tokens->type == TOKEN_APPEND)
 			type_str = "APPEND";
-		else if (tokens->type == TOKEN_SINGLE_QUOTED)
-			type_str = "SINGLE_QUOTED";
-		else if (tokens->type == TOKEN_DOUBLE_QUOTED)
-			type_str = "DOUBLE_QUOTED";
-		else if (tokens->type == TOKEN_SEMICOLON)
-			type_str = "SEMICOLON";
-		else
-			type_str = "UNKNOWN";
-		printf("Token: %-10s | Type: %s\n", tokens->value, type_str);
+		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
 		tokens = tokens->next;
+	}
+}
+
+void 	print_parse(t_cmd	*cmd)
+{
+	int i;
+	while (cmd)
+	{
+		i = 0;
+		while (cmd->cmd_args[i])
+			printf("Argument:   | %s\n", cmd->cmd_args[i++]);
+		while (cmd->redir)
+		{
+			printf("Redir type: | %d\n", cmd->redir->type);
+			printf("Redir file: | %s\n", cmd->redir->file);
+			cmd->redir = cmd->redir->next;
+		}
+		printf("-----------------------\n");
+		cmd = cmd->next;
 	}
 }
 
@@ -59,13 +70,12 @@ int	main()
 		if (line[0] != 0)
 		{
 			add_history(line);
-			main.tokens = lexer(line);
-			print_tokens(main.tokens);
+//			print_tokens(main.tokens);
+			print_parse(main.cmd);
 			temp = ft_split(line, ' ');
 			handle_commands(temp, &main);
+			free_parser(&main);
 			free_tab(temp);
-			if (main.tokens)
-				free_lexer(main.tokens);
 			free(line);
 		}
 	}

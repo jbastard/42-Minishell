@@ -6,80 +6,183 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/05 15:56:21 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/11 14:23:05 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_chars_tab(char **tabl)
+void 	init_cmd(t_cmd *new)
 {
-	int	count;
-	int	i;
+	new->cmd_args = NULL;
+	new->path = NULL;
+	new->redir = NULL;
+	new->fd_in = STDIN_FILENO;
+	new->fd_out = STDOUT_FILENO;
+	new->pipe[0] = -1;
+	new->pipe[1] = -1;
+	new->next = NULL;
+}
+
+int		is_redir(t_token *toks)
+{
+	if (toks->type != TOKEN_PIPE && toks->type != TOKEN_WORD)
+		return (1);
+	return (0);
+}
+
+void	add_redir(t_redir **head, int type, char *file)
+{
+	t_redir	*tmp;
+	t_redir	*new;
+
+	new = malloc(sizeof(t_redir));
+	new->type = type;
+	new->file = strdup(file);
+	new->next = NULL;
+	if (!*head)
+		*head = new;
+	else
+	{
+		tmp = *head;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
+int 	args_count(t_token *toks)
+{
+	int count;
+	t_token	*tmp;
 
 	count = 0;
-	i = 0;
-	while (tabl[i])
+	tmp = toks;
+	while (tmp && tmp->type != TOKEN_PIPE)
 	{
-		count += ft_strlen(tabl[i]);
-		i++;
+		if (is_redir(tmp))
+		{
+			if (!tmp->next || tmp->next->type != TOKEN_WORD)
+				return(printf("Syntax error: expected WORD after redir\n"), 0);
+			tmp = tmp->next->next;
+			continue;
+		}
+		else if (tmp->type == TOKEN_WORD)
+			count++;
+		tmp = tmp->next;
 	}
 	return (count);
 }
 
-char	*better_join(char **tabl, char sep)
+char 	**fill_args(t_token **toks)
 {
-	int		i1;
-	int		i2;
-	int		i3;
-	char	*new;
+	char	**args;
+	int 	argcount;
+	int		i;
 
-	i1 = 0;
-	i3 = 0;
-	new = malloc(count_chars_tab(tabl) + count_args(tabl));
-	while (tabl[i1])
+	i = 0;
+	argcount = args_count(*toks);
+	args = malloc(sizeof(char *) * (argcount + 1));
+	args[argcount] = NULL;
+	while (*toks && (*toks)->type == TOKEN_WORD && i < argcount)
 	{
-		i2 = 0;
-		while (tabl[i1][i2])
-			new[i3++] = tabl[i1][i2++];
-		if (tabl[i1 + 1])
-			new[i3++] = sep;
-		i1++;
+		args[i] = ft_strdup((*toks)->value);
+		*toks = (*toks)->next;
+		i++;
 	}
-	new[i3] = 0;
+	return (args);
+}
+
+t_cmd 	*create_cmd(t_token **toks)
+{
+	t_cmd	*new;
+
+	new = malloc(sizeof(t_cmd));
+	init_cmd(new);
+	new->cmd_args = fill_args(toks);
+	while (*toks && (*toks)->type != TOKEN_PIPE)
+	{
+		if (is_redir(*toks))
+		{
+			{
+				if (!(*toks)->next || (*toks)->next->type != TOKEN_WORD)
+					return (printf("Syntax error near redirection\n"), NULL);
+				add_redir(&(new->redir), (*toks)->type, (*toks)->next->value);
+				(*toks) = (*toks)->next->next;
+			}
+		}
+		else
+			(*toks) = (*toks)->next;
+	}
 	return (new);
 }
 
-void	update_prompt(t_minishell *main)
+void 	add_cmds(t_cmd	**head, t_token **toks)
 {
-	char	buffer[PATH_MAX];
-	char	**temp;
-	char	*temp2;
-	int		count;
-	
-	if (main->prompt)
-		free(main->prompt);
-	getcwd(buffer, PATH_MAX);
-	temp = ft_split(buffer, '/');
-	count = count_args(temp);
-	if (count > 2)
-	{
-		main->prompt = better_join(&temp[count - 2], '/');
-		temp2 = ft_strjoin(main->prompt, "> ");
-		free(main->prompt);
-		main->prompt = temp2;
-	}
+	t_cmd *new;
+	t_cmd *tmp;
+
+	new = create_cmd(toks);
+	if (!*head)
+		*head = new;
 	else
-		main->prompt = ft_strjoin(buffer, "> ");
-	free_tab(temp);
+	{
+		tmp = *head;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
 }
 
-char	*get_cmd(t_minishell *mnsl)
+t_cmd	*parse_tokens(t_minishell *main)
+{
+	t_cmd	*cmds;
+	t_token	*toks;
+
+	cmds = NULL;
+	toks = main->tokens;
+	while (toks)
+	{
+		add_cmds(&cmds, &toks);
+		if (toks && toks->type == TOKEN_PIPE)
+			toks = toks->next;
+	}
+	return (cmds);
+}
+
+void 	free_parser(t_minishell *main)
+{
+	t_cmd 	*ctmp;
+	t_redir	*rtmp;
+
+	while (main->cmd)
+	{
+		free_tab(main->cmd->cmd_args);
+		while (main->cmd->redir)
+		{
+			rtmp = main->cmd->redir;
+			free(main->cmd->redir->file);
+			main->cmd->redir = main->cmd->redir->next;
+			free(rtmp);
+		}
+		ctmp = main->cmd;
+		main->cmd = main->cmd->next;
+		free(ctmp);
+	}
+}
+
+char	*get_cmd(t_minishell *main)
 {
 	char	*line;
 
-	update_prompt(mnsl);
-	line = readline(mnsl->prompt);
+	update_prompt(main);
+	line = readline(main->prompt);
+	if (!line)
+		return (NULL);
+	main->line = line;
+	main->tokens = lexer(main->line);
+	main->cmd = parse_tokens(main);
+	free_lexer(main->tokens);
+	main->tokens = NULL;
 	return (line);
 }
-

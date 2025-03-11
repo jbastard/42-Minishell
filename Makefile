@@ -31,6 +31,7 @@ C_FILES		=	$(CORE_DIR)main.c \
 				$(EXEC_DIR)handle_commands.c \
 				$(ERROR_DIR)error_handler.c \
 				$(PARSING_DIR)signal_handler.c \
+				$(PARSING_DIR)prompt.c \
 				$(PARSING_DIR)cmd_parsing.c \
 				$(LEXING_DIR)line_lexer.c \
 				$(LEXING_DIR)utils_lexer.c \

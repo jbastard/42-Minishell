@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/07 17:13:18 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/10 10:37:38 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,37 @@
 # include "../libft/include/libft.h"
 
 # define NAME "minishell"
-# define SQUOTES '\''
-# define DQUOTES '"'
 #define TOKEN_WORD 1
 #define TOKEN_PIPE 2
 #define TOKEN_REDIR_IN 3
 #define TOKEN_REDIR_OUT 4
 #define TOKEN_HEREDOC 5
 #define TOKEN_APPEND  6
-#define TOKEN_SINGLE_QUOTED 7
-#define TOKEN_DOUBLE_QUOTED 8
-#define TOKEN_SEMICOLON 9
 
 typedef struct s_minishell t_minishell;
-
 typedef struct s_builtin t_builtin;
 typedef struct s_cmd t_cmd;
 typedef struct s_var t_var;
 typedef	struct s_token t_token;
+typedef struct s_redir t_redir;
+
+struct s_redir {
+	int		type;
+	char	*file;
+	int		fd;
+	t_redir	*next;
+};
+
+struct s_cmd {
+	char	**cmd_args;
+	char	*path;
+	t_redir	*redir;
+	int 	pipe[2];
+	int 	fd_in;
+	int 	fd_out;
+	t_cmd	*next;
+};
+
 struct s_builtin {
 	char	*cmd_name;
 	int		(*cmd)(char **, t_minishell *);
@@ -70,6 +83,8 @@ struct	s_minishell {
 	t_builtin	*builtins;
 	t_var		*local_vars;
 	t_token		*tokens;
+	t_cmd		*cmd;
+	char 		*line;
 	char		**env;
 	char		*prompt;
 };
@@ -103,6 +118,11 @@ void	do_nothing(int signal);
 void	ctrl_c(int signal);
 	//CMD_PARSING.C
 char	*get_cmd(t_minishell *main);
+void 	free_parser(t_minishell *main);
+	//PROMPT.c
+int		count_chars_tab(char **tabl);
+char	*better_join(char **tabl, char sep);
+void	update_prompt(t_minishell *main);
 
 //BUILT-INS
 	//CD.C
