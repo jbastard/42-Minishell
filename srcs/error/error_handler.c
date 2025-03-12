@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 07:52:57 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 15:56:16 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:33:09 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,17 @@ int		handle_error(t_minishell *main, t_error_type type, char *info)
 	if (type == ERR_SYNTAX)
 	{
 		ft_dprintf(2, "minishell:"
-					  " syntax error near unexpected token `%s'", info);
-		free_cmd(main->cmd);
+					  " syntax error near unexpected token `%s'\n", info);
+		main->last_status = 2;
 	}
-	return 0;
+	if (type == ERR_PIPE)
+	{
+		ft_dprintf(2, "minishell:"
+					  " syntax error near unexpected token `%s'", info);
+		main->last_status = 2;
+	}
+//	free_cmd(main->cmd);
+	return (main->last_status);
 }
 
 void 	exit_error(char *source, int isper, int exitcode)

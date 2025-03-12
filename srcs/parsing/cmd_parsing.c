@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 15:58:34 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:53:40 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,22 @@ int add_cmds(t_cmd	**head, t_token **toks)
 	return (1);
 }
 
+void 	care_about_pipes(t_minishell *main ,t_cmd *cmds, t_token *toks)
+{
+	t_token *tmp;
+
+	tmp = toks;
+	if (tmp->type == TOKEN_PIPE && cmds == NULL)
+		handle_error(main, ERR_SYNTAX, "|");
+	while (tmp->next)
+		tmp = tmp->next;
+	if (tmp->type == TOKEN_PIPE)
+		handle_error(main, ERR_SYNTAX, "newline");
+	if (tmp->type == TOKEN_PIPE)
+		if (!tmp->next || tmp->next->type == TOKEN_PIPE)
+			handle_error(main, ERR_SYNTAX, "|");
+}
+
 t_cmd	*parse_tokens(t_minishell *main)
 {
 	t_cmd	*cmds;
@@ -156,6 +172,7 @@ t_cmd	*parse_tokens(t_minishell *main)
 	toks = main->tokens;
 	while (toks)
 	{
+//		care_about_pipes(main, cmds, toks);
 		if (!add_cmds(&cmds, &toks))
 			return (NULL);
 		if (toks && toks->type == TOKEN_PIPE)
@@ -164,35 +181,13 @@ t_cmd	*parse_tokens(t_minishell *main)
 	return (cmds);
 }
 
-void 	free_parser(t_minishell *main)
-{
-	t_cmd 	*ctmp;
-	t_redir	*rtmp;
-
-	while (main->cmd)
-	{
-		free_tab(main->cmd->cmd_args);
-		while (main->cmd->redir)
-		{
-			rtmp = main->cmd->redir;
-			free(main->cmd->redir->file);
-			main->cmd->redir = main->cmd->redir->next;
-			free(rtmp);
-		}
-		ctmp = main->cmd;
-		main->cmd = main->cmd->next;
-		free(ctmp);
-	}
-}
-
 char	*get_cmd(t_minishell *main, char *line)
 {
 	main->line = line;
 	main->tokens = lexer(main->line);
 	main->cmd = parse_tokens(main);
+	free_lexer(main->tokens);
 	if (!main->cmd)
 		return (NULL);
-	free_lexer(main->tokens);
-	main->tokens = NULL;
 	return (line);
 }

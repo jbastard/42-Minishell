@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/12 12:37:43 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:13:10 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,6 @@ typedef struct s_lexer
 	int         j;
 	char        quote;
 } t_lexer;
-
-void 	free_parser(t_minishell *main);
 
 //ERROR
 	//ERROR_HANDLER.C

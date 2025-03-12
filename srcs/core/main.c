@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 16:03:52 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:11:23 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void    print_tokens(t_token *tokens)
 {
 	const char  *type_str;
 
-//	if (tokens) {
-//		printf("error parsing\n");
-//		return;
-//	}
+	if (tokens) {
+		printf("error parsing\n");
+		return;
+	}
 	while (tokens)
 	{
 		if (tokens->type == 1)

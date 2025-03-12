@@ -109,7 +109,7 @@ void 	free_lexer(t_token *token)
 {
 	t_token	*temp;
 
-	while (token->next)
+	while (token)
 	{
 		if (token->value)
 			free(token->value);
@@ -117,6 +117,5 @@ void 	free_lexer(t_token *token)
 		token = token->next;
 		free(temp);
 	}
-	free(token->value);
-	free(token);
+	token = NULL;
 }

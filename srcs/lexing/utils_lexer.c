@@ -117,8 +117,6 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 	}
 }
 
-///@brief L objectif est de gerer les heredoc et les append, pour cela on recupere la charactere special et
-/// si le charactere suivant n est pas le meme on traite le char actuel comme une redirection on le stock dans le buffer
 void handle_special_char_op(t_lexer *lexer)
 {
 	char	c;
