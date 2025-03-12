@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 11:25:31 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:49:27 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void    print_tokens(t_token *tokens)
 
 void 	print_parse(t_cmd	*cmd)
 {
-	printf("\n\n");
 	int i;
 	while (cmd)
 	{

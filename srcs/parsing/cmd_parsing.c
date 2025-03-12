@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 11:30:54 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:48:52 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	add_redir(t_redir **head, int type, char *file)
 	new = malloc(sizeof(t_redir));
 	new->type = type;
 	new->file = strdup(file);
-	printf("%s\n", new->file);
 	new->next = NULL;
 	if (!*head)
 		*head = new;
@@ -78,26 +77,28 @@ int 	args_count(t_token *toks)
 char 	**fill_args(t_token **toks)
 {
 	char	**args;
+	t_token *curr;
 	int 	argcount;
 	int		i;
 
 	i = 0;
 	argcount = args_count(*toks);
 	if (!argcount)
-		return (0);
+		return (NULL);
 	args = malloc(sizeof(char *) * (argcount + 1));
 	args[argcount] = NULL;
-	while (*toks && i < argcount)
+	curr = *toks;
+	while (curr && i < argcount)
 	{
-		if ((*toks)->next && (*toks)->next->type == TOKEN_WORD && is_redir(*toks))
+		if (curr->next && curr->next->type == TOKEN_WORD && is_redir(curr))
 		{
-			*toks = (*toks)->next->next;
-			if (!*toks)
+			curr = curr->next->next;
+			if (!curr)
 				break;
 		}
-		if ((*toks)->type == TOKEN_WORD)
-			args[i] = ft_strdup((*toks)->value);
-		*toks = (*toks)->next;
+		if (curr->type == TOKEN_WORD)
+			args[i] = ft_strdup(curr->value);
+		curr = curr->next;
 		i++;
 	}
 	return (args);
@@ -116,12 +117,10 @@ t_cmd 	*create_cmd(t_token **toks)
 	{
 		if (is_redir(*toks))
 		{
-			{
-				if (!(*toks)->next || (*toks)->next->type != TOKEN_WORD)
-					return (printf("Syntax error near redirection\n"), NULL);
-				add_redir(&(new->redir), (*toks)->type, (*toks)->next->value);
-				(*toks) = (*toks)->next->next;
-			}
+			if (!(*toks)->next || (*toks)->next->type != TOKEN_WORD)
+				return (printf("Syntax error near redirection\n"), NULL);
+			add_redir(&(new->redir), (*toks)->type, (*toks)->next->value);
+			(*toks) = (*toks)->next->next;
 		}
 		else
 			(*toks) = (*toks)->next;
