@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/11 14:16:11 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:25:31 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ void    print_tokens(t_token *tokens)
 {
 	const char  *type_str;
 
+	if (tokens) {
+		printf("error parsing");
+		return;
+	}
 	while (tokens)
 	{
 		if (tokens->type == 1)
@@ -37,6 +41,7 @@ void    print_tokens(t_token *tokens)
 
 void 	print_parse(t_cmd	*cmd)
 {
+	printf("\n\n");
 	int i;
 	while (cmd)
 	{
@@ -64,13 +69,15 @@ int	main()
 	sig_handler();
 	while(1)
 	{
-		line = get_cmd(&main);
+		update_prompt(&main);
+		line = readline(main.prompt);
 		if (!line)
 			break ;
 		if (line[0] != 0)
 		{
 			add_history(line);
-//			print_tokens(main.tokens);
+			get_cmd(&main, line);
+			print_tokens(main.tokens);
 			print_parse(main.cmd);
 			temp = ft_split(line, ' ');
 			handle_commands(temp, &main);

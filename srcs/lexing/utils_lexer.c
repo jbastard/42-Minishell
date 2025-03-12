@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/08 14:56:16 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:04:41 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,9 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 	else
 	{
 		if (c == '<')
-			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
-		else if (c == '>')
 			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
+		else if (c == '>')
+			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
 		else if (c == '|')
 			add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 	}

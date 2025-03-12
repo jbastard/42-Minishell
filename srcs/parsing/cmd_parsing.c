@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/11 14:23:05 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:30:54 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	add_redir(t_redir **head, int type, char *file)
 	new = malloc(sizeof(t_redir));
 	new->type = type;
 	new->file = strdup(file);
+	printf("%s\n", new->file);
 	new->next = NULL;
 	if (!*head)
 		*head = new;
@@ -63,7 +64,7 @@ int 	args_count(t_token *toks)
 		if (is_redir(tmp))
 		{
 			if (!tmp->next || tmp->next->type != TOKEN_WORD)
-				return(printf("Syntax error: expected WORD after redir\n"), 0);
+				return(0);
 			tmp = tmp->next->next;
 			continue;
 		}
@@ -82,11 +83,20 @@ char 	**fill_args(t_token **toks)
 
 	i = 0;
 	argcount = args_count(*toks);
+	if (!argcount)
+		return (0);
 	args = malloc(sizeof(char *) * (argcount + 1));
 	args[argcount] = NULL;
-	while (*toks && (*toks)->type == TOKEN_WORD && i < argcount)
+	while (*toks && i < argcount)
 	{
-		args[i] = ft_strdup((*toks)->value);
+		if ((*toks)->next && (*toks)->next->type == TOKEN_WORD && is_redir(*toks))
+		{
+			*toks = (*toks)->next->next;
+			if (!*toks)
+				break;
+		}
+		if ((*toks)->type == TOKEN_WORD)
+			args[i] = ft_strdup((*toks)->value);
 		*toks = (*toks)->next;
 		i++;
 	}
@@ -100,6 +110,8 @@ t_cmd 	*create_cmd(t_token **toks)
 	new = malloc(sizeof(t_cmd));
 	init_cmd(new);
 	new->cmd_args = fill_args(toks);
+	if (new->cmd_args == NULL)
+		return (NULL);
 	while (*toks && (*toks)->type != TOKEN_PIPE)
 	{
 		if (is_redir(*toks))
@@ -117,12 +129,14 @@ t_cmd 	*create_cmd(t_token **toks)
 	return (new);
 }
 
-void 	add_cmds(t_cmd	**head, t_token **toks)
+int add_cmds(t_cmd	**head, t_token **toks)
 {
 	t_cmd *new;
 	t_cmd *tmp;
 
 	new = create_cmd(toks);
+	if (!new)
+		return (0);
 	if (!*head)
 		*head = new;
 	else
@@ -132,6 +146,7 @@ void 	add_cmds(t_cmd	**head, t_token **toks)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
+	return (1);
 }
 
 t_cmd	*parse_tokens(t_minishell *main)
@@ -143,7 +158,8 @@ t_cmd	*parse_tokens(t_minishell *main)
 	toks = main->tokens;
 	while (toks)
 	{
-		add_cmds(&cmds, &toks);
+		if (!add_cmds(&cmds, &toks))
+			return (NULL);
 		if (toks && toks->type == TOKEN_PIPE)
 			toks = toks->next;
 	}
@@ -171,17 +187,13 @@ void 	free_parser(t_minishell *main)
 	}
 }
 
-char	*get_cmd(t_minishell *main)
+char	*get_cmd(t_minishell *main, char *line)
 {
-	char	*line;
-
-	update_prompt(main);
-	line = readline(main->prompt);
-	if (!line)
-		return (NULL);
 	main->line = line;
 	main->tokens = lexer(main->line);
 	main->cmd = parse_tokens(main);
+	if (!main->cmd)
+		return (NULL);
 	free_lexer(main->tokens);
 	main->tokens = NULL;
 	return (line);

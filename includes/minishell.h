@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/10 10:37:38 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:11:28 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	sig_handler();
 void	do_nothing(int signal);
 void	ctrl_c(int signal);
 	//CMD_PARSING.C
-char	*get_cmd(t_minishell *main);
+char	*get_cmd(t_minishell *main, char *line);
 void 	free_parser(t_minishell *main);
 	//PROMPT.c
 int		count_chars_tab(char **tabl);
