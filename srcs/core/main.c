@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 11:49:27 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 16:03:52 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void    print_tokens(t_token *tokens)
 {
 	const char  *type_str;
 
-	if (tokens) {
-		printf("error parsing");
-		return;
-	}
+//	if (tokens) {
+//		printf("error parsing\n");
+//		return;
+//	}
 	while (tokens)
 	{
 		if (tokens->type == 1)
@@ -42,19 +42,24 @@ void    print_tokens(t_token *tokens)
 void 	print_parse(t_cmd	*cmd)
 {
 	int i;
-	while (cmd)
+	t_cmd	*tmp;
+	t_redir	*tmpred;
+
+	tmp = cmd;
+	while (tmp)
 	{
 		i = 0;
-		while (cmd->cmd_args[i])
-			printf("Argument:   | %s\n", cmd->cmd_args[i++]);
-		while (cmd->redir)
+		while (tmp->cmd_args[i])
+			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
+		tmpred = tmp->redir;
+		while (tmpred)
 		{
-			printf("Redir type: | %d\n", cmd->redir->type);
-			printf("Redir file: | %s\n", cmd->redir->file);
-			cmd->redir = cmd->redir->next;
+			printf("Redir type: | %d\n", tmpred->type);
+			printf("Redir file: | %s\n", tmpred->file);
+			tmpred = tmpred->next;
 		}
 		printf("-----------------------\n");
-		cmd = cmd->next;
+		tmp = tmp->next;
 	}
 }
 
@@ -76,12 +81,12 @@ int	main()
 		{
 			add_history(line);
 			get_cmd(&main, line);
-			print_tokens(main.tokens);
+//			print_tokens(main.tokens);
 			print_parse(main.cmd);
 			temp = ft_split(line, ' ');
 			handle_commands(temp, &main);
-			free_parser(&main);
 			free_tab(temp);
+			free_cmd(main.cmd);
 			free(line);
 		}
 	}

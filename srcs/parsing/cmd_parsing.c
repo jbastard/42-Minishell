@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 11:48:52 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:58:34 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void 	init_cmd(t_cmd *new)
 {
+	new->redir = NULL;
+	new->next = NULL;
 	new->cmd_args = NULL;
 	new->path = NULL;
-	new->redir = NULL;
 	new->fd_in = STDIN_FILENO;
 	new->fd_out = STDOUT_FILENO;
 	new->pipe[0] = -1;
 	new->pipe[1] = -1;
-	new->next = NULL;
 }
 
 int		is_redir(t_token *toks)
@@ -37,8 +37,8 @@ void	add_redir(t_redir **head, int type, char *file)
 	t_redir	*new;
 
 	new = malloc(sizeof(t_redir));
-	new->type = type;
 	new->file = strdup(file);
+	new->type = type;
 	new->next = NULL;
 	if (!*head)
 		*head = new;
@@ -83,24 +83,23 @@ char 	**fill_args(t_token **toks)
 
 	i = 0;
 	argcount = args_count(*toks);
-	if (!argcount)
+	if (argcount == 0)
 		return (NULL);
 	args = malloc(sizeof(char *) * (argcount + 1));
-	args[argcount] = NULL;
 	curr = *toks;
-	while (curr && i < argcount)
+	while (curr && curr->type != TOKEN_PIPE && i < argcount)
 	{
-		if (curr->next && curr->next->type == TOKEN_WORD && is_redir(curr))
+		if (is_redir(curr))
 		{
 			curr = curr->next->next;
-			if (!curr)
-				break;
+			continue ;
 		}
 		if (curr->type == TOKEN_WORD)
-			args[i] = ft_strdup(curr->value);
+			args[i++] = ft_strdup(curr->value);
 		curr = curr->next;
-		i++;
 	}
+	args[i] = NULL;
+	*toks = curr;
 	return (args);
 }
 
@@ -112,13 +111,13 @@ t_cmd 	*create_cmd(t_token **toks)
 	init_cmd(new);
 	new->cmd_args = fill_args(toks);
 	if (new->cmd_args == NULL)
-		return (NULL);
+		return (free_cmd(new),NULL);
 	while (*toks && (*toks)->type != TOKEN_PIPE)
 	{
 		if (is_redir(*toks))
 		{
 			if (!(*toks)->next || (*toks)->next->type != TOKEN_WORD)
-				return (printf("Syntax error near redirection\n"), NULL);
+				return (free_cmd(new),NULL);
 			add_redir(&(new->redir), (*toks)->type, (*toks)->next->value);
 			(*toks) = (*toks)->next->next;
 		}

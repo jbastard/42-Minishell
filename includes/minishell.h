@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/12 11:11:28 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:37:43 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@
 # include "../libft/include/libft.h"
 
 # define NAME "minishell"
-#define TOKEN_WORD 1
-#define TOKEN_PIPE 2
-#define TOKEN_REDIR_IN 3
-#define TOKEN_REDIR_OUT 4
-#define TOKEN_HEREDOC 5
-#define TOKEN_APPEND  6
+//#define TOKEN_WORD 1
+//#define TOKEN_PIPE 2
+//#define TOKEN_REDIR_IN 3
+//#define TOKEN_REDIR_OUT 4
+//#define TOKEN_HEREDOC 5
+//#define TOKEN_APPEND  6
 
 typedef struct s_minishell t_minishell;
 typedef struct s_builtin t_builtin;
@@ -49,6 +49,31 @@ typedef struct s_cmd t_cmd;
 typedef struct s_var t_var;
 typedef	struct s_token t_token;
 typedef struct s_redir t_redir;
+
+typedef enum e_token_type
+{
+	TOKEN_EMPTY,
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_HEREDOC,
+	TOKEN_APPEND,
+}	t_token_type;
+
+typedef enum e_error_type
+{
+	ERR_NONE,
+	ERR_MALLOC,
+	ERR_SYNTAX,
+	ERR_CMD_NOT_FOUND,
+	ERR_PERMISSION_DENIED,
+	ERR_EXEC_FAIL,
+	ERR_EXIT,
+	ERR_SIGNAL,
+	ERR_PIPE,
+	ERR_REDIR,
+}	t_error_type;
 
 struct s_redir {
 	int		type;
@@ -87,6 +112,7 @@ struct	s_minishell {
 	char 		*line;
 	char		**env;
 	char		*prompt;
+	int			last_status;
 };
 
 typedef struct s_token
@@ -107,9 +133,14 @@ typedef struct s_lexer
 	char        quote;
 } t_lexer;
 
+void 	free_parser(t_minishell *main);
+
 //ERROR
 	//ERROR_HANDLER.C
 void 	exit_error(char *source, int isper, int isexit);
+int		handle_error(t_minishell *main, t_error_type type, char *info);
+void 	free_cmd(t_cmd *cmd);
+void 	free_redir(t_redir *redir);
 
 //PARSING
 	//SIGNAL_HANDLER.C
@@ -118,7 +149,6 @@ void	do_nothing(int signal);
 void	ctrl_c(int signal);
 	//CMD_PARSING.C
 char	*get_cmd(t_minishell *main, char *line);
-void 	free_parser(t_minishell *main);
 	//PROMPT.c
 int		count_chars_tab(char **tabl);
 char	*better_join(char **tabl, char sep);

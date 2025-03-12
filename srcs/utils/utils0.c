@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/05 15:56:41 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/12 15:29:30 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	free_tab(char **tabl)
 	int	i;
 
 	i = 0;
+	if (!tabl)
+		return ;
 	while (tabl[i])
 	{
 		free(tabl[i]);
