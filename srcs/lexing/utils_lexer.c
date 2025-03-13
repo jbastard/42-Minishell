@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/13 10:49:11 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:47:39 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,20 @@ void handle_double_quotes(t_lexer *lexer)
 	lexer->i++;
 }
 
+void	add_double_token(t_lexer *lexer, char c)
+{
+	if (c == '<')
+		add_token(&(lexer->tokens), "<<", TOKEN_HEREDOC);
+	else if (c == '>')
+			add_token(&(lexer->tokens), ">>", TOKEN_APPEND);
+	else if (c == '|')
+		{
+			add_token(&(lexer->tokens), "|", TOKEN_PIPE);
+			add_token(&(lexer->tokens), "|", TOKEN_PIPE);
+		}
+}
+
+
 void 	add_redirection_token(t_lexer *lexer, char c)
 {
 	char buffer[3];
@@ -76,23 +90,15 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 
 	if (lexer->input[lexer->i + 1] == c)
 	{
-		buffer[1] = c;
+		add_double_token(lexer, c);
 		lexer->i++;
-		if (c == '<')
-			add_token(&(lexer->tokens), buffer, TOKEN_HEREDOC);
-		else if (c == '>')
-			add_token(&(lexer->tokens), buffer, TOKEN_APPEND);
-		return;
 	}
-	else
-	{
-		if (c == '<')
-			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
-		else if (c == '>')
-			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
-		else if (c == '|')
-			add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
-	}
+	else if (c == '<')
+		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
+	else if (c == '>')
+		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
+	else if (c == '|')
+		add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 }
 
 void handle_special_char_op(t_lexer *lexer)
