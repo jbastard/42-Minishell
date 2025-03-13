@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/13 10:15:23 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:39:40 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,61 +73,6 @@ int 	args_count(t_token *toks)
 	}
 	return (count);
 }
-//
-//char 	**fill_args(t_token **toks)
-//{
-//	char	**args;
-//	t_token *curr;
-//	int 	argcount;
-//	int		i;
-//
-//	i = 0;
-//	argcount = args_count(*toks);
-//	if (argcount == 0)
-//		return (NULL);
-//	args = malloc(sizeof(char *) * (argcount + 1));
-//	curr = *toks;
-//	while (curr && curr->type != TOKEN_PIPE && i < argcount)
-//	{
-//		if (is_redir(curr))
-//		{
-//			curr = curr->next->next;
-//			continue ;
-//		}
-//		if (curr->type == TOKEN_WORD)
-//			args[i++] = ft_strdup(curr->value);
-//		curr = curr->next;
-//	}
-//	args[i] = NULL;
-//	*toks = curr;
-//	return (args);
-//}
-//
-//t_cmd 	*create_cmd(t_token **toks)
-//{
-//	t_cmd	*new;
-//
-//	new = malloc(sizeof(t_cmd));
-//	init_cmd(new);
-//	new->cmd_args = fill_args(toks);
-//	if (new->cmd_args == NULL)
-//		return (free_cmd(new),NULL);
-//	printf("token type %d\ntoken value %s\n", (*toks)->type, (*toks)->value);
-//	while (*toks && (*toks)->type != TOKEN_PIPE)
-//	{
-//		if (is_redir(*toks))
-//		{
-//			printf("OK\n");
-//			if (!(*toks)->next || (*toks)->next->type != TOKEN_WORD)
-//				return (free_cmd(new),NULL);
-//			add_redir(&(new->redir), (*toks)->type, (*toks)->next->value);
-//			(*toks) = (*toks)->next->next;
-//		}
-//		else
-//			(*toks) = (*toks)->next;
-//	}
-//	return (new);
-//}
 
 int	alloc_args(t_cmd *cmd, int argcount)
 {
@@ -207,22 +152,6 @@ int add_cmds(t_cmd	**head, t_token **toks)
 	return (1);
 }
 
-void 	care_about_pipes(t_minishell *main ,t_cmd *cmds, t_token *toks)
-{
-	t_token *tmp;
-
-	tmp = toks;
-	if (tmp->type == TOKEN_PIPE && cmds == NULL)
-		handle_error(main, ERR_SYNTAX, "|");
-	if (tmp->type == TOKEN_PIPE)
-		if (!tmp->next || tmp->next->type == TOKEN_PIPE)
-			handle_error(main, ERR_SYNTAX, "|");
-	while (tmp->next)
-		tmp = tmp->next;
-	if (tmp->type == TOKEN_PIPE)
-		handle_error(main, ERR_SYNTAX, "newline");
-}
-
 t_cmd	*parse_tokens(t_minishell *main)
 {
 	t_cmd	*cmds;
@@ -232,7 +161,6 @@ t_cmd	*parse_tokens(t_minishell *main)
 	toks = main->tokens;
 	while (toks)
 	{
-//		care_about_pipes(main, cmds, toks);
 		if (!add_cmds(&cmds, &toks))
 			return (NULL);
 		if (toks && toks->type == TOKEN_PIPE)
@@ -241,18 +169,42 @@ t_cmd	*parse_tokens(t_minishell *main)
 	return (cmds);
 }
 
-//int 	syntax_checker(t_token *toks)
-//{
-//	return (1);
-//}
+int 	check_pipes(t_token *toks)
+{
+	if (toks->type == TOKEN_PIPE
+		&& (!toks->next
+		|| toks->next->type == TOKEN_PIPE))
+	{
+		ft_dprintf(2,"minihell: syntax error: invalid pipe\n");
+		return (2);
+	}
+	return (0);
+}
+
+int 	syntax_checker(t_minishell *main)
+{
+	t_token *toks;
+
+	toks = main->tokens;
+	if (toks->type == TOKEN_PIPE)
+		main->last_status = ERR_SYNTAX;
+	while (toks)
+	{
+		main->last_status = check_pipes(toks);
+		if (main->last_status)
+			return (0);
+		toks = toks->next;
+	}
+	return (1);
+}
 
 char	*get_cmd(t_minishell *main, char *line)
 {
 	main->line = line;
-	main->tokens = lexer(line);
+	main->tokens = lexer(line, main);
 	print_tokens(main->tokens);
-//	if (!syntax_checker(main->tokens))
-//		return (free_lexer(main->tokens), NULL);
+	if (syntax_checker(main))
+		return (free_lexer(main->tokens), NULL);
 	main->cmd = parse_tokens(main);
 	free_lexer(main->tokens);
 	if (!main->cmd)

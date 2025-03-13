@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/13 10:49:38 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 10:49:11 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void 	handle_single_quotes(t_lexer *lexer)
 	if (lexer->input[lexer->i] != '\'')
 	{
 		ft_dprintf(2, "minihell: syntax error: unclosed single quote\n");
-		lexer->error = 1;
+		lexer->error = 2;
 		return;
 	}
 	lexer->i++;
@@ -60,7 +60,7 @@ void handle_double_quotes(t_lexer *lexer)
 	if (lexer->input[lexer->i] != '\"')
 	{
 		ft_dprintf(2, "minihell: syntax error: unclosed double quote\n");
-		lexer->error = 1;
+		lexer->error = 2;
 		return;
 	}
 	lexer->i++;

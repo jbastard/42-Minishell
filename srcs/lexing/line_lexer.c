@@ -6,19 +6,16 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/13 10:43:53 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:22:49 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-///attention comportement bizzard avec les messages d erreur jai pas encore compris pourquoi
-/// il faut les gerer pour exit en cas d erreur je pense que ca suffit
-
 ///@brief Allocation et initialisation d un nouveau token
 ///@param value Correspond a la valeur du token
 ///@param type Correspond au type de token (TOKEN_PIPE / TOKEN_REDIR /...)
-t_token *new_token(char *value, int type)
+t_token	*new_token(char *value, int type)
 {
 	t_token	*token;
 
@@ -37,7 +34,7 @@ t_token *new_token(char *value, int type)
 /// si celle-ci est vide le nouveau token devient la tete de liste
 ///@param head un pointeur vers la tete de liste
 /// on recupere @param value et @param type pour les envoyer dans new_token
-void 	add_token(t_token **head, char *value, int type)
+void	add_token(t_token **head, char *value, int type)
 {
 	t_token	*new;
 	t_token	*tmp;
@@ -57,7 +54,7 @@ void 	add_token(t_token **head, char *value, int type)
 }
 
 ///@brief remplir le token avec du texte apres avoir check tout les autres cas
-void handle_buffer(t_lexer	*lexer)
+void	handle_buffer(t_lexer	*lexer)
 {
 	if (lexer->j > 0)
 	{
@@ -67,7 +64,7 @@ void handle_buffer(t_lexer	*lexer)
 	}
 }
 
-void init_lexer(t_lexer *lexer, const char *input)
+void	init_lexer(t_lexer *lexer, const char *input)
 {
 	lexer->input = input;
 	lexer->input_len = ft_strlen(input);
@@ -78,9 +75,9 @@ void init_lexer(t_lexer *lexer, const char *input)
 	lexer->error = 0;
 }
 
-t_token	*lexer(char *line)
+t_token	*lexer(char *line, t_minishell *main)
 {
-	t_lexer lexer;
+	t_lexer	lexer;
 
 	init_lexer(&lexer, line);
 	while ((size_t)lexer.i < lexer.input_len)
@@ -99,13 +96,14 @@ t_token	*lexer(char *line)
 			lexer.buffer[lexer.j++] = lexer.input[lexer.i];
 		lexer.i++;
 	}
+	main->last_status = lexer.error;
 	if (lexer.error)
 		return (free_lexer(lexer.tokens), NULL);
 	handle_buffer(&lexer);
 	return (lexer.tokens);
 }
 
-void 	free_lexer(t_token *token)
+void	free_lexer(t_token *token)
 {
 	t_token	*temp;
 

@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:33:48 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/05 14:18:50 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:05:50 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_minishell	init_minishell(void)
 	main.local_vars = NULL;
 	main.env = copy_env();
 	main.prompt = NULL;
+	main.last_status = ERR_NONE;
 	return (main);
 }
 
