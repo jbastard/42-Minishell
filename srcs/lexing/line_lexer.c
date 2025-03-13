@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/08 15:22:38 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 10:43:53 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,19 @@ void handle_buffer(t_lexer	*lexer)
 void init_lexer(t_lexer *lexer, const char *input)
 {
 	lexer->input = input;
-	lexer->input_len = ft_strlen(lexer->input);
+	lexer->input_len = ft_strlen(input);
 	lexer->tokens = NULL;
 	lexer->i = 0;
 	lexer->j = 0;
 	lexer->quote = 0;
+	lexer->error = 0;
 }
 
-t_token	*lexer(char *input)
+t_token	*lexer(char *line)
 {
 	t_lexer lexer;
 
-	init_lexer(&lexer, input);
+	init_lexer(&lexer, line);
 	while ((size_t)lexer.i < lexer.input_len)
 	{
 		if (lexer.input[lexer.i] == '\'')
@@ -94,13 +95,12 @@ t_token	*lexer(char *input)
 			handle_env_var(&lexer);
 		else if (is_whitespaces(lexer.input[lexer.i]) && !lexer.quote)
 			handle_buffer(&lexer);
-		if (!is_whitespaces(lexer.input[lexer.i])
-				&& !is_special_char(lexer.input[lexer.i])
-				&& lexer.input[lexer.i] != '\"'
-				&& lexer.input[lexer.i] != '\'')
+		else if (!is_whitespaces(lexer.input[lexer.i]) && !lexer.quote)
 			lexer.buffer[lexer.j++] = lexer.input[lexer.i];
 		lexer.i++;
 	}
+	if (lexer.error)
+		return (free_lexer(lexer.tokens), NULL);
 	handle_buffer(&lexer);
 	return (lexer.tokens);
 }

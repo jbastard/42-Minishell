@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/12 16:13:10 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 10:42:46 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ typedef enum e_token_type
 	TOKEN_EMPTY,
 	TOKEN_WORD,
 	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_IN,
 	TOKEN_HEREDOC,
 	TOKEN_APPEND,
 }	t_token_type;
@@ -131,7 +131,10 @@ typedef struct s_lexer
 	int         i;
 	int         j;
 	char        quote;
+	int 		error;
 } t_lexer;
+
+void	print_tokens(t_token *toks);
 
 //ERROR
 	//ERROR_HANDLER.C
@@ -195,7 +198,7 @@ t_token *new_token(char *value, int type);
 void 	add_token(t_token **head, char *value, int type);
 void 	handle_buffer(t_lexer	*lexer);
 void 	init_lexer(t_lexer *lexer, const char *input);
-t_token	*lexer(char *input);
+t_token 	*lexer(char *line);
 void 	free_lexer(t_token *token);
 	//UTILS_LEXER.C
 void 	add_redirection_token(t_lexer *lexer, char c);

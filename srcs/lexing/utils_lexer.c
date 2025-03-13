@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 10:04:41 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 10:49:38 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void handle_env_var(t_lexer *lexer)
 
 	k = 0;
 	lexer->i++;
-	if (ft_isdigit(lexer->input[lexer->i] || lexer->input[lexer->i] == '?'))
+	if (lexer->input[lexer->i] == '?')
 		var_name[k++] = lexer->input[lexer->i++];
 	else
 		while (ft_isalnum(lexer->input[lexer->i])
-			   || lexer->input[lexer->i] == ' ')
+				|| lexer->input[lexer->i] == '_')
 			var_name[k++] = lexer->input[lexer->i++];
 	var_name[k] = '\0';
 	env_value = getenv(var_name);
@@ -33,58 +33,37 @@ void handle_env_var(t_lexer *lexer)
 			lexer->buffer[lexer->j++] = *env_value++;
 }
 
-///@brief On traite ici les single quotes on rempli le buffer
-/// avec tout les charactere qui suivent la quote jusqu a celle d apres
-/// on saute la quote d ouverture et de fermeture
 void 	handle_single_quotes(t_lexer *lexer)
 {
 	lexer->i++;
-	while (lexer->input[lexer->i])
+	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\'')
+		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
+	if (lexer->input[lexer->i] != '\'')
 	{
-		if (lexer->input[lexer->i] == '\'')
-			return;
-		else
-			lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
+		ft_dprintf(2, "minihell: syntax error: unclosed single quote\n");
+		lexer->error = 1;
+		return;
 	}
-	fprintf(stderr, "Quotes non fermees, mettre un msg d erreur\n");
+	lexer->i++;
 }
 
-///@brief de la meme maniere que pour les simples on rempli le buffer avec le contenu entre les quotes
-/// Ici on traite les variables d environnement (comme en bash) en l identifiant avec le $ elles sont directement
-/// traduites et ajoutee
 void handle_double_quotes(t_lexer *lexer)
 {
 	lexer->i++;
-	while (lexer->input[lexer->i])
+	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\"')
 	{
-		if (lexer->input[lexer->i] == '\"')
-			return;
-		else if (lexer->input[lexer->i] == '$')
+		if (lexer->input[lexer->i] == '$')
 			handle_env_var(lexer);
 		else
 			lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	}
-	fprintf(stderr, "Quotes non fermees, mettre un msg d erreur\n");
-}
-
-int 	is_multiple_chars(t_lexer *lexer, const char *line, char c)
-{
-	int i;
-
-	i = 0;
-	while (line[i] == c)
-		i++;
-	if (i > 2)
+	if (lexer->input[lexer->i] != '\"')
 	{
-		if (i == 3)
-			printf("minishell: syntax error near unexpected token `%c'\n", c);
-		else
-			printf("minishell: syntax "
-				   "error near unexpected token `%c%c'\n", c, c);
-		lexer->i += i - 1;
-		return (0);
+		ft_dprintf(2, "minihell: syntax error: unclosed double quote\n");
+		lexer->error = 1;
+		return;
 	}
-	return (1);
+	lexer->i++;
 }
 
 void 	add_redirection_token(t_lexer *lexer, char c)
@@ -95,8 +74,6 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 	buffer[1] = '\0';
 	buffer[2] = '\0';
 
-	if (!is_multiple_chars(lexer, lexer->input, c))
-		return ;
 	if (lexer->input[lexer->i + 1] == c)
 	{
 		buffer[1] = c;
@@ -105,6 +82,7 @@ void 	add_redirection_token(t_lexer *lexer, char c)
 			add_token(&(lexer->tokens), buffer, TOKEN_HEREDOC);
 		else if (c == '>')
 			add_token(&(lexer->tokens), buffer, TOKEN_APPEND);
+		return;
 	}
 	else
 	{

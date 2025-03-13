@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 16:11:23 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/13 10:18:20 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ void    print_tokens(t_token *tokens)
 {
 	const char  *type_str;
 
-	if (tokens) {
-		printf("error parsing\n");
-		return;
-	}
+//	if (tokens) {
+//		printf("error parsing\n");
+//		return;
+//	}
 	while (tokens)
 	{
-		if (tokens->type == 1)
+		if (tokens->type == TOKEN_WORD)
 			type_str = "WORD";
-		else if (tokens->type == 2)
+		else if (tokens->type == TOKEN_PIPE)
 			type_str = "PIPE";
 		else if (tokens->type == TOKEN_REDIR_IN)
 			type_str = "REDIRECTION_IN";
@@ -81,8 +81,7 @@ int	main()
 		{
 			add_history(line);
 			get_cmd(&main, line);
-//			print_tokens(main.tokens);
-			print_parse(main.cmd);
+//			print_parse(main.cmd);
 			temp = ft_split(line, ' ');
 			handle_commands(temp, &main);
 			free_tab(temp);
