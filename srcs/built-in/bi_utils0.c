@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:56:46 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/10 17:29:02 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:31:48 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,6 @@ void	add_node_env(char *env, t_minishell *main)
 			current = current->next;
 		current->next = new_node;
 	}
-}
-
-char	**copy_env(void)
-{
-	extern char	**environ;
-	int			i;
-	char		**new_env;
-
-	i = 0;
-	if (environ)
-	{
-		new_env = malloc(sizeof(char *) * (count_args(environ) + 1));
-		if (!new_env)
-			return (NULL);
-		while (environ[i])
-		{
-			new_env[i] = ft_strdup(environ[i]);
-			i++;
-		}
-		new_env[i] = NULL;
-		return (new_env);
-	}
-	return (NULL);
 }
 
 t_env	*create_env_node(char *env)
@@ -83,26 +60,6 @@ t_env	*create_env_node(char *env)
 	return (new_node);
 }
 
-char	**ft_realloc_tab(char **args, char *env)
-{
-	int		count;
-	char	**new;
-	int		i;
-
-	count = count_args(args);
-	new = malloc(sizeof(char *) * (count + 2));
-	i = 0;
-	while (args[i])
-	{
-		new[i] = ft_strdup(args[i]);
-		i++;
-	}
-	new[i] = ft_strdup(env);
-	new[i + 1] = NULL;
-	free_tab(args);
-	return (new);
-}
-
 void	print_locals(t_minishell *main)
 {
 	t_env	*test;
@@ -116,4 +73,22 @@ void	print_locals(t_minishell *main)
 			printf("declare -x %s\n", test->key);
 		test = test->next;
 	}
+}
+
+void	free_local_env(t_env **env)
+{
+	t_env	*temp;
+
+	if (!env || !*env)
+		return ;
+	while (*env)
+	{
+		temp = (*env)->next;
+		free((*env)->key);
+		if ((*env)->value)
+			free((*env)->value);
+		free(*env);
+		*env = temp;
+	}
+	*env = NULL;
 }

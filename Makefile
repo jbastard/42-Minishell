@@ -40,8 +40,9 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(BUILT-IN_DIR)pwd.c \
 				$(BUILT-IN_DIR)unset.c \
 				$(BUILT-IN_DIR)mordex.c \
-				$(UTILS_DIR)utils0.c \
-				$(UTILS_DIR)utils1.c
+				$(BUILT-IN_DIR)bi_utils0.c \
+				$(BUILT-IN_DIR)bi_utils1.c \
+				$(UTILS_DIR)utils0.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))

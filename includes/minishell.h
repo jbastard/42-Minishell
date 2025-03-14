@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/10 17:30:45 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:35:24 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,17 @@ int			mordex_command(char **args, t_minishell *main);
 int			pwd_command(char **args, t_minishell *main);
 	//UNSET.C
 int			unset_command(char **args, t_minishell *main);
+	//BI_UTILS0.C
+void		add_node_env(char *env, t_minishell *main);
+t_env		*create_env_node(char *env);
+void		print_locals(t_minishell *main);
+void		free_local_env(t_env **env);
+	//BI_UTILS1.C
+int			check_env(char *env, t_minishell *main);
+char		**ft_realloc_tab(char **args, char *env);
+int			is_valid_identifier(const char *name);
+int			len_equal(char	*env);
+char		**copy_env(void);
 
 //CORE
 	//INIT.C
@@ -113,16 +124,7 @@ int			is_builtin(t_builtin *builtins, char *cmd);
 
 //UTILS
 	//UTILS0.C
-int			check_env(char *env, t_minishell *main);
 int			count_args(char **args);
 void		free_tab(char **tabl);
-int			is_valid_identifier(const char *name);
-int			len_equal(char	*env);
-	//UTILS1.C
-void		add_node_env(char *env, t_minishell *main);
-char		**copy_env(void);
-t_env		*create_env_node(char *env);
-char		**ft_realloc_env(char **args, char *env);
-void		print_locals(t_minishell *main);
 
 #endif

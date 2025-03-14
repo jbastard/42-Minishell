@@ -96,7 +96,7 @@ int	export_command(char	**args, t_minishell *main)
 			if (ft_strchr(args[i], '='))
 			{
 				if (!check_env(args[i], main))
-					main->env = ft_realloc_env(main->env, args[i]);
+					main->env = ft_realloc_tab(main->env, args[i]);
 				else
 					main->env = change_env(args[i], main);
 			}

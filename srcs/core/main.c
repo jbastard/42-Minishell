@@ -6,29 +6,11 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/10 18:00:55 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:28:18 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	free_local_env(t_env **env)
-{
-	t_env	*temp;
-
-	if (!env || !*env)
-		return ;
-	while (*env)
-	{
-		temp = (*env)->next;
-		free((*env)->key);
-		if ((*env)->value)
-			free((*env)->value);
-		free(*env);
-		*env = temp;
-	}
-	*env = NULL;
-}
 
 int	main(void)
 {
