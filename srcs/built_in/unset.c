@@ -38,11 +38,46 @@ char	**ft_unset_env(char **env, char *var)
 	return (new_env);
 }
 
+void	remove_node_env(char *env, t_minishell *main)
+{
+	t_env	*current;
+	t_env	*prev;
+
+	current = main->local_vars;
+	prev = NULL;
+	while (current)
+	{
+		if (!ft_strncmp(current->key, env, ft_strlen(env)))
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				main->local_vars = current->next;
+			free(current->key);
+			if (current->value)
+				free(current->value);
+			free (current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
 int	unset_command(char **args, t_minishell *main)
 {
-	// if (!args[0] || !is_valid_identifier(args[0]))
-	// 	return (printf("unset: not a valid identifier\n"));
-	if (check_env(args[0], main))
-		main->env = ft_unset_env(main->env, args[0]);
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		if (!args[i] || !is_valid_identifier(args[i]))
+			return (printf("unset: not a valid identifier\n"));
+		if (check_env(args[i], main))
+			main->env = ft_unset_env(main->env, args[i]);
+		if (find_node_env(args[i], main))
+			remove_node_env(args[i], main);
+		i++;
+	}
 	return (0);
 }

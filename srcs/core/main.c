@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/14 15:26:48 by jbastard         ###   ########.fr       */
+/*   Created: 2025/03/14 16:14:08 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/14 16:14:38 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,35 +61,4 @@ void 	print_parse(t_cmd	*cmd)
 		printf("-----------------------\n");
 		tmp = tmp->next;
 	}
-}
-
-int	main()
-{
-	char		*line;
-	t_minishell	main;
-
-	main = init_minishell();
-	sig_handler();
-	while(1)
-	{
-		update_prompt(&main);
-		line = readline(main.prompt);
-		if (!line)
-			break ;
-		if (line[0] != 0)
-		{
-			add_history(line);
-			if (get_cmd(&main, line))
-			{
-				print_parse(main.cmd);
-				free_cmd(main.cmd);
-			}
-			free(line);
-		}
-	}
-	free(line);
-	free(main.prompt);
-	free(main.builtins);
-	free_tab(main.env);
-	rl_clear_history();
 }

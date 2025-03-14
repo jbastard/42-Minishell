@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/14 15:48:55 by jbastard         ###   ########.fr       */
+/*   Created: 2025/03/14 16:15:14 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/14 16:15:40 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*get_cmd(t_minishell *main)
+{
+	char	*line;
+
+	update_prompt(main);
+	line = readline(main->prompt);
+	return (line);
+}
 
 void	add_redir(t_redir **head, int type, char *file)
 {
