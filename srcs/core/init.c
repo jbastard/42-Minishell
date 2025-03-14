@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:13:10 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:13:50 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:18:50 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_minishell	init_minishell(void)
 	main.env = copy_env();
 	main.prompt = NULL;
 	main.last_status = ERR_NONE;
+	init_local_env(&main);
 	return (main);
 }
 
@@ -97,16 +98,4 @@ void	init_local_env(t_minishell *main)
 		i++;
 	}
 	sort_local_env(&(main->local_vars));
-}
-
-t_minishell	init_minishell(void)
-{
-	t_minishell	main;
-
-	main.builtins = init_builtins();
-	main.local_vars = NULL;
-	main.env = copy_env();
-	main.prompt = NULL;
-	init_local_env(&main);
-	return (main);
 }
