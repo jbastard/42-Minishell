@@ -53,6 +53,7 @@ struct s_minishell
 	t_env		*local_vars;
 	char		**env;
 	char		*prompt;
+	int			status;
 };
 
 struct s_env

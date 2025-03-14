@@ -15,9 +15,7 @@
 t_builtin	*init_builtins(void)
 {
 	t_builtin	*bi;
-	int			i;
 
-	i = -1;
 	bi = malloc(9 * sizeof(t_builtin));
 	if (!bi)
 		return (NULL);

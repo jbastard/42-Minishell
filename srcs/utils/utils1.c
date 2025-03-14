@@ -83,24 +83,22 @@ t_env	*create_env_node(char *env)
 	return (new_node);
 }
 
-char	**ft_realloc_env(char **args, char *env)
+char	**ft_realloc_tab(char **args, char *env)
 {
 	int		count;
 	char	**new;
-	int		i1;
-	int		i2;
+	int		i;
 
 	count = count_args(args);
 	new = malloc(sizeof(char *) * (count + 2));
-	i1 = 0;
-	while (args[i1])
+	i = 0;
+	while (args[i])
 	{
-		new[i1] = ft_strdup(args[i1]);
-		i1++;
+		new[i] = ft_strdup(args[i]);
+		i++;
 	}
-	i2 = 0;
-	new[i1] = ft_strdup(env);
-	new[i1 + 1] = NULL;
+	new[i] = ft_strdup(env);
+	new[i + 1] = NULL;
 	free_tab(args);
 	return (new);
 }
