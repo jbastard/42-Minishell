@@ -65,7 +65,8 @@ FILES =	\
 		${LIBFT_PATH}ft_lstiter.c \
 		${LIBFT_PATH}ft_lstmap.c \
 		${LIBFT_PATH}ft_putunbr.c \
-		${LIBFT_PATH}ft_ws_split.c
+		${LIBFT_PATH}ft_ws_split.c \
+		${LIBFT_PATH}get_next_line.c \
 
 OFILES = ${FILES:%.c=%.o}
 

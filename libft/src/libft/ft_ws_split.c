@@ -16,7 +16,9 @@ size_t	ws_word_count(const char *s)
 {
 	size_t	words;
 	size_t	i;
+	int quotes;
 
+	quotes = 0;
 	words = 0;
 	i = 0;
 	if (!s)

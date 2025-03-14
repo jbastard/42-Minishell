@@ -33,7 +33,7 @@ int	cd_command(char **args, t_minishell *main)
 			new_path[1] = ft_strjoin(new_path[0], args[0]);
 			if (chdir(new_path[1]) != 0)
 				perror("cd");
-			free_tab(new_path);
+			return (free(new_path[0]), free(new_path[1]), 0);
 		}
 		else
 			perror("cd");

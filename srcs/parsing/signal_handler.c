@@ -6,13 +6,13 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:27:07 by jbastard          #+#    #+#             */
-/*   Updated: 2025/02/24 11:44:07 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/04 10:57:21 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void 	ctrl_c(int signal)
+void	ctrl_c(int signal)
 {
 	(void)signal;
 	write(1, "\n", 1);
@@ -21,13 +21,13 @@ void 	ctrl_c(int signal)
 	rl_redisplay();
 }
 
-void 	do_nothing(int signal)
+void	do_nothing(int signal)
 {
 	(void)signal;
 	return ;
 }
 
-void	sig_handler()
+void	sig_handler(void)
 {
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, SIG_IGN);

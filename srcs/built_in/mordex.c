@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_commands.c                                  :+:      :+:    :+:   */
+/*   mordex.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 16:39:38 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/05 14:19:28 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/03/05 14:08:06 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/05 14:49:49 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_commands(char **args, t_minishell *main)
+int	mordex_command(char **args, t_minishell *main)
 {
-	int	i;
+	(void)args;
+	(void)main;
+	int		fd;
+	char	*line;
 
-	i = 0;
-	while (i <= 7)
+	fd = open(MORDEX_PATH, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
 	{
-		if (!ft_strncmp(main->builtins[i].cmd_name, args[0], main->builtins[i].size))
-			main->builtins[i].cmd(args + 1, main);
-		i++;
+		printf("%s", line);
+		line = get_next_line(fd);
 	}
+	printf("\n");
+	return (1);
 }

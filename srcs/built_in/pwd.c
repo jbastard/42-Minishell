@@ -14,9 +14,10 @@
 
 int	pwd_command(char **args, t_minishell *main)
 {
+	char	buffer[PATH_MAX];
+	
 	(void)args;
 	(void)main;
-	char	buffer[PATH_MAX];
 	if (getcwd(buffer, PATH_MAX))
 	{
 		printf("%s\n", buffer);

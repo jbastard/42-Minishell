@@ -29,27 +29,3 @@ int	env_command(char **args, t_minishell *main)
 	}
 	return (1);
 }
-
-char *get_variable_value(t_var *vars, char **envp, char *name)
-{
-	int i;
-	size_t len;
-	t_var *tmp;
-	
-	i = 0;
-	len = ft_strlen(name);
-	tmp = vars;
-	while (tmp)
-	{
-		if (strcmp(tmp->name, name) == 0)
-			return (tmp->value);
-		tmp = tmp->next;
-	}
-	while (envp[i])
-	{
-		if (strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (envp[i] + len + 1);
-		i++;
-	}
-	return (NULL);
-}
