@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/14 08:06:37 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:26:48 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void 	print_parse(t_cmd	*cmd)
 int	main()
 {
 	char		*line;
-	char		**temp;
 	t_minishell	main;
 
 	main = init_minishell();
@@ -85,9 +84,6 @@ int	main()
 				print_parse(main.cmd);
 				free_cmd(main.cmd);
 			}
-			temp = ft_split(line, ' ');
-//			handle_commands(temp, &main);
-			free_tab(temp);
 			free(line);
 		}
 	}

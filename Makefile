@@ -30,9 +30,11 @@ C_FILES		=	$(CORE_DIR)main.c \
 				$(CORE_DIR)init.c \
 				$(EXEC_DIR)handle_commands.c \
 				$(ERROR_DIR)error_handler.c \
-				$(PARSING_DIR)signal_handler.c \
 				$(PARSING_DIR)prompt.c \
+				$(PARSING_DIR)signal_handler.c \
 				$(PARSING_DIR)cmd_parsing.c \
+				$(PARSING_DIR)cmd_parsing_utils.c \
+				$(PARSING_DIR)syntax_checker.c \
 				$(LEXING_DIR)line_lexer.c \
 				$(LEXING_DIR)utils_lexer.c \
 				$(BUILT-IN_DIR)cd.c \

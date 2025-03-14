@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void 	ctrl_c(int signal)
+void	ctrl_c(int signal)
 {
 	(void)signal;
 	write(1, "\n", 1);
@@ -21,13 +21,13 @@ void 	ctrl_c(int signal)
 	rl_redisplay();
 }
 
-void 	do_nothing(int signal)
+void	do_nothing(int signal)
 {
 	(void)signal;
 	return ;
 }
 
-void	sig_handler()
+void	sig_handler(void)
 {
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, SIG_IGN);

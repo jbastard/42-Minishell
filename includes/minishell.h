@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/13 10:42:46 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:39:57 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ struct s_cmd {
 	char	**cmd_args;
 	char	*path;
 	t_redir	*redir;
-	int 	pipe[2];
 	int 	fd_in;
 	int 	fd_out;
 	t_cmd	*next;
@@ -150,6 +149,21 @@ void	do_nothing(int signal);
 void	ctrl_c(int signal);
 	//CMD_PARSING.C
 char	*get_cmd(t_minishell *main, char *line);
+t_cmd	*parse_tokens(t_minishell *main);
+t_cmd	*create_cmd(t_token **toks);
+int		parse_cmd_into_tokens(t_cmd *cmd, t_token **toks);
+void	add_redir(t_redir **head, int type, char *file);
+	//CMD_PARSING_UTILS.C
+int 	add_cmds(t_cmd	**head, t_token **toks);
+int		alloc_args(t_cmd *cmd, int argcount);
+int		is_redir(t_token *toks);
+int 	args_count(t_token *toks);
+void 	init_cmd(t_cmd *new);
+	//SYNTAX_CHECKER
+int 	syntax_checker(t_minishell *main);
+int 	check_redirs(t_minishell *main);
+int 	check_pipes(t_minishell *main);
+
 	//PROMPT.c
 int		count_chars_tab(char **tabl);
 char	*better_join(char **tabl, char sep);
