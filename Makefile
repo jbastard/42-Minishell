@@ -1,7 +1,7 @@
 NAME		= minishell
 
 #COMPILATION
-CC			= cc
+CC			= clang
 CFLAGS		= -Wall -Wextra -Werror -g
 LFLAGS		= -lreadline
 
@@ -15,9 +15,10 @@ OBJS_DIR	=	objs/
 CORE_DIR	=	core/
 ERROR_DIR	=	error/
 PARSING_DIR	=	parsing/
-BUILT-IN_DIR=	built-in/
+BUILT-IN_DIR=	built_in/
 UTILS_DIR	=	utils/
 EXEC_DIR	=	exec/
+LEXING_DIR	=	lexing/
 
 #LIBFT
 LIBFT_PATH	=	libft/
@@ -30,8 +31,13 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(CORE_DIR)prompt.c \
 				$(EXEC_DIR)handle_commands.c \
 				$(ERROR_DIR)error_handler.c \
+				$(PARSING_DIR)prompt.c \
 				$(PARSING_DIR)signal_handler.c \
 				$(PARSING_DIR)cmd_parsing.c \
+				$(PARSING_DIR)cmd_parsing_utils.c \
+				$(PARSING_DIR)syntax_checker.c \
+				$(LEXING_DIR)line_lexer.c \
+				$(LEXING_DIR)utils_lexer.c \
 				$(BUILT-IN_DIR)cd.c \
 				$(BUILT-IN_DIR)echo.c \
 				$(BUILT-IN_DIR)env.c \

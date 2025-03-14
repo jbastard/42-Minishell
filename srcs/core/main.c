@@ -5,39 +5,60 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/14 15:28:18 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/03/14 16:14:08 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/14 16:14:38 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	main(void)
+void    print_tokens(t_token *tokens)
 {
-	char		*line;
-	char		**temp;
-	t_minishell	main;
+	const char  *type_str;
 
-	main = init_minishell();
-	sig_handler();
-	while (1)
+//	if (tokens) {
+//		printf("error parsing\n");
+//		return;
+//	}
+	while (tokens)
 	{
-		line = get_cmd(&main);
-		if (!line)
-			break ;
-		temp = ft_split(line, ' ');
-		if (temp[0])
-		{
-			add_history(line);
-			handle_commands(temp, &main);
-		}
-		if (temp)
-			free_tab(temp);
-		free(line);
+		if (tokens->type == TOKEN_WORD)
+			type_str = "WORD";
+		else if (tokens->type == TOKEN_PIPE)
+			type_str = "PIPE";
+		else if (tokens->type == TOKEN_REDIR_IN)
+			type_str = "REDIRECTION_IN";
+		else if (tokens->type == TOKEN_REDIR_OUT)
+			type_str = "REDIRECTION_OUT";
+		else if (tokens->type == TOKEN_HEREDOC)
+			type_str = "HEREDOC";
+		else if (tokens->type == TOKEN_APPEND)
+			type_str = "APPEND";
+		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
+		tokens = tokens->next;
 	}
-	free(main.prompt);
-	free(main.builtins);
-	free_tab(main.env);
-	free_local_env(&(main.local_vars));
-	rl_clear_history();
+}
+
+void 	print_parse(t_cmd	*cmd)
+{
+	int i;
+	t_cmd	*tmp;
+	t_redir	*tmpred;
+
+	tmp = cmd;
+	while (tmp)
+	{
+		i = 0;
+		while (tmp->cmd_args[i])
+			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
+		tmpred = tmp->redir;
+		while (tmpred)
+		{
+			printf("Redir type: | %d\n", tmpred->type);
+			printf("Redir file: | %s\n", tmpred->file);
+			tmpred = tmpred->next;
+		}
+		printf("-----------------------\n");
+		tmp = tmp->next;
+	}
 }

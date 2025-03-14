@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 15:35:24 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/03/14 16:12:35 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/14 16:12:55 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@
 # include "../libft/include/libft.h"
 
 # define NAME "minishell"
+//#define TOKEN_WORD 1
+//#define TOKEN_PIPE 2
+//#define TOKEN_REDIR_IN 3
+//#define TOKEN_REDIR_OUT 4
+//#define TOKEN_HEREDOC 5
+//#define TOKEN_APPEND  6
 
 typedef struct s_minishell	t_minishell;
 typedef struct s_builtin	t_builtin;
@@ -126,5 +132,20 @@ int			is_builtin(t_builtin *builtins, char *cmd);
 	//UTILS0.C
 int			count_args(char **args);
 void		free_tab(char **tabl);
+
+//LEXING
+	//LINE_LEXER.C
+t_token *new_token(char *value, int type);
+void 	add_token(t_token **head, char *value, int type);
+void 	handle_buffer(t_lexer	*lexer);
+void 	init_lexer(t_lexer *lexer, const char *input);
+t_token *lexer(char *line, t_minishell *main);
+void 	free_lexer(t_token *token);
+	//UTILS_LEXER.C
+void 	add_redirection_token(t_lexer *lexer, char c);
+void 	handle_env_var(t_lexer *lexer);
+void 	handle_single_quotes(t_lexer *lexer);
+void 	handle_double_quotes(t_lexer *lexer);
+void 	handle_special_char_op(t_lexer *lexer);
 
 #endif
