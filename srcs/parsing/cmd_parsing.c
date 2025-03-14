@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:24:41 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/13 11:39:40 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:14:54 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,33 +169,59 @@ t_cmd	*parse_tokens(t_minishell *main)
 	return (cmds);
 }
 
-int 	check_pipes(t_token *toks)
+int 	check_pipes(t_minishell *main)
 {
+	t_token *toks;
+
+	toks = main->tokens;
 	if (toks->type == TOKEN_PIPE
 		&& (!toks->next
 		|| toks->next->type == TOKEN_PIPE))
 	{
-		ft_dprintf(2,"minihell: syntax error: invalid pipe\n");
-		return (2);
+		ft_dprintf(STDOUT_FILENO,"minihell: "
+					"syntax error: invalid pipe\n");
+		return (ERR_SYNTAX);
+	}
+	return (0);
+}
+
+int 	check_redirs(t_minishell *main)
+{
+	t_token *toks;
+
+	toks = main->tokens;
+	if (!toks->next && toks->type
+		!= TOKEN_PIPE && toks->type
+		!= TOKEN_WORD)
+		return (handle_error(main, ERR_SYNTAX, "newline"));
+	else if (toks->next
+			&& toks->next->type != TOKEN_WORD
+			&& toks->type != TOKEN_PIPE && toks->type != TOKEN_WORD)
+	{
+		if (toks->next->type == TOKEN_PIPE)
+			return (handle_error(main, ERR_SYNTAX, "|"));
+		else
+			return (handle_error(main, ERR_SYNTAX, toks->next->value));
 	}
 	return (0);
 }
 
 int 	syntax_checker(t_minishell *main)
 {
-	t_token *toks;
+	t_minishell minishell;
 
-	toks = main->tokens;
-	if (toks->type == TOKEN_PIPE)
-		main->last_status = ERR_SYNTAX;
-	while (toks)
+	minishell.tokens = main->tokens;
+	if (minishell.tokens->type == TOKEN_PIPE)
+		return (handle_error(main, ERR_SYNTAX, "|"));
+	while (minishell.tokens)
 	{
-		main->last_status = check_pipes(toks);
-		if (main->last_status)
-			return (0);
-		toks = toks->next;
+		if (check_redirs(&minishell))
+			return (1);
+		if (check_pipes(&minishell))
+			return (1);
+		minishell.tokens = minishell.tokens->next;
 	}
-	return (1);
+	return (0);
 }
 
 char	*get_cmd(t_minishell *main, char *line)
@@ -203,11 +229,12 @@ char	*get_cmd(t_minishell *main, char *line)
 	main->line = line;
 	main->tokens = lexer(line, main);
 	print_tokens(main->tokens);
-	if (syntax_checker(main))
+	if (!main->tokens)
+		return (NULL);
+	else if (syntax_checker(main))
 		return (free_lexer(main->tokens), NULL);
 	main->cmd = parse_tokens(main);
-	free_lexer(main->tokens);
 	if (!main->cmd)
-		return (NULL);
-	return (line);
+		return (free_lexer(main->tokens), NULL);
+	return (free_lexer(main->tokens), line);
 }

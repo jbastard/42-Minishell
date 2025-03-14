@@ -6,15 +6,12 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/13 11:22:49 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:16:39 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-///@brief Allocation et initialisation d un nouveau token
-///@param value Correspond a la valeur du token
-///@param type Correspond au type de token (TOKEN_PIPE / TOKEN_REDIR /...)
 t_token	*new_token(char *value, int type)
 {
 	t_token	*token;
@@ -30,10 +27,6 @@ t_token	*new_token(char *value, int type)
 	return (token);
 }
 
-///@brief Ajout d'un nouveau token a la fin de la liste chainee
-/// si celle-ci est vide le nouveau token devient la tete de liste
-///@param head un pointeur vers la tete de liste
-/// on recupere @param value et @param type pour les envoyer dans new_token
 void	add_token(t_token **head, char *value, int type)
 {
 	t_token	*new;
@@ -53,7 +46,6 @@ void	add_token(t_token **head, char *value, int type)
 	}
 }
 
-///@brief remplir le token avec du texte apres avoir check tout les autres cas
 void	handle_buffer(t_lexer	*lexer)
 {
 	if (lexer->j > 0)
