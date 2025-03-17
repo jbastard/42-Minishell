@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:12:35 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:12:55 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/17 08:37:33 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,49 @@
 typedef struct s_minishell	t_minishell;
 typedef struct s_builtin	t_builtin;
 typedef struct s_env		t_env;
+typedef struct s_cmd		t_cmd;
+typedef struct s_redir		t_redir;
+
+typedef enum e_token_type
+{
+	TOKEN_EMPTY,
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_IN,
+	TOKEN_HEREDOC,
+	TOKEN_APPEND,
+}	t_token_type;
+
+typedef enum e_error_type
+{
+	ERR_NONE,
+	ERR_MALLOC,
+	ERR_SYNTAX,
+	ERR_CMD_NOT_FOUND,
+	ERR_PERMISSION_DENIED,
+	ERR_EXEC_FAIL,
+	ERR_EXIT,
+	ERR_SIGNAL,
+	ERR_PIPE,
+	ERR_REDIR,
+}	t_error_type;
+
+struct s_redir {
+	int		type;
+	char	*file;
+	int		fd;
+	t_redir	*next;
+};
+
+struct s_cmd {
+	char	**cmd_args;
+	char	*path;
+	t_redir	*redir;
+	int 	fd_in;
+	int 	fd_out;
+	t_cmd	*next;
+};
 
 struct s_builtin
 {
@@ -59,7 +102,7 @@ struct s_minishell
 	t_env		*local_vars;
 	char		**env;
 	char		*prompt;
-	int			status;
+	int			last_status;
 };
 
 struct s_env
