@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 16:14:08 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:14:38 by nlecreux         ###   ########.fr       */
+/*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
+/*   Updated: 2025/03/17 10:01:26 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void 	print_parse(t_cmd	*cmd)
 
 int	main()
 {
-	char		*line;
 	t_minishell	main;
 
 	main = init_minishell();
@@ -69,21 +68,18 @@ int	main()
 	while(1)
 	{
 		update_prompt(&main);
-		line = readline(main.prompt);
-		if (!line)
-			break ;
-		if (line[0] != 0)
+		main.line = readline(main.prompt);
+		if (!main.line)
+			break;
+		add_history(main.line);
+		if (get_cmd(&main, main.line))
 		{
-			add_history(line);
-			if (get_cmd(&main, line))
-			{
-				print_parse(main.cmd);
-				free_cmd(main.cmd);
-			}
-			free(line);
+			print_parse(main.cmd);
+			free_cmd(main.cmd);
 		}
+		free(main.line);
 	}
-	free(line);
+	free(main.line);
 	free(main.prompt);
 	free(main.builtins);
 	free_tab(main.env);

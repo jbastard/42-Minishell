@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 16:12:35 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/17 08:53:18 by jbastard         ###   ########.fr       */
+/*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/17 09:17:17 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,7 @@
 # include <readline/history.h>
 # include "../libft/include/libft.h"
 
-# define NAME "minishell"
-//#define TOKEN_WORD 1
-//#define TOKEN_PIPE 2
-//#define TOKEN_REDIR_IN 3
-//#define TOKEN_REDIR_OUT 4
-//#define TOKEN_HEREDOC 5
-//#define TOKEN_APPEND  6
+extern volatile	int g_sig;
 
 typedef struct s_minishell	t_minishell;
 typedef struct s_builtin	t_builtin;
