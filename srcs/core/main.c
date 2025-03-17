@@ -16,10 +16,6 @@ void    print_tokens(t_token *tokens)
 {
 	const char  *type_str;
 
-//	if (tokens) {
-//		printf("error parsing\n");
-//		return;
-//	}
 	while (tokens)
 	{
 		if (tokens->type == TOKEN_WORD)

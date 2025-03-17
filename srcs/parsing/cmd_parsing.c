@@ -12,15 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-char	*get_cmd(t_minishell *main)
-{
-	char	*line;
-
-	update_prompt(main);
-	line = readline(main->prompt);
-	return (line);
-}
-
 void	add_redir(t_redir **head, int type, char *file)
 {
 	t_redir	*tmp;
