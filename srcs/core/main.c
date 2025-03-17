@@ -62,3 +62,34 @@ void 	print_parse(t_cmd	*cmd)
 		tmp = tmp->next;
 	}
 }
+
+int	main()
+{
+	char		*line;
+	t_minishell	main;
+
+	main = init_minishell();
+	sig_handler();
+	while(1)
+	{
+		update_prompt(&main);
+		line = readline(main.prompt);
+		if (!line)
+			break ;
+		if (line[0] != 0)
+		{
+			add_history(line);
+			if (get_cmd(&main, line))
+			{
+				print_parse(main.cmd);
+				free_cmd(main.cmd);
+			}
+			free(line);
+		}
+	}
+	free(line);
+	free(main.prompt);
+	free(main.builtins);
+	free_tab(main.env);
+	rl_clear_history();
+}
