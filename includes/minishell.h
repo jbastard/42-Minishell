@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 15:39:57 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/17 09:17:17 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,7 @@
 # include <readline/history.h>
 # include "../libft/include/libft.h"
 
-# define NAME "minishell"
-//#define TOKEN_WORD 1
-//#define TOKEN_PIPE 2
-//#define TOKEN_REDIR_IN 3
-//#define TOKEN_REDIR_OUT 4
-//#define TOKEN_HEREDOC 5
-//#define TOKEN_APPEND  6
+extern volatile	int g_sig;
 
 typedef struct s_minishell t_minishell;
 typedef struct s_builtin t_builtin;
@@ -135,6 +129,8 @@ typedef struct s_lexer
 
 void	print_tokens(t_token *toks);
 
+void	sig_handler(void);
+
 //ERROR
 	//ERROR_HANDLER.C
 void 	exit_error(char *source, int isper, int isexit);
@@ -144,8 +140,7 @@ void 	free_redir(t_redir *redir);
 
 //PARSING
 	//SIGNAL_HANDLER.C
-void	sig_handler();
-void	do_nothing(int signal);
+void	signal_handler();
 void	ctrl_c(int signal);
 	//CMD_PARSING.C
 char	*get_cmd(t_minishell *main, char *line);

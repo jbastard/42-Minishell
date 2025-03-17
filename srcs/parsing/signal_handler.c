@@ -6,29 +6,29 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:27:07 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/04 10:57:21 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/17 10:08:31 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ctrl_c(int signal)
+void ctrl_c(int signal)
 {
 	(void)signal;
-	write(1, "\n", 1);
-	rl_on_new_line();
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_replace_line("", 0);
+	rl_on_new_line();
 	rl_redisplay();
 }
 
-void	do_nothing(int signal)
+void sig_handler(void)
 {
-	(void)signal;
-	return ;
-}
+	struct sigaction sa;
 
-void	sig_handler(void)
-{
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
+	sa.sa_handler = ctrl_c;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }
