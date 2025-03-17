@@ -129,8 +129,6 @@ typedef struct s_lexer
 
 void	print_tokens(t_token *toks);
 
-void	sig_handler(void);
-
 //ERROR
 	//ERROR_HANDLER.C
 void 	exit_error(char *source, int isper, int isexit);
@@ -140,7 +138,7 @@ void 	free_redir(t_redir *redir);
 
 //PARSING
 	//SIGNAL_HANDLER.C
-void	signal_handler();
+void	sig_handler();
 void	ctrl_c(int signal);
 	//CMD_PARSING.C
 char	*get_cmd(t_minishell *main, char *line);
