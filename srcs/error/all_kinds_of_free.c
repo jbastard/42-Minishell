@@ -56,3 +56,18 @@ void	free_tab(char **tabl)
 	}
 	free(tabl);
 }
+
+void	free_lexer(t_token *token)
+{
+	t_token	*temp;
+
+	while (token)
+	{
+		if (token->value)
+			free(token->value);
+		temp = token;
+		token = token->next;
+		free(temp);
+	}
+	token = NULL;
+}

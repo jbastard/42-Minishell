@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/18 11:19:08 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:12:50 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ void 	handle_single_quotes(t_lexer *lexer)
 		lexer->error = 2;
 		return;
 	}
-	handle_buffer(lexer);
 	lexer->i++;
+	while (!is_whitespaces(lexer->input[lexer->i]))
+		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
+	handle_buffer(lexer);
 }
 
 void handle_double_quotes(t_lexer *lexer)
@@ -70,8 +72,10 @@ void handle_double_quotes(t_lexer *lexer)
 		lexer->error = 2;
 		return;
 	}
-	handle_buffer(lexer);
 	lexer->i++;
+	while (!is_whitespaces(lexer->input[lexer->i]))
+		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
+	handle_buffer(lexer);
 }
 
 void	add_double_token(t_lexer *lexer, char c)
@@ -85,27 +89,6 @@ void	add_double_token(t_lexer *lexer, char c)
 			add_token(&(lexer->tokens), "|", TOKEN_PIPE);
 			add_token(&(lexer->tokens), "|", TOKEN_PIPE);
 		}
-}
-
-void 	add_redirection_token(t_lexer *lexer, char c)
-{
-	char buffer[3];
-
-	buffer[0] = c;
-	buffer[1] = '\0';
-	buffer[2] = '\0';
-
-	if (lexer->input[lexer->i + 1] == c)
-	{
-		add_double_token(lexer, c);
-		lexer->i++;
-	}
-	else if (c == '<')
-		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
-	else if (c == '>')
-		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
-	else if (c == '|')
-		add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 }
 
 void handle_special_char_op(t_lexer *lexer)
