@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:14:44 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/18 10:46:18 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:14:59 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void 	free_cmd(t_cmd *cmd)
 
 	while (cmd)
 	{
+		free(cmd->path);
 		free_tab(cmd->cmd_args);
 		free_redir(cmd->redir);
 		tmp = cmd;
@@ -69,6 +70,12 @@ int		handle_error(t_minishell *main, t_error_type type, char *info)
 	{
 		ft_dprintf(2, "minishell:"
 					  " permission denied: %s\n", info);
+		main->last_status = 126;
+	}
+	if (type == ERR_FILE_NOT_FOUND)
+	{
+		ft_dprintf(2, "minishell:"
+					  " no such file or directory: %s\n", info);
 		main->last_status = 126;
 	}
 

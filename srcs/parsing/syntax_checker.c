@@ -21,7 +21,7 @@ int	check_pipes(t_minishell *main)
 		&& (!toks->next
 			|| toks->next->type == TOKEN_PIPE))
 	{
-		ft_dprintf(STDOUT_FILENO, "minihell: "
+		ft_dprintf(STDOUT_FILENO, "minishell: "
 			"syntax error: invalid pipe\n");
 		return (ERR_SYNTAX);
 	}
