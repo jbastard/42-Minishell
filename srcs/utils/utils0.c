@@ -36,18 +36,3 @@ int	count_args(char **args)
 	}
 	return (count);
 }
-
-void	free_tab(char **tabl)
-{
-	int	i;
-
-	i = 0;
-	if (!tabl)
-		return ;
-	while (tabl[i])
-	{
-		free(tabl[i]);
-		i++;
-	}
-	free(tabl);
-}
