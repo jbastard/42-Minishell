@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/18 12:17:41 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:21:16 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void 	print_parse(t_cmd	*cmd)
 	while (tmp)
 	{
 		i = 0;
-		printf("Path        | %s\n", tmp->path);
 		while (tmp->cmd_args[i])
 			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
+		printf("Path        | %s\n", tmp->path);
 		tmpred = tmp->redir;
 		while (tmpred)
 		{
