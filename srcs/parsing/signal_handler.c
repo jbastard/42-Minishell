@@ -12,6 +12,8 @@
 
 #include "../../includes/minishell.h"
 
+volatile int g_sig = 0;
+
 void ctrl_c(int signal)
 {
 	(void)signal;
