@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:13:10 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:18:50 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:46:35 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	insert_sorted(t_env **sorted, t_env *new_node)
 	current->next = new_node;
 }
 
+// ??????????????????????
 void	sort_local_env(t_env **locals)
 {
 	t_env	*sorted;
@@ -85,6 +86,17 @@ void	sort_local_env(t_env **locals)
 		current = next;
 	}
 	*locals = sorted;
+}
+
+void	init_lexer(t_lexer *lexer, const char *input)
+{
+	lexer->input = input;
+	lexer->input_len = ft_strlen(input);
+	lexer->tokens = NULL;
+	lexer->i = 0;
+	lexer->j = 0;
+	lexer->quote = 0;
+	lexer->error = 0;
 }
 
 void	init_local_env(t_minishell *main)

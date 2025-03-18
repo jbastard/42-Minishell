@@ -31,10 +31,12 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(CORE_DIR)prompt.c \
 				$(EXEC_DIR)handle_commands.c \
 				$(ERROR_DIR)error_handler.c \
+				$(ERROR_DIR)all_kinds_of_free.c \
 				$(PARSING_DIR)signal_handler.c \
 				$(PARSING_DIR)cmd_parsing.c \
 				$(PARSING_DIR)cmd_parsing_utils.c \
 				$(PARSING_DIR)syntax_checker.c \
+				$(PARSING_DIR)path_finder.c \
 				$(LEXING_DIR)line_lexer.c \
 				$(LEXING_DIR)utils_lexer.c \
 				$(BUILT-IN_DIR)cd.c \

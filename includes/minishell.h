@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/17 09:17:17 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:48:07 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef enum e_error_type
 	ERR_SYNTAX,
 	ERR_CMD_NOT_FOUND,
 	ERR_PERMISSION_DENIED,
+	ERR_FILE_NOT_FOUND,
 	ERR_EXEC_FAIL,
 	ERR_EXIT,
 	ERR_SIGNAL,
@@ -135,10 +136,13 @@ void    print_tokens(t_token *tokens);
 
 //ERROR
 	//ERROR_HANDLER.C
-void 	exit_error(char *source, int isper, int isexit);
-int		handle_error(t_minishell *main, t_error_type type, char *info);
-void 	free_cmd(t_cmd *cmd);
-void 	free_redir(t_redir *redir);
+void 		exit_error(char *source, int isper, int isexit);
+int			handle_error(t_minishell *main, t_error_type type, char *info);
+	//ALL_KINDS_OF_FREE.C
+void 		free_cmd(t_cmd *cmd);
+void 		free_redir(t_redir *redir);
+void		free_tab(char **tabl);
+void		free_lexer(t_token *token);
 
 //BUILT-INS
 	//CD.C
@@ -177,6 +181,7 @@ char		**copy_env(void);
 t_builtin	*init_builtins(void);
 void		init_local_env(t_minishell *main);
 t_minishell	init_minishell(void);
+void 		init_lexer(t_lexer *lexer, const char *input);
 	//PROMPT.C
 char		*better_join(char **tabl, char sep);
 int			count_chars_tab(char **tabl);
@@ -187,7 +192,7 @@ void		update_prompt(t_minishell *main);
 void		sig_handler();
 void		ctrl_c(int signal);
 	//CMD_PARSING.C
-char		*get_cmd(t_minishell *main, char *line);
+int			get_cmd(t_minishell *main);
 t_cmd		*parse_tokens(t_minishell *main);
 t_cmd		*create_cmd(t_token **toks);
 int			parse_cmd_into_tokens(t_cmd *cmd, t_token **toks);
@@ -202,6 +207,8 @@ void 		init_cmd(t_cmd *new);
 int 		syntax_checker(t_minishell *main);
 int 		check_redirs(t_minishell *main);
 int 		check_pipes(t_minishell *main);
+	//PATH_FINDER.C
+int			check_cmd(t_minishell *main);
 
 //EXEC
 	//HANDLE_COMMANDS.C
@@ -211,7 +218,6 @@ int			is_builtin(t_builtin *builtins, char *cmd);
 //UTILS
 	//UTILS0.C
 int			count_args(char **args);
-void		free_tab(char **tabl);
 int			is_special_char(char c);
 int			is_whitespaces(char c);
 
@@ -220,14 +226,13 @@ int			is_whitespaces(char c);
 t_token		*new_token(char *value, int type);
 void 		add_token(t_token **head, char *value, int type);
 void 		handle_buffer(t_lexer	*lexer);
-void 		init_lexer(t_lexer *lexer, const char *input);
 t_token		*lexer(char *line, t_minishell *main);
-void		free_lexer(t_token *token);
-	//UTILS_LEXER.C
 void		add_redirection_token(t_lexer *lexer, char c);
+	//UTILS_LEXER.C
 void		handle_env_var(t_lexer *lexer);
 void		handle_single_quotes(t_lexer *lexer);
 void		handle_double_quotes(t_lexer *lexer);
+void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
 
 #endif

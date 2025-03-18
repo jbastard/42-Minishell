@@ -56,15 +56,25 @@ void	handle_buffer(t_lexer	*lexer)
 	}
 }
 
-void	init_lexer(t_lexer *lexer, const char *input)
+void 	add_redirection_token(t_lexer *lexer, char c)
 {
-	lexer->input = input;
-	lexer->input_len = ft_strlen(input);
-	lexer->tokens = NULL;
-	lexer->i = 0;
-	lexer->j = 0;
-	lexer->quote = 0;
-	lexer->error = 0;
+	char buffer[3];
+
+	buffer[0] = c;
+	buffer[1] = '\0';
+	buffer[2] = '\0';
+
+	if (lexer->input[lexer->i + 1] == c)
+	{
+		add_double_token(lexer, c);
+		lexer->i++;
+	}
+	else if (c == '<')
+			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
+	else if (c == '>')
+		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
+	else if (c == '|')
+		add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 }
 
 t_token	*lexer(char *line, t_minishell *main)
@@ -93,19 +103,4 @@ t_token	*lexer(char *line, t_minishell *main)
 		return (free_lexer(lexer.tokens), NULL);
 	handle_buffer(&lexer);
 	return (lexer.tokens);
-}
-
-void	free_lexer(t_token *token)
-{
-	t_token	*temp;
-
-	while (token)
-	{
-		if (token->value)
-			free(token->value);
-		temp = token;
-		token = token->next;
-		free(temp);
-	}
-	token = NULL;
 }
