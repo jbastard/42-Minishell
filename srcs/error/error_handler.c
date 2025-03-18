@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:14:44 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:14:51 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:46:18 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,22 @@ int		handle_error(t_minishell *main, t_error_type type, char *info)
 	if (type == ERR_PIPE)
 	{
 		ft_dprintf(2, "minishell:"
-					  " syntax error near unexpected token `%s'", info);
+					  " syntax error near unexpected token `%s'\n", info);
 		main->last_status = 2;
 	}
+	if (type == ERR_CMD_NOT_FOUND)
+	{
+		ft_dprintf(2, "minishell:"
+					  " command not found: %s\n", info);
+		main->last_status = 127;
+	}
+	if (type == ERR_PERMISSION_DENIED)
+	{
+		ft_dprintf(2, "minishell:"
+					  " permission denied: %s\n", info);
+		main->last_status = 126;
+	}
+
 //	free_cmd(main->cmd);
 	return (main->last_status);
 }

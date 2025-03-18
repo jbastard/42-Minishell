@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/17 09:17:17 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:44:08 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void		update_prompt(t_minishell *main);
 void		sig_handler();
 void		ctrl_c(int signal);
 	//CMD_PARSING.C
-char		*get_cmd(t_minishell *main, char *line);
+int			get_cmd(t_minishell *main);
 t_cmd		*parse_tokens(t_minishell *main);
 t_cmd		*create_cmd(t_token **toks);
 int			parse_cmd_into_tokens(t_cmd *cmd, t_token **toks);
@@ -202,6 +202,8 @@ void 		init_cmd(t_cmd *new);
 int 		syntax_checker(t_minishell *main);
 int 		check_redirs(t_minishell *main);
 int 		check_pipes(t_minishell *main);
+	//PATH_FINDER.C
+int			check_cmd(t_minishell *main);
 
 //EXEC
 	//HANDLE_COMMANDS.C

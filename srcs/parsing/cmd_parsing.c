@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:15:14 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:15:40 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:47:39 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,18 @@ t_cmd	*parse_tokens(t_minishell *main)
 	return (cmds);
 }
 
-char	*get_cmd(t_minishell *main, char *line)
+int	get_cmd(t_minishell *main)
 {
-	main->tokens = lexer(line, main);
+	main->tokens = lexer(main->line, main);
 	print_tokens(main->tokens);
 	if (!main->tokens)
-		return (NULL);
-	else if (syntax_checker(main))
-		return (free_lexer(main->tokens), NULL);
+		return (0);
+	else if (!syntax_checker(main))
+		return (free_lexer(main->tokens), 0);
 	main->cmd = parse_tokens(main);
 	if (!main->cmd)
-		return (free_lexer(main->tokens), NULL);
-	return (free_lexer(main->tokens), line);
+		return (free_lexer(main->tokens), 0);
+	if (check_cmd(main))
+		return (free_lexer(main->tokens), free_cmd(main->cmd), 0);
+	return (free_lexer(main->tokens), 1);
 }

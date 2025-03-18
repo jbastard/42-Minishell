@@ -72,7 +72,7 @@ int	main()
 		if (!main.line)
 			break;
 		add_history(main.line);
-		if (get_cmd(&main, main.line))
+		if (get_cmd(&main))
 		{
 			print_parse(main.cmd);
 			free_cmd(main.cmd);
