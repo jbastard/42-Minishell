@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 07:52:57 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/12 16:33:09 by jbastard         ###   ########.fr       */
+/*   Created: 2025/03/14 16:14:44 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/14 16:14:51 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void 	exit_error(char *source, int isper, int exitcode)
 	if (isper)
 		perror(source);
 	else if (source)
-		printf("%s", source);
+			printf("%s", source);
 	if (exitcode >= 0)
 		exit(exitcode);
 }

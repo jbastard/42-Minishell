@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 10:39:07 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/10 10:39:35 by jbastard         ###   ########.fr       */
+/*   Created: 2025/03/10 17:20:03 by nlecreux          #+#    #+#             */
+/*   Updated: 2025/03/10 17:30:02 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	count_chars_tab(char **tabl)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (tabl[i])
-	{
-		count += ft_strlen(tabl[i]);
-		i++;
-	}
-	return (count);
-}
 
 char	*better_join(char **tabl, char sep)
 {
@@ -48,6 +33,21 @@ char	*better_join(char **tabl, char sep)
 	}
 	new[i3] = 0;
 	return (new);
+}
+
+int	count_chars_tab(char **tabl)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (tabl[i])
+	{
+		count += ft_strlen(tabl[i]);
+		i++;
+	}
+	return (count);
 }
 
 void	update_prompt(t_minishell *main)
