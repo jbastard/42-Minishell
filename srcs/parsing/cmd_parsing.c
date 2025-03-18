@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:15:14 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/18 10:47:39 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:00:41 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	get_cmd(t_minishell *main)
 	main->cmd = parse_tokens(main);
 	if (!main->cmd)
 		return (free_lexer(main->tokens), 0);
-	if (check_cmd(main))
-		return (free_lexer(main->tokens), free_cmd(main->cmd), 0);
+//	if (check_cmd(main))
+//		return (free_lexer(main->tokens), free_cmd(main->cmd), 0);
 	return (free_lexer(main->tokens), 1);
 }

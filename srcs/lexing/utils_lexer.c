@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:39:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/14 10:24:08 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:19:08 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void 	handle_single_quotes(t_lexer *lexer)
 		lexer->error = 2;
 		return;
 	}
+	handle_buffer(lexer);
 	lexer->i++;
 }
 
@@ -69,6 +70,7 @@ void handle_double_quotes(t_lexer *lexer)
 		lexer->error = 2;
 		return;
 	}
+	handle_buffer(lexer);
 	lexer->i++;
 }
 
