@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 08:42:36 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/20 11:16:37 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:56:04 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 			return (redir_out(main, redir->file));
 		else if (redir->type == TOKEN_APPEND)
 			return (redir_append(main, redir->file));
-		else if (redir->type == TOKEN_HEREDOC)
-			return (heredoc(main, redir->file));
+//		else if (redir->type == TOKEN_HEREDOC)
+//			return (heredoc(main, redir->file));
 		redir = redir->next;
 	}
 	return (0);
