@@ -102,6 +102,7 @@ struct s_minishell
 	t_cmd		*cmd;
 	t_token		*tokens;
 	int			last_status;
+	int 		is_here;
 };
 
 struct s_env
@@ -130,9 +131,8 @@ typedef struct s_lexer
 	int 		error;
 } t_lexer;
 
-
-void    print_tokens(t_token *tokens);
-
+void	print_tokens(t_token *tokens);
+int		handle_redir(t_minishell *main, t_cmd *cmd);
 
 //ERROR
 	//ERROR_HANDLER.C
