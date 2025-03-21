@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 08:42:36 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/21 13:31:34 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/21 14:27:13 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 		else if (redir->type == TOKEN_APPEND)
 			return (redir_append(main, redir->file));
 		else if (redir->type == TOKEN_HEREDOC)
-			return (heredoc(main, redir->file));
-		// pas au point, on ne peut qu ecrire dedans, pas de lecture pour le moment
+			if (!heredoc(main, redir->file))
+				return (redir_in(main, "heredoc.tmp"));
 		redir = redir->next;
 	}
 	return (0);
