@@ -6,59 +6,90 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:14:08 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 16:14:38 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:41:54 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    print_tokens(t_token *tokens)
+// void	print_tokens(t_token *tokens)
+// {
+// 	const char  *type_str;
+
+// 	if (tokens) {
+// 		printf("error parsing\n");
+// 		return;
+// 	}
+// 	while (tokens)
+// 	{
+// 		if (tokens->type == TOKEN_WORD)
+// 			type_str = "WORD";
+// 		else if (tokens->type == TOKEN_PIPE)
+// 			type_str = "PIPE";
+// 		else if (tokens->type == TOKEN_REDIR_IN)
+// 			type_str = "REDIRECTION_IN";
+// 		else if (tokens->type == TOKEN_REDIR_OUT)
+// 			type_str = "REDIRECTION_OUT";
+// 		else if (tokens->type == TOKEN_HEREDOC)
+// 			type_str = "HEREDOC";
+// 		else if (tokens->type == TOKEN_APPEND)
+// 			type_str = "APPEND";
+// 		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
+// 		tokens = tokens->next;
+// 	}
+// }
+
+// void	print_parse(t_cmd	*cmd)
+// {
+// 	int		i;
+// 	t_cmd	*tmp;
+// 	t_redir	*tmpred;
+
+// 	tmp = cmd;
+// 	while (tmp)
+// 	{
+// 		i = 0;
+// 		while (tmp->cmd_args[i])
+// 			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
+// 		tmpred = tmp->redir;
+// 		while (tmpred)
+// 		{
+// 			printf("Redir type: | %d\n", tmpred->type);
+// 			printf("Redir file: | %s\n", tmpred->file);
+// 			tmpred = tmpred->next;
+// 		}
+// 		printf("-----------------------\n");
+// 		tmp = tmp->next;
+// 	}
+// }
+
+int	main()
 {
-	const char  *type_str;
+	char		*line;
+	t_minishell	main;
 
-//	if (tokens) {
-//		printf("error parsing\n");
-//		return;
-//	}
-	while (tokens)
+	main = init_minishell();
+	sig_handler();
+	while(1)
 	{
-		if (tokens->type == TOKEN_WORD)
-			type_str = "WORD";
-		else if (tokens->type == TOKEN_PIPE)
-			type_str = "PIPE";
-		else if (tokens->type == TOKEN_REDIR_IN)
-			type_str = "REDIRECTION_IN";
-		else if (tokens->type == TOKEN_REDIR_OUT)
-			type_str = "REDIRECTION_OUT";
-		else if (tokens->type == TOKEN_HEREDOC)
-			type_str = "HEREDOC";
-		else if (tokens->type == TOKEN_APPEND)
-			type_str = "APPEND";
-		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
-		tokens = tokens->next;
-	}
-}
-
-void 	print_parse(t_cmd	*cmd)
-{
-	int i;
-	t_cmd	*tmp;
-	t_redir	*tmpred;
-
-	tmp = cmd;
-	while (tmp)
-	{
-		i = 0;
-		while (tmp->cmd_args[i])
-			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
-		tmpred = tmp->redir;
-		while (tmpred)
+		update_prompt(&main);
+		line = readline(main.prompt);
+		if (!line)
+			break ;
+		if (line[0] != 0)
 		{
-			printf("Redir type: | %d\n", tmpred->type);
-			printf("Redir file: | %s\n", tmpred->file);
-			tmpred = tmpred->next;
+			add_history(line);
+			if (get_cmd(&main, line))
+			{
+				handle_commands(main);
+				free_cmd(main.cmd);
+			}
+			free(line);
 		}
-		printf("-----------------------\n");
-		tmp = tmp->next;
 	}
+	free(line);
+	free(main.prompt);
+	free(main.builtins);
+	free_tab(main.env);
+	rl_clear_history();
 }

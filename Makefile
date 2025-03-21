@@ -46,8 +46,9 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(BUILT-IN_DIR)pwd.c \
 				$(BUILT-IN_DIR)unset.c \
 				$(BUILT-IN_DIR)mordex.c \
-				$(BUILT-IN_DIR)bi_utils0.c \
-				$(BUILT-IN_DIR)bi_utils1.c \
+				$(BUILT-IN_DIR)bi_utils_env0.c \
+				$(BUILT-IN_DIR)bi_utils_env1.c \
+				$(BUILT-IN_DIR)bi_utils_env2.c \
 				$(UTILS_DIR)utils0.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
