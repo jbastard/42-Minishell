@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/14 10:16:39 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:59:22 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,21 @@ void	handle_buffer(t_lexer	*lexer)
 	}
 }
 
-void 	add_redirection_token(t_lexer *lexer, char c)
+void	add_redirection_token(t_lexer *lexer, char c)
 {
-	char buffer[3];
+	char	buffer[3];
 
 	buffer[0] = c;
 	buffer[1] = '\0';
 	buffer[2] = '\0';
-
 	if (lexer->input[lexer->i + 1] == c)
 	{
 		add_double_token(lexer, c);
 		lexer->i++;
 	}
-	else if (c == '<')
-			add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
 	else if (c == '>')
+		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_OUT);
+	else if (c == '<')
 		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
 	else if (c == '|')
 		add_token(&(lexer->tokens), buffer, TOKEN_PIPE);

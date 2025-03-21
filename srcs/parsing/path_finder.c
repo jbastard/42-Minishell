@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 08:58:17 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/18 12:31:26 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/20 12:41:11 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,29 @@ char	*find_cmd_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-int check_cmd(t_minishell *main)
+int	check_cmd(t_minishell *main)
 {
-	t_cmd *temp;
+	t_cmd	*temp;
 
 	temp = main->cmd;
 	while (temp)
 	{
-		if (!access(temp->cmd_args[0], X_OK)
-			&& !access(temp->cmd_args[0], F_OK))
+		if (!access(temp->cmd_args[0], X_OK | F_OK))
 		{
-			temp->path = temp->cmd_args[0];
+			temp->path = ft_strdup(temp->cmd_args[0]);
 			temp = temp->next;
 			continue ;
 		}
 		else if (temp->cmd_args[0][0] == '/')
 			return (handle_error(main, ERR_FILE_NOT_FOUND,
-								 temp->cmd_args[0]));
+					temp->cmd_args[0]));
 		temp->path = find_cmd_path(temp->cmd_args[0], main->env);
 		if (!temp->path)
 			return (handle_error(main, ERR_CMD_NOT_FOUND,
-								 temp->cmd_args[0]));
+					temp->cmd_args[0]));
 		if (access(temp->path, X_OK))
 			return (handle_error(main, ERR_PERMISSION_DENIED,
-								 temp->cmd_args[0]));
+					temp->cmd_args[0]));
 		temp = temp->next;
 	}
 	return (0);

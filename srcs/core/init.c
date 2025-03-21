@@ -21,6 +21,7 @@ t_minishell	init_minishell(void)
 	main.env = copy_env();
 	main.prompt = NULL;
 	main.last_status = ERR_NONE;
+	main.is_here = 0;
 	init_local_env(&main);
 	return (main);
 }

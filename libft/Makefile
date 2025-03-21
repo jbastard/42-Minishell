@@ -11,6 +11,7 @@ REMOVE			= rm -f
 #visual
 MAKEFLAGS		+= --no-print-directory
 RM_LINE			= @tput cuu1 && tput el
+BOLD_GREEN		= \e[1;92m
 GREEN			= \033[0;92m
 DEF_COLOR		= \033[0;39m
 
@@ -74,7 +75,7 @@ all: ${NAME}
 
 ${NAME}: ${OFILES}
 	@ar rcs $@ $^
-	@echo "${GREEN}Done creating ${NAME}${DEF_COLOR}"
+	@echo "${GREEN}Done creating  [ ${BOLD_GREEN}${NAME} ${GREEN}]${DEF_COLOR}"
 
 %.o : %.c
 	@echo "Compiling $< into $@..."
@@ -86,9 +87,9 @@ clean:
 	@${REMOVE} ${OFILES}
 
 fclean:
-	@echo "Removing ${NAME} and dependencies"
 	@${REMOVE} ${OFILES}
 	@${REMOVE} ${NAME}
+	@echo "Successfully removed ${NAME}"
 
 re: fclean all clean
 

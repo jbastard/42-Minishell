@@ -6,15 +6,13 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:27:07 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/18 12:23:39 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:28:54 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-volatile int g_sig = 0;
-
-void ctrl_c(int signal)
+void	ctrl_c(int signal)
 {
 	(void)signal;
 	ft_putstr_fd("\n", STDOUT_FILENO);
@@ -23,9 +21,9 @@ void ctrl_c(int signal)
 	rl_redisplay();
 }
 
-void sig_handler(void)
+void	sig_handler(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_handler = ctrl_c;
 	sigemptyset(&sa.sa_mask);
