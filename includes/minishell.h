@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:19:18 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/18 12:48:07 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/21 13:30:26 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_lexer
 
 void	print_tokens(t_token *tokens);
 int		handle_redir(t_minishell *main, t_cmd *cmd);
+int		heredoc(t_minishell *main, char *file);
 
 //ERROR
 	//ERROR_HANDLER.C
