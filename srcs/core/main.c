@@ -76,7 +76,6 @@ int	main()
 		add_history(main.line);
 		if (get_cmd(&main))
 			free_cmd(main.cmd);
-		heredoc(&main, "EOF");
 		free(main.line);
 	}
 	free(main.line);

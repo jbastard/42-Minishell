@@ -94,6 +94,7 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 			return (redir_append(main, redir->file));
 		else if (redir->type == TOKEN_HEREDOC)
 			return (heredoc(main, redir->file));
+		// pas au point, on ne peut qu ecrire dedans, pas de lecture pour le moment
 		redir = redir->next;
 	}
 	return (0);
