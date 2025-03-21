@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:36:19 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/20 12:40:58 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:28:16 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void 	free_cmd(t_cmd *cmd)
 
 	while (cmd)
 	{
-		if (cmd->cmd_args) {
+		if (cmd->cmd_args)
 			free_tab(cmd->cmd_args);
-		}
+		free(cmd->path);
 		free_redir(cmd->redir);
 		tmp = cmd;
 		cmd = cmd->next;

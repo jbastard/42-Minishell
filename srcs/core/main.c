@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/20 12:26:33 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:29:29 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ int	main()
 			break;
 		add_history(main.line);
 		if (get_cmd(&main))
-			if (main.cmd)
-				free_cmd(main.cmd);
+			free_cmd(main.cmd);
 		free(main.line);
 	}
 	free(main.line);

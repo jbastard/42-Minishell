@@ -100,7 +100,6 @@ t_cmd	*parse_tokens(t_minishell *main)
 int	get_cmd(t_minishell *main)
 {
 	main->tokens = lexer(main->line, main);
-//	print_tokens(main->tokens);
 	if (!main->tokens)
 		return (0);
 	else if (!syntax_checker(main))
