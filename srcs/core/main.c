@@ -39,29 +39,29 @@
 // 	}
 // }
 
-void	print_parse(t_cmd	*cmd)
-{
-	int		i;
-	t_cmd	*tmp;
-	t_redir	*tmpred;
+// void	print_parse(t_cmd	*cmd)
+// {
+// 	int		i;
+// 	t_cmd	*tmp;
+// 	t_redir	*tmpred;
 
-	tmp = cmd;
-	while (tmp)
-	{
-		i = 0;
-		while (tmp->cmd_args[i])
-			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
-		tmpred = tmp->redir;
-		while (tmpred)
-		{
-			printf("Redir type: | %d\n", tmpred->type);
-			printf("Redir file: | %s\n", tmpred->file);
-			tmpred = tmpred->next;
-		}
-		printf("-----------------------\n");
-		tmp = tmp->next;
-	}
-}
+// 	tmp = cmd;
+// 	while (tmp)
+// 	{
+// 		i = 0;
+// 		while (tmp->cmd_args[i])
+// 			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
+// 		tmpred = tmp->redir;
+// 		while (tmpred)
+// 		{
+// 			printf("Redir type: | %d\n", tmpred->type);
+// 			printf("Redir file: | %s\n", tmpred->file);
+// 			tmpred = tmpred->next;
+// 		}
+// 		printf("-----------------------\n");
+// 		tmp = tmp->next;
+// 	}
+// }
 
 int	main()
 {
@@ -81,7 +81,7 @@ int	main()
 			if (get_cmd(&main))
 			{
 				handle_commands(main.cmd, &main);
-				print_parse(main.cmd);
+				// print_parse(main.cmd);
 				free_cmd(main.cmd);
 			}
 		}
