@@ -73,3 +73,21 @@ void	free_lexer(t_token *token)
 	}
 	token = NULL;
 }
+
+void	free_local_env(t_env **env)
+{
+	t_env	*temp;
+
+	if (!env || !*env)
+		return ;
+	while (*env)
+	{
+		temp = (*env)->next;
+		free((*env)->key);
+		if ((*env)->value)
+			free((*env)->value);
+		free(*env);
+		*env = temp;
+	}
+	*env = NULL;
+}

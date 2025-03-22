@@ -12,32 +12,36 @@
 
 #include "../../includes/minishell.h"
 
-void    print_tokens(t_token *tokens)
-{
-	const char  *type_str;
+// void	print_tokens(t_token *tokens)
+// {
+// 	const char  *type_str;
 
-	while (tokens)
-	{
-		if (tokens->type == TOKEN_WORD)
-			type_str = "WORD";
-		else if (tokens->type == TOKEN_PIPE)
-			type_str = "PIPE";
-		else if (tokens->type == TOKEN_REDIR_IN)
-			type_str = "REDIRECTION_IN";
-		else if (tokens->type == TOKEN_REDIR_OUT)
-			type_str = "REDIRECTION_OUT";
-		else if (tokens->type == TOKEN_HEREDOC)
-			type_str = "HEREDOC";
-		else if (tokens->type == TOKEN_APPEND)
-			type_str = "APPEND";
-		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
-		tokens = tokens->next;
-	}
-}
+// 	if (tokens) {
+// 		printf("error parsing\n");
+// 		return;
+// 	}
+// 	while (tokens)
+// 	{
+// 		if (tokens->type == TOKEN_WORD)
+// 			type_str = "WORD";
+// 		else if (tokens->type == TOKEN_PIPE)
+// 			type_str = "PIPE";
+// 		else if (tokens->type == TOKEN_REDIR_IN)
+// 			type_str = "REDIRECTION_IN";
+// 		else if (tokens->type == TOKEN_REDIR_OUT)
+// 			type_str = "REDIRECTION_OUT";
+// 		else if (tokens->type == TOKEN_HEREDOC)
+// 			type_str = "HEREDOC";
+// 		else if (tokens->type == TOKEN_APPEND)
+// 			type_str = "APPEND";
+// 		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
+// 		tokens = tokens->next;
+// 	}
+// }
 
-void 	print_parse(t_cmd	*cmd)
+void	print_parse(t_cmd	*cmd)
 {
-	int i;
+	int		i;
 	t_cmd	*tmp;
 	t_redir	*tmpred;
 
@@ -47,7 +51,6 @@ void 	print_parse(t_cmd	*cmd)
 		i = 0;
 		while (tmp->cmd_args[i])
 			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
-		printf("Path        | %s\n", tmp->path);
 		tmpred = tmp->redir;
 		while (tmpred)
 		{
@@ -69,19 +72,26 @@ int	main()
 	while(1)
 	{
 		update_prompt(&main);
-		if (!main.is_here)
-			main.line = readline(main.prompt);
+		main.line = readline(main.prompt);
 		if (!main.line)
-			break;
-		add_history(main.line);
-		if (get_cmd(&main))
-			free_cmd(main.cmd);
-		heredoc(&main, "EOF");
-		free(main.line);
+			break ;
+		if (main.line[0] != 0)
+		{
+			add_history(main.line);
+			if (get_cmd(&main))
+			{
+				handle_commands(main.cmd, &main);
+				print_parse(main.cmd);
+				free_cmd(main.cmd);
+			}
+		}
+		if (main.line)
+			free(main.line);
 	}
 	free(main.line);
 	free(main.prompt);
 	free(main.builtins);
 	free_tab(main.env);
+	free_local_env(&main.local_vars);
 	rl_clear_history();
 }
