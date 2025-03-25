@@ -12,7 +12,38 @@
 
 #include "../../includes/minishell.h"
 
-void	handle_env_var(t_lexer *lexer)
+char	*ft_getenv(char *env, t_minishell *main)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (main->env[i])
+	{
+		j = len_equal(main->env[i]);
+		if (j < len_equal(env))
+			j = len_equal(env);
+		if (!ft_strncmp(env, main->env[i], j))
+			return (main->env[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+int		get_equals(char *env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i++])
+	{
+		if (env[i] == '=')
+			return (i + 1);
+	}
+	return (-1);
+}
+
+void	handle_env_var(t_lexer *lexer, t_minishell *main)
 {
 	char	var_name[1024];
 	char	*env_value;
@@ -32,7 +63,7 @@ void	handle_env_var(t_lexer *lexer)
 			|| lexer->input[lexer->i] == '_')
 			var_name[k++] = lexer->input[lexer->i++];
 		var_name[k] = '\0';
-		env_value = getenv(var_name);
+		env_value = (ft_getenv(var_name, main) + get_equals(ft_getenv(var_name, main)));
 		if (env_value)
 			while (*env_value)
 				lexer->buffer[lexer->j++] = *env_value++;
@@ -56,13 +87,13 @@ void	handle_single_quotes(t_lexer *lexer)
 	handle_buffer(lexer);
 }
 
-void	handle_double_quotes(t_lexer *lexer)
+void	handle_double_quotes(t_lexer *lexer, t_minishell *main)
 {
 	lexer->i++;
 	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\"')
 	{
 		if (lexer->input[lexer->i] == '$')
-			handle_env_var(lexer);
+			handle_env_var(lexer, main);
 		else
 			lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	}

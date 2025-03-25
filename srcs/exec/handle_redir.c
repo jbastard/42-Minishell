@@ -35,6 +35,7 @@ int heredoc(t_minishell *main, char *eof)
 		free(line);
 	}
 	main->is_here = 0;
+	close(fd);
 	return (0);
 }
 
@@ -93,7 +94,8 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 		else if (redir->type == TOKEN_APPEND)
 			return (redir_append(main, redir->file));
 		else if (redir->type == TOKEN_HEREDOC)
-			return (heredoc(main, redir->file));
+			if (!heredoc(main, redir->file))
+				return (redir_in(main, "heredoc.tmp"));
 		redir = redir->next;
 	}
 	return (0);
