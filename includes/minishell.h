@@ -232,9 +232,9 @@ void 		handle_buffer(t_lexer	*lexer);
 t_token		*lexer(char *line, t_minishell *main);
 void		add_redirection_token(t_lexer *lexer, char c);
 	//UTILS_LEXER.C
-void		handle_env_var(t_lexer *lexer);
+void		handle_env_var(t_lexer *lexer, t_minishell *main);
 void		handle_single_quotes(t_lexer *lexer);
-void		handle_double_quotes(t_lexer *lexer);
+void		handle_double_quotes(t_lexer *lexer, t_minishell *main);
 void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
 
