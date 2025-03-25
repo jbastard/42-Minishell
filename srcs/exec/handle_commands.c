@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   handle_commands.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 08:03:13 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/20 14:24:50 by jbastard         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   handle_commands.c								  :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: jbastard <jbastard@student.1337.ma>		+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/03/18 08:03:13 by jbastard		  #+#	#+#			 */
+/*   Updated: 2025/03/20 14:24:50 by jbastard		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
@@ -77,22 +77,28 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
-	if (i >= 0)
+	if (i >= 0 && bi_needs_child(i))
 		main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	else
 	{
 		pid = fork();
 		if (pid == 0)
-			execute_external_command(cmd, main);
+		{
+			handle_redir(main, cmd);
+			if (i > 0)
+				main->builtins[i].cmd(cmd->cmd_args + 1, main);
+			else
+				execute_external_command(cmd, main);
+		}
 		else
 			waitpid(pid, &main->last_status, 0);
 	}
 }
 
-void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
+void exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
-	pid_t	pid;
-	int		pipefd[2];
+	pid_t pid;
+	int pipefd[2];
 
 	while (cmds)
 	{
