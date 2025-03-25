@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/21 12:27:29 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/23 15:37:14 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 // void	print_tokens(t_token *tokens)
 // {
 // 	const char  *type_str;
-
-// 	if (tokens) {
-// 		printf("error parsing\n");
-// 		return;
-// 	}
+//
+//// 	if (tokens) {
+//// 		printf("error parsing\n");
+//// 		return;
+//// 	}
 // 	while (tokens)
 // 	{
 // 		if (tokens->type == TOKEN_WORD)
@@ -38,13 +38,13 @@
 // 		tokens = tokens->next;
 // 	}
 // }
-
+//
 // void	print_parse(t_cmd	*cmd)
 // {
 // 	int		i;
 // 	t_cmd	*tmp;
 // 	t_redir	*tmpred;
-
+//
 // 	tmp = cmd;
 // 	while (tmp)
 // 	{
@@ -81,7 +81,7 @@ int	main()
 			if (get_cmd(&main))
 			{
 				handle_commands(main.cmd, &main);
-				// print_parse(main.cmd);
+//				print_parse(main.cmd);
 				free_cmd(main.cmd);
 			}
 		}
