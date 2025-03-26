@@ -6,38 +6,38 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:35:00 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/23 15:37:14 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/26 09:58:33 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// void	print_tokens(t_token *tokens)
-// {
-// 	const char  *type_str;
-//
-//// 	if (tokens) {
-//// 		printf("error parsing\n");
-//// 		return;
-//// 	}
-// 	while (tokens)
-// 	{
-// 		if (tokens->type == TOKEN_WORD)
-// 			type_str = "WORD";
-// 		else if (tokens->type == TOKEN_PIPE)
-// 			type_str = "PIPE";
-// 		else if (tokens->type == TOKEN_REDIR_IN)
-// 			type_str = "REDIRECTION_IN";
-// 		else if (tokens->type == TOKEN_REDIR_OUT)
-// 			type_str = "REDIRECTION_OUT";
-// 		else if (tokens->type == TOKEN_HEREDOC)
-// 			type_str = "HEREDOC";
-// 		else if (tokens->type == TOKEN_APPEND)
-// 			type_str = "APPEND";
-// 		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
-// 		tokens = tokens->next;
+ void	print_tokens(t_token *tokens)
+ {
+ 	const char  *type_str;
+
+// 	if (tokens) {
+// 		printf("error parsing\n");
+// 		return;
 // 	}
-// }
+ 	while (tokens)
+ 	{
+ 		if (tokens->type == TOKEN_WORD)
+ 			type_str = "WORD";
+ 		else if (tokens->type == TOKEN_PIPE)
+ 			type_str = "PIPE";
+ 		else if (tokens->type == TOKEN_REDIR_IN)
+ 			type_str = "REDIRECTION_IN";
+ 		else if (tokens->type == TOKEN_REDIR_OUT)
+ 			type_str = "REDIRECTION_OUT";
+ 		else if (tokens->type == TOKEN_HEREDOC)
+ 			type_str = "HEREDOC";
+ 		else if (tokens->type == TOKEN_APPEND)
+ 			type_str = "APPEND";
+ 		printf("Token: %-20s | Type: %s\n", tokens->value, type_str);
+ 		tokens = tokens->next;
+ 	}
+ }
 //
 // void	print_parse(t_cmd	*cmd)
 // {

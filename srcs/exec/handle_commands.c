@@ -1,4 +1,16 @@
 /* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_commands.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 07:57:06 by jbastard          #+#    #+#             */
+/*   Updated: 2025/03/26 07:57:06 by jbastard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
 /*																			*/
 /*														:::	  ::::::::   */
 /*   handle_commands.c								  :+:	  :+:	:+:   */
@@ -77,10 +89,10 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
-	if (i >= 0 && bi_needs_child(i))
-		main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	else
-	{
+//	if (i >= 0 && bi_needs_child(i))
+//		main->builtins[i].cmd(cmd->cmd_args + 1, main);
+//	else
+//	{
 		pid = fork();
 		if (pid == 0)
 		{
@@ -92,7 +104,7 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 		}
 		else
 			waitpid(pid, &main->last_status, 0);
-	}
+//	}
 }
 
 void exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)

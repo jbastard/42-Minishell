@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/20 10:59:22 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:15:39 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	add_redirection_token(t_lexer *lexer, char c)
 		add_token(&(lexer->tokens), buffer, TOKEN_REDIR_IN);
 	else if (c == '|')
 		add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
+	lexer->i++;
 }
 
 t_token	*lexer(char *line, t_minishell *main)
@@ -92,14 +93,16 @@ t_token	*lexer(char *line, t_minishell *main)
 		else if (lexer.input[lexer.i] == '$' && !lexer.quote)
 			handle_env_var(&lexer, main);
 		else if (is_whitespaces(lexer.input[lexer.i]) && !lexer.quote)
+		{
 			handle_buffer(&lexer);
-		else if (!is_whitespaces(lexer.input[lexer.i]) && !lexer.quote)
-			lexer.buffer[lexer.j++] = lexer.input[lexer.i];
-		lexer.i++;
+			lexer.i++;
+		}
+		else
+			lexer.buffer[lexer.j++] = lexer.input[lexer.i++];
 	}
+	handle_buffer(&lexer);
 	main->last_status = lexer.error;
 	if (lexer.error)
 		return (free_lexer(lexer.tokens), NULL);
-	handle_buffer(&lexer);
 	return (lexer.tokens);
 }
