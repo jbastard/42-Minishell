@@ -101,8 +101,5 @@ t_token	*lexer(char *line, t_minishell *main)
 			lexer.buffer[lexer.j++] = lexer.input[lexer.i++];
 	}
 	handle_buffer(&lexer);
-	main->last_status = lexer.error;
-	if (lexer.error)
-		return (free_lexer(lexer.tokens), NULL);
 	return (lexer.tokens);
 }

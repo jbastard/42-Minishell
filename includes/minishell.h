@@ -1,4 +1,16 @@
 /* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
+/*   Updated: 2025/03/26 17:00:30 by jbastard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
 /*																			*/
 /*														:::	  ::::::::   */
 /*   minishell.h										:+:	  :+:	:+:   */
@@ -232,10 +244,15 @@ void 		handle_buffer(t_lexer	*lexer);
 t_token		*lexer(char *line, t_minishell *main);
 void		add_redirection_token(t_lexer *lexer, char c);
 	//UTILS_LEXER.C
+char		*ft_getenv(char *env, t_minishell *main);
+int			get_equals(char *env);
+void		add_double_token(t_lexer *lexer, char c);
+void		handle_special_char_op(t_lexer *lexer);
+//QUOTES_LEXER.C
+void		error_var(t_lexer *lexer, t_minishell *main, char *env_value, int k);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
 void		handle_single_quotes(t_lexer *lexer);
 void		handle_double_quotes(t_lexer *lexer, t_minishell *main);
-void		add_double_token(t_lexer *lexer, char c);
-void		handle_special_char_op(t_lexer *lexer);
+
 
 #endif
