@@ -70,8 +70,6 @@ void	init_cmd(t_cmd *new)
 	new->next = NULL;
 	new->cmd_args = NULL;
 	new->path = NULL;
-	new->fd_in = STDIN_FILENO;
-	new->fd_out = STDOUT_FILENO;
 }
 
 int	is_redir(t_token *toks)

@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:15:14 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/20 12:29:42 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/26 09:58:03 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ int	get_cmd(t_minishell *main)
 	main->tokens = lexer(main->line, main);
 	if (!main->tokens)
 		return (0);
-	else if (!syntax_checker(main))
+	print_tokens(main->tokens);
+	if (!syntax_checker(main))
 		return (free_lexer(main->tokens), 0);
 	main->cmd = parse_tokens(main);
 	if (!main->cmd)

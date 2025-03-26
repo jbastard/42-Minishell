@@ -35,6 +35,7 @@ int heredoc(t_minishell *main, char *eof)
 		free(line);
 	}
 	main->is_here = 0;
+	close(fd);
 	return (0);
 }
 
@@ -82,8 +83,9 @@ int redir_append(t_minishell *main, char *file)
 
 int	handle_redir(t_minishell *main, t_cmd *cmd)
 {
-	t_redir *redir = cmd->redir;
-
+	t_redir *redir;
+	
+	redir = cmd->redir;
 	while (redir)
 	{
 		if (redir->type == TOKEN_REDIR_IN)
