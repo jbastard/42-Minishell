@@ -77,7 +77,7 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
-	if (i >= 0 && bi_needs_child(i))
+	if (i >= 0)
 		main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	else
 	{
