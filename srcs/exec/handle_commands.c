@@ -148,27 +148,3 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 	else
 		exec_multiple_cmds(cmds, main, prev_pipe);
 }
-
-// void	print_parse(t_cmd	*cmd)
-// {
-// 	int		i;
-// 	t_cmd	*tmp;
-// 	t_redir	*tmpred;
-
-// 	tmp = cmd;
-// 	while (tmp)
-// 	{
-// 		i = 0;
-// 		while (tmp->cmd_args[i])
-// 			printf("Argument:   | %s\n", tmp->cmd_args[i++]);
-// 		tmpred = tmp->redir;
-// 		while (tmpred)
-// 		{
-// 			printf("Redir type: | %d\n", tmpred->type);
-// 			printf("Redir file: | %s\n", tmpred->file);
-// 			tmpred = tmpred->next;
-// 		}
-// 		printf("-----------------------\n");
-// 		tmp = tmp->next;
-// 	}
-// }
