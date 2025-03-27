@@ -89,14 +89,14 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 	while (redir)
 	{
 		if (redir->type == TOKEN_REDIR_IN)
-			return (redir_in(main, redir->file));
+			redir_in(main, redir->file);
 		else if (redir->type == TOKEN_REDIR_OUT)
-			return (redir_out(main, redir->file));
+			redir_out(main, redir->file);
 		else if (redir->type == TOKEN_APPEND)
-			return (redir_append(main, redir->file));
+			redir_append(main, redir->file);
 		else if (redir->type == TOKEN_HEREDOC)
 			if (!heredoc(main, redir->file))
-				return (redir_in(main, "heredoc.tmp"));
+				redir_in(main, "heredoc.tmp");
 		redir = redir->next;
 	}
 	return (0);
