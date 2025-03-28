@@ -152,7 +152,7 @@ int		heredoc(t_minishell *main, char *file);
 	//ERROR_HANDLER.C
 void 		exit_error(char *source, int isper, int isexit);
 int			handle_error(t_minishell *main, t_error_type type, char *info);
-int			handle_error1(t_minishell *main, t_error_type type, char *info);
+void		handle_error1(t_minishell *main, t_error_type type, char *info);
 	//ALL_KINDS_OF_FREE.C
 void 		free_cmd(t_cmd *cmd);
 void 		free_redir(t_redir *redir);

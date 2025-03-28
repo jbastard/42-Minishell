@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int is_whitespaces(char c)
+int	is_whitespaces(char c)
 {
 	return (c <= 32);
 }

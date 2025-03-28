@@ -41,7 +41,7 @@ int	handle_error(t_minishell *main, t_error_type type, char *info)
 	return (main->last_status);
 }
 
-int	handle_error1(t_minishell *main, t_error_type type, char *info)
+void	handle_error1(t_minishell *main, t_error_type type, char *info)
 {
 	if (type == ERR_FILE_NOT_FOUND)
 	{
