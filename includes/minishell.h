@@ -48,6 +48,9 @@
 # include "../libft/include/libft.h"
 
 # define NAME "minishell"
+# define SIG_INTER 1 
+# define SIG_EXEC 2
+# define SIG_CHILD 3 
 
 typedef enum e_token_type
 {
@@ -144,6 +147,7 @@ struct s_lexer
 	int 		error;
 };
 
+void	set_sig_child(void);
 void	print_tokens(t_token *tokens);
 int		handle_redir(t_minishell *main, t_cmd *cmd);
 int		heredoc(t_minishell *main, char *file);
@@ -193,6 +197,9 @@ char		**copy_env(void);
 	//BI_UTILS_ENV2.c
 void		insert_sorted(t_env **sorted, t_env *new_node);
 void		sort_local_env(t_env **locals);
+int			count_args(char **args);
+int			is_special_char(char c);
+int			is_whitespaces(char c);
 
 //CORE
 	//INIT.C
@@ -236,13 +243,13 @@ int			check_cmd(t_minishell *main);
 //EXEC
 	//HANDLE_COMMANDS.C
 void		handle_commands(t_cmd *cmds, t_minishell *main);
+void		exec_one_cmd(t_cmd *cmd, t_minishell *main);
+void		exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe);
+	//EXEC_UTILS.C
 int			is_builtin(t_builtin *builtins, char *cmd);
-
-//UTILS
-	//UTILS0.C
-int			count_args(char **args);
-int			is_special_char(char c);
-int			is_whitespaces(char c);
+int			count_commands(t_cmd *cmds);
+void		create_pipe_and_fork(t_cmd *cmds, t_minishell *main, int prev_pipe, int pipefd[2], int *pid);
+void		execute_external_command(t_cmd *cmd, t_minishell *main);
 
 //LEXING
 	//LINE_LEXER.C

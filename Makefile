@@ -22,7 +22,6 @@ CORE_DIR	=	core/
 ERROR_DIR	=	error/
 PARSING_DIR	=	parsing/
 BUILT-IN_DIR=	built_in/
-UTILS_DIR	=	utils/
 EXEC_DIR	=	exec/
 LEXING_DIR	=	lexing/
 
@@ -37,6 +36,7 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(CORE_DIR)prompt.c \
 				$(EXEC_DIR)handle_commands.c \
 				$(EXEC_DIR)handle_redir.c \
+				$(EXEC_DIR)exec_utils.c \
 				$(ERROR_DIR)error_handler.c \
 				$(ERROR_DIR)all_kinds_of_free.c \
 				$(PARSING_DIR)signal_handler.c \
@@ -58,7 +58,6 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(BUILT-IN_DIR)bi_utils_env0.c \
 				$(BUILT-IN_DIR)bi_utils_env1.c \
 				$(BUILT-IN_DIR)bi_utils_env2.c \
-				$(UTILS_DIR)utils0.c
 
 SRC			=	$(addprefix $(SRC_DIR), $(C_FILES))
 OBJS		=	$(patsubst $(SRC_DIR)%.c, $(OBJS_DIR)%.o, $(SRC))

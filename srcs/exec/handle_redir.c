@@ -21,6 +21,7 @@ int	heredoc(t_minishell *main, char *eof)
 	if (fd < 0)
 		return (printf("Unable to open heredoc\n"), 1);
 	main->is_here = 1;
+	set_sig_child();
 	while (1)
 	{
 		line = readline("heredoc> ");

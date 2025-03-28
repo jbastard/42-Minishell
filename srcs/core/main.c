@@ -61,13 +61,13 @@
 
 int	handle_inputs(t_minishell *main)
 {
-	if (!main->is_here)
+	if (!main->is_here && g_signal != SIG_CHILD)
 		main->line = readline(main->prompt);
 	if (!main->line)
-		return (free(main->line), 0);
+		return (0);
 	add_history(main->line);
 	if (!get_cmd(main))
-		return (free(main->line), 0);
+		return (free(main->line), 1);
 	handle_commands(main->cmd, main);
 	free_cmd(main->cmd);
 	if (main->line)
