@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/26 17:00:30 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/03/27 09:24:54 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ typedef enum e_error_type
 	ERR_PIPE,
 	ERR_REDIR,
 }	t_error_type;
+
+extern volatile int	g_signal;
 
 typedef struct s_minishell	t_minishell;
 typedef struct s_builtin	t_builtin;
@@ -206,6 +208,11 @@ void		update_prompt(t_minishell *main);
 	//SIGNAL_HANDLER.C
 void		sig_handler();
 void		ctrl_c(int signal);
+
+
+void	set_sig_interactive(void);
+void	set_sig_executing(void);
+
 	//CMD_PARSING.C
 int			get_cmd(t_minishell *main);
 t_cmd		*parse_tokens(t_minishell *main);
