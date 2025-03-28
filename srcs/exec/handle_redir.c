@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int heredoc(t_minishell *main, char *eof)
+int	heredoc(t_minishell *main, char *eof)
 {
 	int		fd;
 	char	*line;
@@ -39,7 +39,7 @@ int heredoc(t_minishell *main, char *eof)
 	return (0);
 }
 
-int redir_in(t_minishell *main, char *file)
+int	redir_in(t_minishell *main, char *file)
 {
 	int	fd;
 
@@ -53,7 +53,7 @@ int redir_in(t_minishell *main, char *file)
 	return (0);
 }
 
-int redir_out(t_minishell *main, char *file)
+int	redir_out(t_minishell *main, char *file)
 {
 	int	fd;
 
@@ -67,9 +67,9 @@ int redir_out(t_minishell *main, char *file)
 	return (0);
 }
 
-int redir_append(t_minishell *main, char *file)
+int	redir_append(t_minishell *main, char *file)
 {
-	int fd;
+	int	fd;
 
 	fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0664);
 	if (fd < 0)
@@ -83,8 +83,8 @@ int redir_append(t_minishell *main, char *file)
 
 int	handle_redir(t_minishell *main, t_cmd *cmd)
 {
-	t_redir *redir;
-	
+	t_redir	*redir;
+
 	redir = cmd->redir;
 	while (redir)
 	{

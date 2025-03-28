@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void 	free_redir(t_redir *redir)
+void	free_redir(t_redir *redir)
 {
 	t_redir	*tmp;
 
@@ -26,9 +26,9 @@ void 	free_redir(t_redir *redir)
 	redir = NULL;
 }
 
-void 	free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
-	t_cmd 	*tmp;
+	t_cmd	*tmp;
 
 	while (cmd)
 	{

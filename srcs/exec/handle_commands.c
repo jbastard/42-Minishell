@@ -51,8 +51,8 @@ int	is_builtin(t_builtin *builtins, char *cmd)
 
 int	count_commands(t_cmd *cmds)
 {
-	int count;
-	
+	int	count;
+
 	count = 0;
 	while (cmds)
 	{
@@ -95,10 +95,10 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	}
 }
 
-void exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
+void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
-	pid_t pid;
-	int pipefd[2];
+	pid_t	pid;
+	int		pipefd[2];
 
 	while (cmds)
 	{
@@ -138,7 +138,7 @@ void exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 
 void	handle_commands(t_cmd *cmds, t_minishell *main)
 {
-	int cmd_count;
+	int	cmd_count;
 	int	prev_pipe;
 	
 	prev_pipe = -1;
