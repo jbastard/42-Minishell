@@ -12,31 +12,46 @@
 
 #include "../../includes/minishell.h"
 
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char	*res;
+
+	res = ft_strjoin(s1, s2);
+	free(s1);
+	return (res);
+}
+
 int	cd_command(char **args, t_minishell *main)
 {
 	char	buffer[1024];
-	char	*new_path[2];
+	char	*path;
+	char 	*tmp;
+	char	*cwd;
 
 	(void)main;
-	if (args == NULL || args[0][0] == 0)
-		return (1);
-	if (args[0][0] == '/')
+	if (!args || !args[0] || args[0][0] == 0)
 	{
-		if (chdir(args[0]) != 0)
+		path = getenv("HOME");
+		if (!path)
+			return (printf("cd: HOME not set\n"), 1);
+	}
+	else
+		path = args[0];
+	if (path[0] == '/')
+	{
+		if (chdir(path) != 0)
 			perror("cd");
 	}
 	else
 	{
-		if (getcwd(buffer, 1024))
-		{
-			new_path[0] = ft_strjoin(buffer, "/");
-			new_path[1] = ft_strjoin(new_path[0], args[0]);
-			if (chdir(new_path[1]) != 0)
-				perror("cd");
-			return (free(new_path[0]), free(new_path[1]), 0);
-		}
-		else
-			perror("cd");
+		cwd = getcwd(buffer, 1024);
+		if (!cwd)
+			return (perror("cd"), 1);
+		tmp = ft_strjoin(cwd, "/");
+		path = ft_strjoin_free(tmp, path);
+		if (chdir(path) != 0)
+			return (perror("cd"), free(path), 1);
+		free(path);
 	}
 	return (0);
 }
