@@ -34,8 +34,8 @@ int	echo_command(char **args, t_minishell *main)
 				printf(" ");
 			i++;
 		}
-		if (newl)
-			printf("\n");
 	}
+	if (newl || !args[0])
+		printf("\n");
 	return (0);
 }

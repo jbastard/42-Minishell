@@ -87,14 +87,14 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 		create_pipe_and_fork(cmds, main, prev_pipe, pipefd, &pid);
 		if (pid > 0)
 		{
-			waitpid(pid, &main->last_status, 0);
 			close(pipefd[1]);
 			if (prev_pipe != -1)
-	   			close(prev_pipe);
-   			prev_pipe = pipefd[0];
+			close(prev_pipe);
+			prev_pipe = pipefd[0];
 			cmds = cmds->next;
 		}
 	}
+	waitpid(pid, &main->last_status, 0);
 	if (prev_pipe != -1)
 		close(prev_pipe);
 }
