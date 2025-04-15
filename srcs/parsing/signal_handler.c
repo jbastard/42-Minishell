@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:27:07 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/28 10:23:18 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:17:57 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	set_sig_interactive(void)
 	struct sigaction	sa_quit;
 	g_signal = SIG_INTER;
 
-	ft_memset(&sa_int, 0, sizeof(sa_int));
-	ft_memset(&sa_quit, 0, sizeof(sa_quit));
 	init_sigaction(&sa_int, handle_sigint_interactive, SA_RESTART);
 	init_sigaction(&sa_quit, SIG_IGN, 0);
 	sigaction(SIGINT, &sa_int, NULL);
@@ -63,7 +61,6 @@ void	set_sig_executing(void)
 	struct sigaction	sa_exec;
 	g_signal = SIG_EXEC;
 
-	ft_memset(&sa_exec, 0, sizeof(sa_exec));
 	init_sigaction(&sa_exec, handle_sig_executing, SA_RESTART);
 	sigaction(SIGINT, &sa_exec, NULL);
 	sigaction(SIGQUIT, &sa_exec, NULL);

@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/27 09:24:54 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:31:27 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,9 @@ struct s_lexer
 void	set_sig_child(void);
 void	print_tokens(t_token *tokens);
 int		handle_redir(t_minishell *main, t_cmd *cmd);
-int		heredoc(t_minishell *main, char *file);
+int		heredoc(t_minishell *main, char *file, char *tmp_name);
+char	*generate_tmp_name(int i);
+int	prepare_heredocs(t_cmd *cmd, t_minishell *main);
 
 //ERROR
 	//ERROR_HANDLER.C

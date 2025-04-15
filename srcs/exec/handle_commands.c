@@ -1,4 +1,16 @@
 /* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_commands.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
+/*   Updated: 2025/04/15 09:52:03 by jbastard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
 /*																			*/
 /*														:::	  ::::::::   */
 /*   handle_commands.c								  :+:	  :+:	:+:   */
@@ -41,15 +53,19 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
+	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) || !cmd->redir))
+		main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	if (i < 0 || cmd->redir)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
+			if (prepare_heredocs(cmd, main))
+				exit(1);
 			handle_redir(main, cmd);
-			if (i >= 0 && cmd->redir && bi_has_output(i, cmd->cmd_args + 1))
+			if (i >= 0)
 				main->builtins[i].cmd(cmd->cmd_args + 1, main);
-			else if (i < 0)
+			else
 				execute_external_command(cmd, main);
 			exit(0);
 		}
@@ -58,8 +74,8 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	}
 	if (i >= 0 && !cmd->redir)
 		main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
-		main->builtins[i].cmd(cmd->cmd_args + 1, main);
+//	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
+//		main->builtins[i].cmd(cmd->cmd_args + 1, main);
 }
 
 void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
@@ -69,6 +85,8 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 
 	while (cmds)
 	{
+		if (prepare_heredocs(cmds, main))
+			exit(1);
 		create_pipe_and_fork(cmds, main, prev_pipe, pipefd, &pid);
 		if (pid > 0)
 		{
