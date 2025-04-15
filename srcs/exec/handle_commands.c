@@ -40,10 +40,7 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 int	bi_has_output(int i, char **args)
 {
 	if (i == 0 || i == 2 || (i == 3 && !*args) || i == 5 || i == 7)
-	{
-		printf("test\n");
 		return (1);
-	}
 	return (0);
 }
 
@@ -53,7 +50,7 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
-	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) || !cmd->redir))
+	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) && !cmd->redir))
 		main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	if (i < 0 || cmd->redir)
 	{
