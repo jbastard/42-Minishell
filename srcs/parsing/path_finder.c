@@ -70,12 +70,6 @@ int	check_cmd(t_minishell *main)
 			return (handle_error(main, ERR_FILE_NOT_FOUND,
 					temp->cmd_args[0]));
 		temp->path = find_cmd_path(temp->cmd_args[0], main->env);
-		if (!temp->path)
-			return (handle_error(main, ERR_CMD_NOT_FOUND,
-					temp->cmd_args[0]));
-		if (access(temp->path, X_OK))
-			return (handle_error(main, ERR_PERMISSION_DENIED,
-					temp->cmd_args[0]));
 		temp = temp->next;
 	}
 	return (0);

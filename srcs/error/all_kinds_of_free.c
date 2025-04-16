@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void 	free_redir(t_redir *redir)
+void	free_redir(t_redir *redir)
 {
 	t_redir	*tmp;
 
@@ -26,9 +26,9 @@ void 	free_redir(t_redir *redir)
 	redir = NULL;
 }
 
-void 	free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
-	t_cmd 	*tmp;
+	t_cmd	*tmp;
 
 	while (cmd)
 	{
@@ -72,4 +72,22 @@ void	free_lexer(t_token *token)
 		free(temp);
 	}
 	token = NULL;
+}
+
+void	free_local_env(t_env **env)
+{
+	t_env	*temp;
+
+	if (!env || !*env)
+		return ;
+	while (*env)
+	{
+		temp = (*env)->next;
+		free((*env)->key);
+		if ((*env)->value)
+			free((*env)->value);
+		free(*env);
+		*env = temp;
+	}
+	*env = NULL;
 }

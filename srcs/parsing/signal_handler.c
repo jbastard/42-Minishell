@@ -6,28 +6,41 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:27:07 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/21 13:28:54 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:17:57 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ctrl_c(int signal)
+volatile int	g_signal = 0;
+
+static void	handle_sigint_interactive(int signo)
 {
-	(void)signal;
-	ft_putstr_fd("\n", STDOUT_FILENO);
-	rl_replace_line("", 0);
+	(void)signo;
+	if (g_signal == SIG_CHILD)
+		exit(130);
+	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
-	rl_redisplay();
+	rl_replace_line("", 0);
+	if (g_signal == SIG_INTER)
+		rl_redisplay();
 }
 
-void	sig_handler(void)
+void	init_sigaction(struct sigaction *sa, void (*handler)(int), int flags)
 {
-	struct sigaction	sa;
+	sigemptyset(&sa->sa_mask);
+	sa->sa_handler = handler;
+	sa->sa_flags = flags;
+}
 
-	sa.sa_handler = ctrl_c;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+void	set_sig_interactive(void)
+{
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
+	g_signal = SIG_INTER;
+
+	init_sigaction(&sa_int, handle_sigint_interactive, SA_RESTART);
+	init_sigaction(&sa_quit, SIG_IGN, 0);
+	sigaction(SIGINT, &sa_int, NULL);
+	sigaction(SIGQUIT, &sa_quit, NULL);
 }

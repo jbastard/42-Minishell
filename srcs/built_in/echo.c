@@ -20,19 +20,22 @@ int	echo_command(char **args, t_minishell *main)
 	(void)main;
 	newl = 1;
 	i = 0;
-	if (!(ft_strncmp(args[i], "-n", 2)))
+	if (args[0])
 	{
-		newl = 0;
-		i++;
+		if (!(ft_strncmp(args[i], "-n", 2)))
+		{
+			newl = 0;
+			i++;
+		}
+		while (args[i])
+		{
+			printf("%s", args[i]);
+			if (args[i + 1])
+				printf(" ");
+			i++;
+		}
 	}
-	while (args[i])
-	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (newl)
+	if (newl || !args[0])
 		printf("\n");
 	return (0);
 }
