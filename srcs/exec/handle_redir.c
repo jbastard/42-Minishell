@@ -55,11 +55,10 @@ int	heredoc(t_minishell *main, char *eof, char *filename)
 	int		fd;
 	char	*line;
 
+	(void)main;
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	if (fd < 0)
 		return (printf("Unable to open heredoc\n"), 1);
-	main->is_here = 1;
-	set_sig_child();
 	while (1)
 	{
 		line = readline("heredoc> ");
@@ -73,7 +72,6 @@ int	heredoc(t_minishell *main, char *eof, char *filename)
 		ft_dprintf(fd, "%s\n", line);
 		free(line);
 	}
-	main->is_here = 0;
 	close(fd);
 	return (0);
 }
