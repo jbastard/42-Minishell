@@ -61,13 +61,14 @@
 
 int	handle_inputs(t_minishell *main)
 {
+	set_sig_interactive();
 	if (!main->is_here && g_signal != SIG_CHILD)
 		main->line = readline(main->prompt);
 	if (!main->line)
 		return (0);
-	add_history(main->line);
 	if (!get_cmd(main))
 		return (free(main->line), 1);
+	add_history(main->line);
 	handle_commands(main->cmd, main);
 	free_cmd(main->cmd);
 	if (main->line)
@@ -82,7 +83,6 @@ int	main(void)
 	main = init_minishell();
 	while (1)
 	{
-		set_sig_interactive();
 		update_prompt(&main);
 		if (!handle_inputs(&main))
 			break ;

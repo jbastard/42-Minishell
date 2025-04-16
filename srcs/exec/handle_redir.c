@@ -59,7 +59,6 @@ int	heredoc(t_minishell *main, char *eof, char *filename)
 	if (fd < 0)
 		return (printf("Unable to open heredoc\n"), 1);
 	main->is_here = 1;
-	set_sig_child();
 	while (1)
 	{
 		line = readline("heredoc> ");
@@ -139,6 +138,7 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 		else if (redir->type == TOKEN_HEREDOC)
 		{
 			tmpname = generate_tmp_name(i++);
+			ft_dprintf(1, "%s\n", tmpname);
 			if (!heredoc(main, redir->file, tmpname))
 				redir_in(main, tmpname);
 			unlink(tmpname);

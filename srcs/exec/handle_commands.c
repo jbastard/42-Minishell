@@ -32,7 +32,10 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 	prev_pipe = -1;
 	cmd_count = count_commands(cmds);
 	if (cmd_count == 1)
+	{
+		g_signal = SIG_EXEC;
 		exec_one_cmd(cmds, main);
+	}
 	else
 		exec_multiple_cmds(cmds, main, prev_pipe);
 }
@@ -59,6 +62,7 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 		pid = fork();
 		if (pid == 0)
 		{
+			g_signal = SIG_CHILD;
 			if (prepare_heredocs(cmd, main))
 				exit(1);
 			handle_redir(main, cmd);
@@ -80,6 +84,7 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 	pid_t pid;
 	int pipefd[2];
 
+	g_signal = SIG_EXEC;
 	while (cmds)
 	{
 		if (prepare_heredocs(cmds, main))
