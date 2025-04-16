@@ -63,8 +63,6 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 		if (pid == 0)
 		{
 			g_signal = SIG_CHILD;
-			if (prepare_heredocs(cmd, main))
-				exit(1);
 			handle_redir(main, cmd);
 			if (i >= 0)
 				main->builtins[i].cmd(cmd->cmd_args + 1, main);
@@ -87,8 +85,6 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 	g_signal = SIG_EXEC;
 	while (cmds)
 	{
-		if (prepare_heredocs(cmds, main))
-			exit(1);
 		create_pipe_and_fork(cmds, main, prev_pipe, pipefd, &pid);
 		if (pid > 0)
 		{

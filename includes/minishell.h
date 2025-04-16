@@ -152,7 +152,6 @@ void	print_tokens(t_token *tokens);
 int		handle_redir(t_minishell *main, t_cmd *cmd);
 int		heredoc(t_minishell *main, char *file, char *tmp_name);
 char	*generate_tmp_name(int i);
-int	prepare_heredocs(t_cmd *cmd, t_minishell *main);
 
 //ERROR
 	//ERROR_HANDLER.C

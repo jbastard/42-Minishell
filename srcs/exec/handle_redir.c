@@ -23,33 +23,6 @@ char	*generate_tmp_name(int i)
 	return (tmpname);
 }
 
-int	prepare_heredocs(t_cmd *cmd, t_minishell *main)
-{
-	t_redir	*redir;
-	int		i;
-	char	*tmp;
-
-	redir = cmd->redir;
-	i = 0;
-	while (redir)
-	{
-		if (redir->type == TOKEN_HEREDOC)
-		{
-			tmp = generate_tmp_name(i++);
-			if (heredoc(main, redir->file, tmp))
-			{
-				free(tmp);
-				return (1);
-			}
-			free(redir->file);
-			redir->file = tmp;
-			redir->type = TOKEN_REDIR_IN;
-		}
-		redir = redir->next;
-	}
-	return (0);
-}
-
 int	heredoc(t_minishell *main, char *eof, char *filename)
 {
 	int		fd;
@@ -138,7 +111,6 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 		else if (redir->type == TOKEN_HEREDOC)
 		{
 			tmpname = generate_tmp_name(i++);
-			ft_dprintf(1, "%s\n", tmpname);
 			if (!heredoc(main, redir->file, tmpname))
 				redir_in(main, tmpname);
 			unlink(tmpname);
