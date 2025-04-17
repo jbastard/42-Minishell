@@ -33,7 +33,7 @@ void	init_sigaction(struct sigaction *sa, void (*handler)(int), int flags)
 	sa->sa_flags = flags;
 }
 
-void	set_sig_interactive()
+void	set_sig_interactive(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;

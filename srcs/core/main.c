@@ -12,7 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-
 int	handle_inputs(t_minishell *main)
 {
 	set_sig_interactive();
@@ -33,7 +32,7 @@ int	handle_inputs(t_minishell *main)
 int	main(void)
 {
 	t_minishell	main;
-	
+
 	main = init_minishell();
 	while (1)
 	{
