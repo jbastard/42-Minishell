@@ -56,6 +56,11 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 				main->builtins[i].cmd(cmd->cmd_args + 1, main);
 			else
 				execute_external_command(cmd, main);
+			free(main->prompt);
+			free_cmd(main->cmd);
+			free(main->builtins);
+			free_tab(main->env);
+			free_local_env(&main->local_vars);
 			exit(0);
 		}
 		waitpid(pid, &main->last_status, 0);

@@ -17,12 +17,12 @@ volatile int	g_signal = 0;
 static void	handle_sigint_interactive(int signo)
 {
 	(void)signo;
-	if (g_signal == SIG_CHILD)
-		exit(130);
-	write(STDOUT_FILENO, "\n", 1);
+	if (g_signal == SIG_EXEC)
+		return ;
 	rl_on_new_line();
+	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);
-	if (g_signal == SIG_INTER)
+	if (g_signal == SIG_INTER || g_signal == SIG_CHILD)
 		rl_redisplay();
 }
 
@@ -33,7 +33,7 @@ void	init_sigaction(struct sigaction *sa, void (*handler)(int), int flags)
 	sa->sa_flags = flags;
 }
 
-void	set_sig_interactive(void)
+void	set_sig_interactive()
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;

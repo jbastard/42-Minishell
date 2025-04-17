@@ -118,7 +118,7 @@ struct s_minishell
 	char		*line;
 	t_cmd		*cmd;
 	t_token		*tokens;
-	int			last_status;
+	unsigned char			last_status;
 	int 		is_here;
 };
 
