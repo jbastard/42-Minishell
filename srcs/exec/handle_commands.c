@@ -10,25 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   handle_commands.c								  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: jbastard <jbastard@student.1337.ma>		+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/03/26 07:57:06 by jbastard		  #+#	#+#			 */
-/*   Updated: 2025/03/26 07:57:06 by jbastard		 ###   ########.fr	   */
-/*																			*/
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 void	handle_commands(t_cmd *cmds, t_minishell *main)
 {
 	int	cmd_count;
 	int	prev_pipe;
-	
+
 	prev_pipe = -1;
 	cmd_count = count_commands(cmds);
 	if (cmd_count == 1)
@@ -70,8 +58,7 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 				execute_external_command(cmd, main);
 			exit(0);
 		}
-		else
-			waitpid(pid, &main->last_status, 0);
+		waitpid(pid, &main->last_status, 0);
 	}
 	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
 		main->builtins[i].cmd(cmd->cmd_args + 1, main);
@@ -79,8 +66,8 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 
 void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
-	pid_t pid;
-	int pipefd[2];
+	pid_t	pid;
+	int		pipefd[2];
 
 	g_signal = SIG_EXEC;
 	while (cmds)
@@ -90,7 +77,7 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 		{
 			close(pipefd[1]);
 			if (prev_pipe != -1)
-			close(prev_pipe);
+				close(prev_pipe);
 			prev_pipe = pipefd[0];
 			cmds = cmds->next;
 		}

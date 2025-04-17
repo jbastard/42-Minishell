@@ -25,7 +25,7 @@ int	cd_command(char **args, t_minishell *main)
 {
 	char	buffer[1024];
 	char	*path;
-	char 	*tmp;
+	char	*tmp;
 	char	*cwd;
 
 	(void)main;

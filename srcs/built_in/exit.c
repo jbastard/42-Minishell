@@ -27,7 +27,7 @@ int	exit_command(char **args, t_minishell *main)
 		while (args[0][i])
 		{
 			if (ft_isalpha(args[0][i++]))
-				exit_error("minishell: exit: numeric argument required\n", 0, 2);
+				exit_error(ERROR_NUM_ARGS, 0, 2);
 		}
 	}
 	if (words == 1)

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   handle_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,44 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-char	*generate_tmp_name(int i)
-{
-	char	*num;
-	char	*tmpname;
-
-	num = ft_itoa(i);
-	tmpname = ft_strjoin("heredoc_", num);
-	free(num);
-	return (tmpname);
-}
-
-int	heredoc(t_minishell *main, char *eof, char *filename)
-{
-	int		fd;
-	char	*line;
-
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0664);
-	if (fd < 0)
-		return (printf("Unable to open heredoc\n"), 1);
-	main->is_here = 1;
-	while (1)
-	{
-		line = readline("heredoc> ");
-		if (!line)
-			break ;
-		if (!ft_strncmp(line, eof, ft_strlen(eof) + 1))
-		{
-			free(line);
-			break ;
-		}
-		ft_dprintf(fd, "%s\n", line);
-		free(line);
-	}
-	main->is_here = 0;
-	close(fd);
-	return (0);
-}
 
 int	redir_in(t_minishell *main, char *file)
 {

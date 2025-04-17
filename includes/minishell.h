@@ -51,6 +51,7 @@
 # define SIG_INTER 1 
 # define SIG_EXEC 2
 # define SIG_CHILD 3 
+# define ERROR_NUM_ARGS "minishell: exit: numeric argument required\n"
 
 typedef enum e_token_type
 {

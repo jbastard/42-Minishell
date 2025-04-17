@@ -37,8 +37,8 @@ void	set_sig_interactive(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
-	g_signal = SIG_INTER;
 
+	g_signal = SIG_INTER;
 	init_sigaction(&sa_int, handle_sigint_interactive, SA_RESTART);
 	init_sigaction(&sa_quit, SIG_IGN, 0);
 	sigaction(SIGINT, &sa_int, NULL);
