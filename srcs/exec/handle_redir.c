@@ -57,11 +57,8 @@ int	redir_append(t_minishell *main, char *file)
 int	handle_redir(t_minishell *main, t_cmd *cmd)
 {
 	t_redir	*redir;
-	int		i;
-	char	*tmpname;
 
 	redir = cmd->redir;
-	i = 0;
 	while (redir)
 	{
 		if (redir->type == TOKEN_REDIR_IN)
@@ -70,14 +67,6 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 			redir_out(main, redir->file);
 		else if (redir->type == TOKEN_APPEND)
 			redir_append(main, redir->file);
-		else if (redir->type == TOKEN_HEREDOC)
-		{
-			tmpname = generate_tmp_name(i++);
-			if (!heredoc(main, redir->file, tmpname))
-				redir_in(main, tmpname);
-			unlink(tmpname);
-			free(tmpname);
-		}
 		redir = redir->next;
 	}
 	return (0);

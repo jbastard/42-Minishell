@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 08:42:36 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/15 09:31:09 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 09:47:52 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	heredoc(t_minishell *main, char *eof, char *filename)
 	char	*line;
 
 	(void)main;
+	g_signal = SIG_CHILD;
 	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	if (fd < 0)
 		return (printf("Unable to open heredoc\n"), 1);
