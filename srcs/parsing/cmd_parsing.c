@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:15:14 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/26 15:31:41 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:35:10 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	add_redir(t_redir **head, int type, char *file)
 	new = malloc(sizeof(t_redir));
 	new->file = strdup(file);
 	new->type = type;
+	new->is_heredoc_tmp = 0;
 	new->next = NULL;
 	if (!*head)
 		*head = new;

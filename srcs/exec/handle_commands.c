@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 10:14:20 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:37:10 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 		exec_one_cmd(cmds, main);
 	else
 		exec_multiple_cmds(cmds, main, prev_pipe);
+	cleanup_heredoc_files(cmds);
 }
 
 int	bi_has_output(int i, char **args)

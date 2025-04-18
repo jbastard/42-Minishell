@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/15 09:31:27 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:36:48 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ struct s_redir
 {
 	int		type;
 	char	*file;
-	int		fd;
+	int		is_heredoc_tmp;
 	t_redir	*next;
 };
 
@@ -142,6 +142,7 @@ int			handle_redir(t_minishell *main, t_cmd *cmd);
 int			heredoc(t_minishell *main, char *file, char *tmp_name);
 char		*generate_tmp_name(int i);
 void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
+void		cleanup_heredoc_files(t_cmd *cmds);
 
 //ERROR
 	//ERROR_HANDLER.C

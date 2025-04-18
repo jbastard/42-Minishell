@@ -12,12 +12,36 @@
 
 #include "../../includes/minishell.h"
 
+void cleanup_heredoc_files(t_cmd *cmds)
+{
+	t_cmd   *cmd;
+	t_redir *redir;
+
+	cmd = cmds;
+	while (cmd)
+	{
+		redir = cmd->redir;
+		while (redir)
+		{
+			if (redir->is_heredoc_tmp)
+			{
+				unlink(redir->file);
+				redir->is_heredoc_tmp = 0;
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
 void	preprocess_heredocs(t_minishell *main, t_cmd *cmds)
 {
 	t_cmd	*cmd;
 	t_redir	*redir;
-	int		i = 0;
+	int		i;
+	char	*tmpname;
 
+	i = 0;
 	cmd = cmds;
 	while (cmd)
 	{
@@ -26,16 +50,17 @@ void	preprocess_heredocs(t_minishell *main, t_cmd *cmds)
 		{
 			if (redir->type == TOKEN_HEREDOC)
 			{
-				char *tmpname = generate_tmp_name(i++);
+				tmpname = generate_tmp_name(i++);
 				if (heredoc(main, redir->file, tmpname))
 				{
 					unlink(tmpname);
 					free(tmpname);
-					return;
+					return ;
 				}
 				free(redir->file);
 				redir->file = tmpname;
 				redir->type = TOKEN_REDIR_IN;
+				redir->is_heredoc_tmp = 1;
 			}
 			redir = redir->next;
 		}
