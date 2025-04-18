@@ -143,6 +143,7 @@ int			heredoc(t_minishell *main, char *file, char *tmp_name);
 char		*generate_tmp_name(int i);
 void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
 void		cleanup_heredoc_files(t_cmd *cmds);
+void		free_all(t_minishell *main);
 
 //ERROR
 	//ERROR_HANDLER.C

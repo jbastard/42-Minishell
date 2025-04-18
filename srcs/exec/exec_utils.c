@@ -57,14 +57,12 @@ void	create_pipe_and_fork(t_cmd *cmds, t_minishell *main, int prev_pipe, int pip
 		if (cmds->next)
 			close(pipefd[0]);
 		exec_one_cmd(cmds, main);
-		free(main->prompt);
-		free_cmd(main->cmd);
-		free(main->builtins);
-		free_tab(main->env);
-		free_local_env(&main->local_vars);
-		exit(0);
+		return (free_all(main), exit(0));
+//		free_all(main);
+//		exit(0);
 	}
-	else if (*pid > 0) {
+	else if (*pid > 0)
+	{
 		if (prev_pipe != -1)
 			close(prev_pipe);
 		if (cmds->next)
