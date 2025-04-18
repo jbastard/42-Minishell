@@ -16,25 +16,14 @@ volatile int	g_signal = 0;
 
 static void	handle_sigint_interactive(int signo)
 {
-	if (g_signal == SIG_CHILD)
-		return ;
 	(void)signo;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-static void	handle_sig_executing(int signo)
-{
-	(void)signo;
-
 	if (g_signal == SIG_EXEC)
-		handle_sigint_interactive(signo);
-	else if (signo == SIGQUIT)
-	{
-		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
-	}
+		return ;
+	rl_on_new_line();
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	if (g_signal == SIG_INTER || g_signal == SIG_CHILD)
+		rl_redisplay();
 }
 
 void	init_sigaction(struct sigaction *sa, void (*handler)(int), int flags)
@@ -48,38 +37,10 @@ void	set_sig_interactive(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
-	g_signal = SIG_INTER;
 
+	g_signal = SIG_INTER;
 	init_sigaction(&sa_int, handle_sigint_interactive, SA_RESTART);
 	init_sigaction(&sa_quit, SIG_IGN, 0);
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
-}
-
-void	set_sig_executing(void)
-{
-	struct sigaction	sa_exec;
-	g_signal = SIG_EXEC;
-
-	init_sigaction(&sa_exec, handle_sig_executing, SA_RESTART);
-	sigaction(SIGINT, &sa_exec, NULL);
-	sigaction(SIGQUIT, &sa_exec, NULL);
-}
-
-static void	handle_sigint_child(int signo)
-{
-	(void)signo;
-
-	if (g_signal == SIG_CHILD)
-		exit(130);
-}
-
-void set_sig_child(void)
-{
-	struct sigaction sa_child;
-	g_signal = SIG_CHILD;
-	ft_memset(&sa_child, 0, sizeof(sa_child));
-	init_sigaction(&sa_child, handle_sigint_child, 0);
-	sigaction(SIGINT, &sa_child, NULL);
-	sigaction(SIGQUIT, &sa_child, NULL);
 }
