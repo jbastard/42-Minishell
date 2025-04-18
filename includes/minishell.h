@@ -91,6 +91,7 @@ struct s_cmd
 	char	*path;
 	t_redir	*redir;
 	t_cmd	*next;
+	pid_t	pid;
 };
 
 struct s_builtin
@@ -143,7 +144,6 @@ int			heredoc(t_minishell *main, char *file, char *tmp_name);
 char		*generate_tmp_name(int i);
 void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
 void		cleanup_heredoc_files(t_cmd *cmds);
-void		free_all(t_minishell *main);
 
 //ERROR
 	//ERROR_HANDLER.C
@@ -232,21 +232,20 @@ int			check_pipes(t_minishell *main);
 int			check_cmd(t_minishell *main);
 
 //EXEC
-	//HANDLE_COMMANDS.C
+//HANDLE_COMMANDS.C
 void		handle_commands(t_cmd *cmds, t_minishell *main);
 void		exec_one_cmd(t_cmd *cmd, t_minishell *main);
 void		exec_multiple_cmds(t_cmd *cmds,
-				t_minishell *main,
-				int prev_pipe);
-	//EXEC_UTILS.C
+	t_minishell *main,
+	int prev_pipe);
+//EXEC_UTILS.C
 int			is_builtin(t_builtin *builtins, char *cmd);
 int			count_commands(t_cmd *cmds);
-void		create_pipe_and_fork(t_cmd *cmds,
-				t_minishell *main,
-				int prev_pipe,
-				int pipefd[2],
-				int *pid);
+void		create_pipe_and_fork(t_cmd *cmds, t_minishell *main,
+int prev_pipe,
+int pipefd[2]);
 void		execute_external_command(t_cmd *cmd, t_minishell *main);
+void		free_all(t_minishell *main);
 
 //LEXING
 	//LINE_LEXER.C
@@ -260,10 +259,9 @@ char		*ft_getenv(char *env, t_minishell *main);
 int			get_equals(char *env);
 void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
-//QUOTES_LEXER.C
-void		error_var(t_lexer *lexer,
-				t_minishell *main,
-				char *env_value,
+	//QUOTES_LEXER.C
+void		error_var(t_lexer *lexer, t_minishell *main,
+			char *env_value,
 				int k);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
 void		handle_single_quotes(t_lexer *lexer);

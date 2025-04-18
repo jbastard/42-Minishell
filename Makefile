@@ -39,7 +39,6 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(EXEC_DIR)handle_redir.c \
 				$(EXEC_DIR)exec_utils.c \
 				$(ERROR_DIR)error_handler.c \
-				$(ERROR_DIR)free_all.c \
 				$(ERROR_DIR)all_kinds_of_free.c \
 				$(PARSING_DIR)signal_handler.c \
 				$(PARSING_DIR)cmd_parsing.c \

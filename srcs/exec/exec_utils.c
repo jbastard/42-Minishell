@@ -39,42 +39,60 @@ int	count_commands(t_cmd *cmds)
 	return (count);
 }
 
-void	create_pipe_and_fork(t_cmd *cmds, t_minishell *main, int prev_pipe, int pipefd[2], int *pid)
+void	exec_pipe_child(t_cmd *cmd, t_minishell *main, int prev_pipe, int pipefd[2])
 {
-	if (cmds->next && pipe(pipefd) == -1)
+	int		i;
+	int		j;
+
+	if (prev_pipe != -1)
+		dup2(prev_pipe, STDIN_FILENO);
+	if (cmd->next)
+		dup2(pipefd[1], STDOUT_FILENO);
+	if (prev_pipe != -1)
+		close(prev_pipe);
+	if (cmd->next)
+		close(pipefd[1]);
+	if (cmd->next)
+		close(pipefd[0]);
+	handle_redir(main, cmd);
+	i = is_builtin(main->builtins, cmd->cmd_args[0]);
+	if (i >= 0)
+	{
+		j = main->builtins[i].cmd(cmd->cmd_args + 1, main);
+		free_all(main);
+		exit(j);
+	}
+	execute_external_command(cmd, main);
+	exit(main->last_status);
+}
+
+void	create_pipe_and_fork(t_cmd *cmd, t_minishell *main, int prev_pipe, int pipefd[2])
+{
+	cmd->pid = -1;
+	if (cmd->next && pipe(pipefd) == -1)
 		perror("pipe");
-	*pid = fork();
-	if (*pid == 0)
-	{
-		if (prev_pipe != -1)
-			dup2(prev_pipe, STDIN_FILENO);
-		if (cmds->next)
-			dup2(pipefd[1], STDOUT_FILENO);
-		if (prev_pipe != -1)
-			close(prev_pipe);
-		if (cmds->next)
-			close(pipefd[1]);
-		if (cmds->next)
-			close(pipefd[0]);
-		exec_one_cmd(cmds, main);
-		return (free_all(main), exit(0));
-	}
-	else if (*pid > 0)
+	cmd->pid = fork();
+	if (cmd->pid == 0)
+		exec_pipe_child(cmd, main, prev_pipe, pipefd);
+	else if (cmd->pid > 0)
 	{
 		if (prev_pipe != -1)
 			close(prev_pipe);
-		if (cmds->next)
+		if (cmd->next)
 			close(pipefd[1]);
 	}
-	if (*pid < 0)
-		return (perror("fork"), exit(1));
+	else
+	{
+		perror("fork");
+		exit(1);
+	}
 }
 
 void	execute_external_command(t_cmd *cmd, t_minishell *main)
 {
 	if (!cmd->path)
 	{
-		ft_dprintf(2, "No such file or directory\n");
+		ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]);
 		exit(127);
 	}
 	if (execve(cmd->path, cmd->cmd_args, main->env) == -1)
@@ -82,4 +100,13 @@ void	execute_external_command(t_cmd *cmd, t_minishell *main)
 		perror("execve");
 		exit(1);
 	}
+}
+
+void	free_all(t_minishell *main)
+{
+	free(main->prompt);
+	free_cmd(main->cmd);
+	free(main->builtins);
+	free_tab(main->env);
+	free_local_env(&main->local_vars);
 }
