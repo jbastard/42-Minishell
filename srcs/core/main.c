@@ -18,6 +18,7 @@ int	handle_inputs(t_minishell *main)
 		main->line = readline(main->prompt);
 	if (!main->line)
 		return (0);
+	g_signal = SIG_EXEC;
 	if (!get_cmd(main))
 		return (free(main->line), 1);
 	add_history(main->line);

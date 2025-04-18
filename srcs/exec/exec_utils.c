@@ -56,7 +56,6 @@ void	create_pipe_and_fork(t_cmd *cmds, t_minishell *main, int prev_pipe, int pip
 			close(pipefd[1]);
 		if (cmds->next)
 			close(pipefd[0]);
-		g_signal = SIG_CHILD;
 		exec_one_cmd(cmds, main);
 		free(main->prompt);
 		free_cmd(main->cmd);

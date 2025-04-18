@@ -135,14 +135,13 @@ struct s_lexer
 	int			i;
 	int			j;
 	char		quote;
-	int			error;
+	int 		error;
 };
 
-void		set_sig_child(void);
-void		print_tokens(t_token *tokens);
 int			handle_redir(t_minishell *main, t_cmd *cmd);
 int			heredoc(t_minishell *main, char *file, char *tmp_name);
 char		*generate_tmp_name(int i);
+void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
 
 //ERROR
 	//ERROR_HANDLER.C
