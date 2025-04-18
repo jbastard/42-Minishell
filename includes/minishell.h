@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 11:36:48 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:10:34 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,13 +138,6 @@ struct s_lexer
 	int			error;
 };
 
-int			handle_redir(t_minishell *main, t_cmd *cmd);
-int			heredoc(t_minishell *main, char *file, char *tmp_name);
-char		*generate_tmp_name(int i);
-void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
-void		cleanup_heredoc_files(t_cmd *cmds);
-void		free_all(t_minishell *main);
-
 //ERROR
 	//ERROR_HANDLER.C
 void		exit_error(char *source, int isper, int isexit);
@@ -156,6 +149,8 @@ void		free_redir(t_redir *redir);
 void		free_tab(char **tabl);
 void		free_lexer(t_token *token);
 void		free_local_env(t_env **env);
+	//FREE_ALL.C
+void		free_all(t_minishell *main);
 
 //BUILT-INS
 	//CD.C
@@ -207,11 +202,8 @@ void		update_prompt(t_minishell *main);
 
 //PARSING
 	//SIGNAL_HANDLER.C
-void		sig_handler(void);
-void		ctrl_c(int signal);
+static void	handle_sigint_interactive(int signo);
 void		set_sig_interactive(void);
-void		set_sig_executing(void);
-
 	//CMD_PARSING.C
 int			get_cmd(t_minishell *main);
 t_cmd		*parse_tokens(t_minishell *main);
@@ -238,6 +230,13 @@ void		exec_one_cmd(t_cmd *cmd, t_minishell *main);
 void		exec_multiple_cmds(t_cmd *cmds,
 				t_minishell *main,
 				int prev_pipe);
+	//HANDLE_REDIR.C
+int			handle_redir(t_minishell *main, t_cmd *cmd);
+	//HEREDOC.C
+int			heredoc(t_minishell *main, char *file, char *tmp_name);
+char		*generate_tmp_name(int i);
+void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
+void		cleanup_heredoc_files(t_cmd *cmds);
 	//EXEC_UTILS.C
 int			is_builtin(t_builtin *builtins, char *cmd);
 int			count_commands(t_cmd *cmds);
