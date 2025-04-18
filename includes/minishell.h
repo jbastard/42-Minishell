@@ -135,7 +135,7 @@ struct s_lexer
 	int			i;
 	int			j;
 	char		quote;
-	int 		error;
+	int			error;
 };
 
 int			handle_redir(t_minishell *main, t_cmd *cmd);

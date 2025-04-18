@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 11:37:51 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/04/18 08:45:06 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:52:03 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (res);
 }
 
-int get_cd_path(t_minishell *main, char *path)
+int	get_cd_path(t_minishell *main, char *path)
 {
 	char	buffer[1024];
 	char	*tmp;

@@ -58,8 +58,6 @@ void	create_pipe_and_fork(t_cmd *cmds, t_minishell *main, int prev_pipe, int pip
 			close(pipefd[0]);
 		exec_one_cmd(cmds, main);
 		return (free_all(main), exit(0));
-//		free_all(main);
-//		exit(0);
 	}
 	else if (*pid > 0)
 	{
