@@ -91,6 +91,7 @@ struct s_cmd
 	char	*path;
 	t_redir	*redir;
 	t_cmd	*next;
+	int		pid;
 };
 
 struct s_builtin
@@ -138,13 +139,6 @@ struct s_lexer
 	int			error;
 };
 
-int			handle_redir(t_minishell *main, t_cmd *cmd);
-int			heredoc(t_minishell *main, char *file, char *tmp_name);
-char		*generate_tmp_name(int i);
-void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
-void		cleanup_heredoc_files(t_cmd *cmds);
-void		free_all(t_minishell *main);
-
 //ERROR
 	//ERROR_HANDLER.C
 void		exit_error(char *source, int isper, int isexit);
@@ -156,8 +150,6 @@ void		free_redir(t_redir *redir);
 void		free_tab(char **tabl);
 void		free_lexer(t_token *token);
 void		free_local_env(t_env **env);
-	//FREE_ALL.C
-void		free_all(t_minishell *main);
 
 //BUILT-INS
 	//CD.C
@@ -251,8 +243,7 @@ int			count_commands(t_cmd *cmds);
 void		create_pipe_and_fork(t_cmd *cmds,
 				t_minishell *main,
 				int prev_pipe,
-				int pipefd[2],
-				int *pid);
+				int pipefd[2]);
 void		execute_external_command(t_cmd *cmd, t_minishell *main);
 void		free_all(t_minishell *main);
 

@@ -39,7 +39,10 @@ int	count_commands(t_cmd *cmds)
 	return (count);
 }
 
-void	exec_pipe_child(t_cmd *cmd, t_minishell *main, int prev_pipe, int pipefd[2])
+void	exec_pipe_child(t_cmd *cmd,
+						t_minishell *main,
+						int prev_pipe,
+						int pipefd[2])
 {
 	int		i;
 	int		j;
@@ -66,7 +69,10 @@ void	exec_pipe_child(t_cmd *cmd, t_minishell *main, int prev_pipe, int pipefd[2]
 	exit(main->last_status);
 }
 
-void	create_pipe_and_fork(t_cmd *cmd, t_minishell *main, int prev_pipe, int pipefd[2])
+void	create_pipe_and_fork(t_cmd *cmd,
+							t_minishell *main,
+							int prev_pipe,
+							int pipefd[2])
 {
 	cmd->pid = -1;
 	if (cmd->next && pipe(pipefd) == -1)
@@ -100,13 +106,4 @@ void	execute_external_command(t_cmd *cmd, t_minishell *main)
 		perror("execve");
 		exit(1);
 	}
-}
-
-void	free_all(t_minishell *main)
-{
-	free(main->prompt);
-	free_cmd(main->cmd);
-	free(main->builtins);
-	free_tab(main->env);
-	free_local_env(&main->local_vars);
 }
