@@ -138,6 +138,13 @@ struct s_lexer
 	int			error;
 };
 
+int			handle_redir(t_minishell *main, t_cmd *cmd);
+int			heredoc(t_minishell *main, char *file, char *tmp_name);
+char		*generate_tmp_name(int i);
+void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
+void		cleanup_heredoc_files(t_cmd *cmds);
+void		free_all(t_minishell *main);
+
 //ERROR
 	//ERROR_HANDLER.C
 void		exit_error(char *source, int isper, int isexit);
@@ -202,7 +209,8 @@ void		update_prompt(t_minishell *main);
 
 //PARSING
 	//SIGNAL_HANDLER.C
-static void	handle_sigint_interactive(int signo);
+void		sig_handler(void);
+void		ctrl_c(int signal);
 void		set_sig_interactive(void);
 	//CMD_PARSING.C
 int			get_cmd(t_minishell *main);
@@ -246,6 +254,7 @@ void		create_pipe_and_fork(t_cmd *cmds,
 				int pipefd[2],
 				int *pid);
 void		execute_external_command(t_cmd *cmd, t_minishell *main);
+void		free_all(t_minishell *main);
 
 //LEXING
 	//LINE_LEXER.C

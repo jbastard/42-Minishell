@@ -34,6 +34,16 @@ int	bi_has_output(int i, char **args)
 	return (0);
 }
 
+void	exec_cmd_child(t_cmd *cmd, t_minishell *main, int i)
+{
+	handle_redir(main, cmd);
+	if (i >= 0)
+		exit(main->builtins[i].cmd(cmd->cmd_args + 1, main));
+	execute_external_command(cmd, main);
+	free_all(main);
+	exit(main->last_status);
+}
+
 void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 {
 	int		i;
@@ -41,50 +51,52 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
 	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) && !cmd->redir))
-		main->builtins[i].cmd(cmd->cmd_args + 1, main);
+		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	else if (i >= 0 && !cmd->redir)
-		main->builtins[i].cmd(cmd->cmd_args + 1, main);
+		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			handle_redir(main, cmd);
-			if (i >= 0)
-				main->builtins[i].cmd(cmd->cmd_args + 1, main);
-			else
-				execute_external_command(cmd, main);
-			free(main->prompt);
-			free_cmd(main->cmd);
-			free(main->builtins);
-			free_tab(main->env);
-			free_local_env(&main->local_vars);
-			exit(0);
+			exec_cmd_child(cmd, main, i);
+			free_all(main);
 		}
 		waitpid(pid, &main->last_status, 0);
+		if (WIFEXITED(main->last_status))
+			main->last_status = WEXITSTATUS(main->last_status);
+		else if (WIFSIGNALED(main->last_status))
+			main->last_status = 128 + WTERMSIG(main->last_status);
 	}
 	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
-		main->builtins[i].cmd(cmd->cmd_args + 1, main);
+		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
 }
+
 
 void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
-	pid_t	pid;
 	int		pipefd[2];
 
 	while (cmds)
 	{
-		create_pipe_and_fork(cmds, main, prev_pipe, pipefd, &pid);
-		if (pid > 0)
+		create_pipe_and_fork(cmds, main, prev_pipe, pipefd);
+		if (cmds->pid > 0)
 		{
 			close(pipefd[1]);
 			if (prev_pipe != -1)
 				close(prev_pipe);
 			prev_pipe = pipefd[0];
-			cmds = cmds->next;
+			if (cmds->next)
+				cmds = cmds->next;
+			else
+				break ;
 		}
 	}
-	waitpid(pid, &main->last_status, 0);
+	waitpid(cmds->pid, &main->last_status, 0);
+	if (WIFEXITED(main->last_status))
+		main->last_status = WEXITSTATUS(main->last_status);
+	else if (WIFSIGNALED(main->last_status))
+		main->last_status = 128 + WTERMSIG(main->last_status);
 	if (prev_pipe != -1)
 		close(prev_pipe);
 }

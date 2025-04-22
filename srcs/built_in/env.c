@@ -14,7 +14,7 @@
 
 int	env_command(char **args, t_minishell *main)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	(void)args;

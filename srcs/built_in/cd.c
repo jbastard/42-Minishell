@@ -48,16 +48,17 @@ int	cd_command(char **args, t_minishell *main)
 	{
 		path = getenv("HOME");
 		if (!path)
-			return (printf("cd: HOME not set\n"), 1);
+			return (printf("minishell: cd: HOME not set\n"), 1);
 	}
 	else
 		path = args[0];
 	if (path[0] == '/')
 	{
 		if (chdir(path) != 0)
+		{
 			perror("cd");
+			return (1);
+		}
 	}
-	else
-		get_cd_path(main, path);
-	return (0);
+	return (get_cd_path(main, path));
 }

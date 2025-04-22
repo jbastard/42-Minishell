@@ -92,7 +92,7 @@ int	export_command(char	**args, t_minishell *main)
 	{
 		{
 			if (!is_valid_identifier(args[i]))
-				return (printf("export: not a valid identifier\n"));
+				return (printf("minishell : export: '%s': not a valid identifier\n", args[i]), 1);
 			if (ft_strchr(args[i], '='))
 			{
 				if (!check_env(args[i], main))
