@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 11:37:51 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/04/18 12:52:03 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/22 07:21:22 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (res);
 }
 
-int	get_cd_path(t_minishell *main, char *path)
+int	get_cd_path(t_minishell *main, char *path, char **args)
 {
 	char	buffer[1024];
 	char	*tmp;
@@ -33,7 +33,7 @@ int	get_cd_path(t_minishell *main, char *path)
 		return (perror("cd"), 1);
 	tmp = ft_strjoin(cwd, "/");
 	path = ft_strjoin_free(tmp, path);
-	if (chdir(path) != 0)
+	if (chdir(path) != 0 && args[0])
 		return (perror("cd"), free(path), 1);
 	free(path);
 	return (0);
@@ -60,5 +60,5 @@ int	cd_command(char **args, t_minishell *main)
 			return (1);
 		}
 	}
-	return (get_cd_path(main, path));
+	return (get_cd_path(main, path, args));
 }
