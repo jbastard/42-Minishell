@@ -6,20 +6,8 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/15 09:31:27 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:10:34 by jbastard         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   minishell.h										:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: nlecreux <nlecreux@student.42.fr>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/03/14 16:12:35 by nlecreux		  #+#	#+#			 */
-/*   Updated: 2025/03/14 16:29:03 by nlecreux		 ###   ########.fr	   */
-/*																			*/
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -51,6 +39,7 @@
 # define SIG_INTER 1 
 # define SIG_EXEC 2
 # define SIG_CHILD 3 
+# define ERROR_NUM_ARGS "minishell: exit: numeric argument required\n"
 
 typedef enum e_token_type
 {
@@ -78,28 +67,31 @@ typedef enum e_error_type
 	ERR_REDIR,
 }	t_error_type;
 
-extern volatile int	g_signal;
+extern volatile int			g_signal;
 
 typedef struct s_minishell	t_minishell;
 typedef struct s_builtin	t_builtin;
 typedef struct s_cmd		t_cmd;
-typedef	struct s_token		t_token;
+typedef struct s_token		t_token;
 typedef struct s_redir		t_redir;
 typedef struct s_env		t_env;
 typedef struct s_lexer		t_lexer;
 
-struct s_redir {
+struct s_redir
+{
 	int		type;
 	char	*file;
-	int		fd;
+	int		is_heredoc_tmp;
 	t_redir	*next;
 };
 
-struct s_cmd {
+struct s_cmd
+{
 	char	**cmd_args;
 	char	*path;
 	t_redir	*redir;
 	t_cmd	*next;
+	int		pid;
 };
 
 struct s_builtin
@@ -118,7 +110,7 @@ struct s_minishell
 	t_cmd		*cmd;
 	t_token		*tokens;
 	int			last_status;
-	int 		is_here;
+	int			is_here;
 };
 
 struct s_env
@@ -130,37 +122,31 @@ struct s_env
 
 struct s_token
 {
-	char            *value;
-	int             type;
-	struct s_token  *next;
+	char			*value;
+	int				type;
+	struct s_token	*next;
 };
 
 struct s_lexer
 {
-	const char  *input;
+	const char	*input;
 	size_t		input_len;
-	t_token     *tokens;
-	char        buffer[1024];
-	int         i;
-	int         j;
-	char        quote;
-	int 		error;
+	t_token		*tokens;
+	char		buffer[1024];
+	int			i;
+	int			j;
+	char		quote;
+	int			error;
 };
-
-void	set_sig_child(void);
-void	print_tokens(t_token *tokens);
-int		handle_redir(t_minishell *main, t_cmd *cmd);
-int		heredoc(t_minishell *main, char *file, char *tmp_name);
-char	*generate_tmp_name(int i);
 
 //ERROR
 	//ERROR_HANDLER.C
-void 		exit_error(char *source, int isper, int isexit);
+void		exit_error(char *source, int isper, int isexit);
 int			handle_error(t_minishell *main, t_error_type type, char *info);
 void		handle_error1(t_minishell *main, t_error_type type, char *info);
 	//ALL_KINDS_OF_FREE.C
-void 		free_cmd(t_cmd *cmd);
-void 		free_redir(t_redir *redir);
+void		free_cmd(t_cmd *cmd);
+void		free_redir(t_redir *redir);
 void		free_tab(char **tabl);
 void		free_lexer(t_token *token);
 void		free_local_env(t_env **env);
@@ -207,7 +193,7 @@ int			is_whitespaces(char c);
 t_builtin	*init_builtins(void);
 void		init_local_env(t_minishell *main);
 t_minishell	init_minishell(void);
-void 		init_lexer(t_lexer *lexer, const char *input);
+void		init_lexer(t_lexer *lexer, const char *input);
 	//PROMPT.C
 char		*better_join(char **tabl, char sep);
 int			count_chars_tab(char **tabl);
@@ -215,13 +201,9 @@ void		update_prompt(t_minishell *main);
 
 //PARSING
 	//SIGNAL_HANDLER.C
-void		sig_handler();
+void		sig_handler(void);
 void		ctrl_c(int signal);
-
-
-void	set_sig_interactive(void);
-void	set_sig_executing(void);
-
+void		set_sig_interactive(void);
 	//CMD_PARSING.C
 int			get_cmd(t_minishell *main);
 t_cmd		*parse_tokens(t_minishell *main);
@@ -229,15 +211,15 @@ t_cmd		*create_cmd(t_token **toks);
 int			parse_cmd_into_tokens(t_cmd *cmd, t_token **toks);
 void		add_redir(t_redir **head, int type, char *file);
 	//CMD_PARSING_UTILS.C
-int 		add_cmds(t_cmd	**head, t_token **toks);
+int			add_cmds(t_cmd	**head, t_token **toks);
 int			alloc_args(t_cmd *cmd, int argcount);
 int			is_redir(t_token *toks);
-int 		args_count(t_token *toks);
-void 		init_cmd(t_cmd *new);
+int			args_count(t_token *toks);
+void		init_cmd(t_cmd *new);
 	//SYNTAX_CHECKER
-int 		syntax_checker(t_minishell *main);
-int 		check_redirs(t_minishell *main);
-int 		check_pipes(t_minishell *main);
+int			syntax_checker(t_minishell *main);
+int			check_redirs(t_minishell *main);
+int			check_pipes(t_minishell *main);
 	//PATH_FINDER.C
 int			check_cmd(t_minishell *main);
 
@@ -245,18 +227,31 @@ int			check_cmd(t_minishell *main);
 	//HANDLE_COMMANDS.C
 void		handle_commands(t_cmd *cmds, t_minishell *main);
 void		exec_one_cmd(t_cmd *cmd, t_minishell *main);
-void		exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe);
+void		exec_multiple_cmds(t_cmd *cmds,
+				t_minishell *main,
+				int prev_pipe);
+	//HANDLE_REDIR.C
+int			handle_redir(t_minishell *main, t_cmd *cmd);
+	//HEREDOC.C
+int			heredoc(t_minishell *main, char *file, char *tmp_name);
+char		*generate_tmp_name(int i);
+void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
+void		cleanup_heredoc_files(t_cmd *cmds);
 	//EXEC_UTILS.C
 int			is_builtin(t_builtin *builtins, char *cmd);
 int			count_commands(t_cmd *cmds);
-void		create_pipe_and_fork(t_cmd *cmds, t_minishell *main, int prev_pipe, int pipefd[2], int *pid);
+void		create_pipe_and_fork(t_cmd *cmds,
+				t_minishell *main,
+				int prev_pipe,
+				int pipefd[2]);
 void		execute_external_command(t_cmd *cmd, t_minishell *main);
+void		free_all(t_minishell *main);
 
 //LEXING
 	//LINE_LEXER.C
 t_token		*new_token(char *value, int type);
-void 		add_token(t_token **head, char *value, int type);
-void 		handle_buffer(t_lexer	*lexer);
+void		add_token(t_token **head, char *value, int type);
+void		handle_buffer(t_lexer	*lexer);
 t_token		*lexer(char *line, t_minishell *main);
 void		add_redirection_token(t_lexer *lexer, char c);
 	//UTILS_LEXER.C
@@ -265,10 +260,12 @@ int			get_equals(char *env);
 void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
 //QUOTES_LEXER.C
-void		error_var(t_lexer *lexer, t_minishell *main, char *env_value, int k);
+void		error_var(t_lexer *lexer,
+				t_minishell *main,
+				char *env_value,
+				int k);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
 void		handle_single_quotes(t_lexer *lexer);
 void		handle_double_quotes(t_lexer *lexer, t_minishell *main);
-
 
 #endif

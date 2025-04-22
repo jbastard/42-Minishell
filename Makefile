@@ -35,6 +35,7 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(CORE_DIR)main.c \
 				$(CORE_DIR)prompt.c \
 				$(EXEC_DIR)handle_commands.c \
+				$(EXEC_DIR)heredoc.c \
 				$(EXEC_DIR)handle_redir.c \
 				$(EXEC_DIR)exec_utils.c \
 				$(ERROR_DIR)error_handler.c \
