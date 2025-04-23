@@ -69,12 +69,14 @@ void	exec_pipe_child(t_cmd *cmd,
 	exit(main->last_status);
 }
 
-void	create_pipe_and_fork(t_cmd *cmd,
+int	create_pipe_and_fork(t_cmd *cmd,
 							t_minishell *main,
 							int prev_pipe,
 							int pipefd[2])
 {
 	cmd->pid = -1;
+	if (!cmd->path)
+		return (ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]), 0);
 	if (cmd->next && pipe(pipefd) == -1)
 		perror("pipe");
 	cmd->pid = fork();
@@ -92,6 +94,7 @@ void	create_pipe_and_fork(t_cmd *cmd,
 		perror("fork");
 		exit(1);
 	}
+	return (1);
 }
 
 void	execute_external_command(t_cmd *cmd, t_minishell *main)

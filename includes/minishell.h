@@ -226,7 +226,7 @@ int			check_cmd(t_minishell *main);
 //EXEC
 	//HANDLE_COMMANDS.C
 void		handle_commands(t_cmd *cmds, t_minishell *main);
-void		exec_one_cmd(t_cmd *cmd, t_minishell *main);
+int			exec_one_cmd(t_cmd *cmd, t_minishell *main);
 void		exec_multiple_cmds(t_cmd *cmds,
 				t_minishell *main,
 				int prev_pipe);
@@ -240,7 +240,7 @@ void		cleanup_heredoc_files(t_cmd *cmds);
 	//EXEC_UTILS.C
 int			is_builtin(t_builtin *builtins, char *cmd);
 int			count_commands(t_cmd *cmds);
-void		create_pipe_and_fork(t_cmd *cmds,
+int			create_pipe_and_fork(t_cmd *cmds,
 				t_minishell *main,
 				int prev_pipe,
 				int pipefd[2]);
@@ -265,7 +265,7 @@ void		error_var(t_lexer *lexer,
 				char *env_value,
 				int k);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
-void		handle_single_quotes(t_lexer *lexer);
-void		handle_double_quotes(t_lexer *lexer, t_minishell *main);
+int			handle_single_quotes(t_lexer *lexer);
+int			handle_double_quotes(t_lexer *lexer, t_minishell *main);
 
 #endif

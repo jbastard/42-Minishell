@@ -54,18 +54,18 @@ void	exec_cmd_child(t_cmd *cmd, t_minishell *main, int i)
 	exit(main->last_status);
 }
 
-void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
+int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 {
 	int		i;
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
-	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) && !cmd->redir))
-		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	else if (i >= 0 && !cmd->redir)
+	if (i >= 0 && !cmd->redir)
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
+		if (!cmd->path)
+			return (ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]), 0);
 		pid = fork();
 		if (pid == 0)
 		{
@@ -80,28 +80,38 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	}
 	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
+	return (1);
 }
 
 void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
 	int		pipefd[2];
+	int		j;
 
+	pipefd[0] = 0;
 	while (cmds)
 	{
-		create_pipe_and_fork(cmds, main, prev_pipe, pipefd);
+		j = 1;
+		if (!create_pipe_and_fork(cmds, main, prev_pipe, pipefd))
+			j = 0;
 		if (cmds->pid > 0)
 		{
-			close(pipefd[1]);
+			if (cmds->next && cmds->next->path)
+				close(pipefd[1]);
 			if (prev_pipe != -1)
 				close(prev_pipe);
-			prev_pipe = pipefd[0];
+			if (pipefd[0])
+				prev_pipe = pipefd[0];
 			if (cmds->next)
 				cmds = cmds->next;
 			else
 				break ;
 		}
+		else if (cmds->pid == -1)
+			cmds = cmds->next;
 	}
-	waitpid(cmds->pid, &main->last_status, 0);
+	if (j)
+		waitpid(cmds->pid, &main->last_status, 0);
 	if (WIFEXITED(main->last_status))
 		main->last_status = WEXITSTATUS(main->last_status);
 	else if (WIFSIGNALED(main->last_status))
