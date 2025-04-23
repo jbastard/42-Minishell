@@ -103,8 +103,9 @@ int	export_command(char	**args, t_minishell *main)
 			}
 			if (!find_node_env(args[i], main))
 				add_node_env(args[i], main);
-			else
-				replace_value_env(args[i++], main);
+			else if (ft_strchr(args[i], '='))
+				replace_value_env(args[i], main);
+			i++;
 		}
 	}
 	return (1);

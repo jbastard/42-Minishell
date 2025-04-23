@@ -36,9 +36,19 @@ int	bi_has_output(int i, char **args)
 
 void	exec_cmd_child(t_cmd *cmd, t_minishell *main, int i)
 {
-	handle_redir(main, cmd);
+	int	j;
+
+	if (handle_redir(main, cmd) != 0)
+	{
+		free_all(main);
+		exit(1);
+	}
 	if (i >= 0)
-		exit(main->builtins[i].cmd(cmd->cmd_args + 1, main));
+	{
+		j = main->builtins[i].cmd(cmd->cmd_args + 1, main);
+		free_all(main);
+		exit(j);
+	}
 	execute_external_command(cmd, main);
 	free_all(main);
 	exit(main->last_status);
