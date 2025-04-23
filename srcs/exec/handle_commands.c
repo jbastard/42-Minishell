@@ -82,7 +82,6 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
 }
 
-
 void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
 	int		pipefd[2];

@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 11:36:48 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:10:34 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ struct s_cmd
 	char	*path;
 	t_redir	*redir;
 	t_cmd	*next;
-	pid_t	pid;
+	int		pid;
 };
 
 struct s_builtin
@@ -138,12 +138,6 @@ struct s_lexer
 	char		quote;
 	int			error;
 };
-
-int			handle_redir(t_minishell *main, t_cmd *cmd);
-int			heredoc(t_minishell *main, char *file, char *tmp_name);
-char		*generate_tmp_name(int i);
-void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
-void		cleanup_heredoc_files(t_cmd *cmds);
 
 //ERROR
 	//ERROR_HANDLER.C
@@ -210,8 +204,6 @@ void		update_prompt(t_minishell *main);
 void		sig_handler(void);
 void		ctrl_c(int signal);
 void		set_sig_interactive(void);
-void		set_sig_executing(void);
-
 	//CMD_PARSING.C
 int			get_cmd(t_minishell *main);
 t_cmd		*parse_tokens(t_minishell *main);
@@ -232,18 +224,26 @@ int			check_pipes(t_minishell *main);
 int			check_cmd(t_minishell *main);
 
 //EXEC
-//HANDLE_COMMANDS.C
+	//HANDLE_COMMANDS.C
 void		handle_commands(t_cmd *cmds, t_minishell *main);
 void		exec_one_cmd(t_cmd *cmd, t_minishell *main);
 void		exec_multiple_cmds(t_cmd *cmds,
-	t_minishell *main,
-	int prev_pipe);
-//EXEC_UTILS.C
+				t_minishell *main,
+				int prev_pipe);
+	//HANDLE_REDIR.C
+int			handle_redir(t_minishell *main, t_cmd *cmd);
+	//HEREDOC.C
+int			heredoc(t_minishell *main, char *file, char *tmp_name);
+char		*generate_tmp_name(int i);
+void		preprocess_heredocs(t_minishell *main, t_cmd *cmds);
+void		cleanup_heredoc_files(t_cmd *cmds);
+	//EXEC_UTILS.C
 int			is_builtin(t_builtin *builtins, char *cmd);
 int			count_commands(t_cmd *cmds);
-void		create_pipe_and_fork(t_cmd *cmds, t_minishell *main,
-int prev_pipe,
-int pipefd[2]);
+void		create_pipe_and_fork(t_cmd *cmds,
+				t_minishell *main,
+				int prev_pipe,
+				int pipefd[2]);
 void		execute_external_command(t_cmd *cmd, t_minishell *main);
 void		free_all(t_minishell *main);
 
@@ -259,9 +259,10 @@ char		*ft_getenv(char *env, t_minishell *main);
 int			get_equals(char *env);
 void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
-	//QUOTES_LEXER.C
-void		error_var(t_lexer *lexer, t_minishell *main,
-			char *env_value,
+//QUOTES_LEXER.C
+void		error_var(t_lexer *lexer,
+				t_minishell *main,
+				char *env_value,
 				int k);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
 void		handle_single_quotes(t_lexer *lexer);

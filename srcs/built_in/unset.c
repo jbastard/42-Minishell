@@ -72,7 +72,8 @@ int	unset_command(char **args, t_minishell *main)
 	while (args[i])
 	{
 		if (!args[i] || !is_valid_identifier(args[i]))
-			return (printf("minishell: unset: '%s': not a valid identifier\n", args[i]), 1);
+			return (printf("minishell: unset: "
+					"'%s': not a valid identifier\n", args[i]), 1);
 		if (check_env(args[i], main))
 			main->env = ft_unset_env(main->env, args[i]);
 		if (find_node_env(args[i], main))

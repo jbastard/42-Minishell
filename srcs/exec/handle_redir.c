@@ -74,3 +74,12 @@ int	handle_redir(t_minishell *main, t_cmd *cmd)
 	}
 	return (0);
 }
+
+void	free_all(t_minishell *main)
+{
+	free(main->prompt);
+	free_cmd(main->cmd);
+	free(main->builtins);
+	free_tab(main->env);
+	free_local_env(&main->local_vars);
+}
