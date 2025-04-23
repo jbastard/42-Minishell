@@ -265,7 +265,7 @@ void		error_var(t_lexer *lexer,
 				char *env_value,
 				int k);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
-void		handle_single_quotes(t_lexer *lexer);
-void		handle_double_quotes(t_lexer *lexer, t_minishell *main);
+int			handle_single_quotes(t_lexer *lexer);
+int			handle_double_quotes(t_lexer *lexer, t_minishell *main);
 
 #endif

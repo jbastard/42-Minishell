@@ -66,8 +66,7 @@ void	update_prompt(t_minishell *main)
 	{
 		main->prompt = better_join(&temp[count - 2], '/');
 		temp2 = ft_strjoin(main->prompt, "> ");
-		if (main->prompt)
-			free(main->prompt);
+		free(main->prompt);
 		main->prompt = temp2;
 	}
 	else

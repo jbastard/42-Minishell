@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/23 10:16:53 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:37:10 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,10 @@ int	bi_has_output(int i, char **args)
 
 void	exec_cmd_child(t_cmd *cmd, t_minishell *main, int i)
 {
-	if (!handle_redir(main, cmd))	//peut etre mettre un freeall, pas sur que ca marche
-		exit(0);			//Gerer le status
+	handle_redir(main, cmd);
 	if (i >= 0)
 		exit(main->builtins[i].cmd(cmd->cmd_args + 1, main));
 	execute_external_command(cmd, main);
-	free_all(main);
 	exit(main->last_status);
 }
 
@@ -51,18 +49,17 @@ void	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	pid_t	pid;
 
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
-	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) && !cmd->redir))
-		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	else if (i >= 0 && !cmd->redir)
-		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
+	if (i >= 0 && (bi_has_output(i, cmd->cmd_args + 1) && !cmd->redir))	//
+		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main); 	// Deux fois le meme if avec le meme resultat
+	else if (i >= 0 && !cmd->redir)												//
+		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);		// A quoi ca sert ca ??
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
+		if (!cmd->path)
+			return;
 		pid = fork();
 		if (pid == 0)
-		{
 			exec_cmd_child(cmd, main, i);
-			free_all(main);
-		}
 		waitpid(pid, &main->last_status, 0);
 		if (WIFEXITED(main->last_status))
 			main->last_status = WEXITSTATUS(main->last_status);

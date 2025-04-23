@@ -57,11 +57,7 @@ void	exec_pipe_child(t_cmd *cmd,
 		close(pipefd[1]);
 	if (cmd->next)
 		close(pipefd[0]);
-	if (!handle_redir(main, cmd))
-	{
-		free_all(main);
-		exit(0);
-	}
+	handle_redir(main, cmd);
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
 	if (i >= 0)
 	{

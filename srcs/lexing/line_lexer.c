@@ -85,10 +85,12 @@ t_token	*lexer(char *line, t_minishell *main)
 	while ((size_t)lexer.i < lexer.input_len)
 	{
 		if (lexer.input[lexer.i] == '\'')
-			handle_single_quotes(&lexer);
-		else if (lexer.input[lexer.i] == '\"')
-			handle_double_quotes(&lexer, main);
-		else if (is_special_char(lexer.input[lexer.i]) && !lexer.quote)
+			if (!handle_single_quotes(&lexer))
+				return(free_lexer(lexer.tokens), NULL);
+		if (lexer.input[lexer.i] == '\"')
+			if (!handle_double_quotes(&lexer, main))
+				return(free_lexer(lexer.tokens), NULL);
+		if (is_special_char(lexer.input[lexer.i]) && !lexer.quote)
 			handle_special_char_op(&lexer);
 		else if (lexer.input[lexer.i] == '$' && !lexer.quote)
 			handle_env_var(&lexer, main);

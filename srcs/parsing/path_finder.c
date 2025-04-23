@@ -60,16 +60,21 @@ int	check_cmd(t_minishell *main)
 	temp = main->cmd;
 	while (temp)
 	{
+		if (temp->cmd_args[0][0] == '/' && access(temp->cmd_args[0], F_OK))
+			return (handle_error(main, ERR_FILE_NOT_FOUND,
+								 temp->cmd_args[0]));
 		if (!access(temp->cmd_args[0], X_OK | F_OK))
 		{
 			temp->path = ft_strdup(temp->cmd_args[0]);
 			temp = temp->next;
 			continue ;
 		}
-		else if (temp->cmd_args[0][0] == '/')
-			return (handle_error(main, ERR_FILE_NOT_FOUND,
-					temp->cmd_args[0]));
 		temp->path = find_cmd_path(temp->cmd_args[0], main->env);
+		if (access(temp->cmd_args[0], X_OK | F_OK) || access(temp->path, X_OK | F_OK))
+		{
+			main->last_status = 127;
+			return (ft_dprintf(2, "minishell: command not found: %s\n", temp->cmd_args[0]), 0);
+		}
 		temp = temp->next;
 	}
 	return (0);
