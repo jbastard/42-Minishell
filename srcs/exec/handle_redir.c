@@ -54,29 +54,47 @@ int	redir_append(t_minishell *main, char *file)
 	return (0);
 }
 
+int can_access(t_redir *redir, t_cmd *cmd, int mode)
+{
+	if (!access(redir->file, mode))
+		return (1);
+	return (ft_dprintf(2, "%s: %s: Permission denied\n",
+				cmd->cmd_args[0], cmd->redir->file), 0);
+}
+
 int	handle_redir(t_minishell *main, t_cmd *cmd)
 {
 	t_redir	*redir;
 
 	redir = cmd->redir;
-	while (redir)
-	{
+	while (redir) {
+		if (!can_access(cmd->redir, cmd, R_OK)
+			&& redir->type == TOKEN_REDIR_IN)
+			return (0);
+		if (!can_access(cmd->redir, cmd, R_OK)
+			&& (redir->type == TOKEN_REDIR_IN || redir->type == TOKEN_APPEND))
+			return (0);
 		if (redir->type == TOKEN_REDIR_IN)
-			redir_in(main, redir->file);
+				redir_in(main, redir->file);
 		else if (redir->type == TOKEN_REDIR_OUT)
-			redir_out(main, redir->file);
+				redir_out(main, redir->file);
 		else if (redir->type == TOKEN_APPEND)
-			redir_append(main, redir->file);
+				redir_append(main, redir->file);
 		redir = redir->next;
 	}
-	return (0);
+	return (1);
 }
 
 void	free_all(t_minishell *main)
 {
-	free(main->prompt);
-	free_cmd(main->cmd);
-	free(main->builtins);
-	free_tab(main->env);
-	free_local_env(&main->local_vars);
+	if (main->prompt)
+		free(main->prompt);
+	if (main->cmd)
+		free_cmd(main->cmd);
+	if (main->builtins)
+		free(main->builtins);
+	if (main->env)
+		free_tab(main->env);
+	if (main->local_vars)
+		free_local_env(&main->local_vars);
 }

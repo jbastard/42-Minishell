@@ -21,7 +21,10 @@ int	exit_command(char **args, t_minishell *main)
 	i = 0;
 	words = count_args(args);
 	if (words == 0)
+	{
+		free_all(main);
 		exit_error("", 0, 0);
+	}
 	if (words >= 1)
 	{
 		while (args[0][i])

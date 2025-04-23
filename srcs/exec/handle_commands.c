@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 11:37:10 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/23 10:16:53 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	bi_has_output(int i, char **args)
 
 void	exec_cmd_child(t_cmd *cmd, t_minishell *main, int i)
 {
-	handle_redir(main, cmd);
+	if (!handle_redir(main, cmd))	//peut etre mettre un freeall, pas sur que ca marche
+		exit(0);			//Gerer le status
 	if (i >= 0)
 		exit(main->builtins[i].cmd(cmd->cmd_args + 1, main));
 	execute_external_command(cmd, main);
