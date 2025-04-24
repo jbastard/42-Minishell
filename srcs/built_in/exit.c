@@ -12,6 +12,19 @@
 
 #include "../../includes/minishell.h"
 
+int	exit_num_args(int words, char **args, int i)
+{
+	if (words >= 1)
+	{
+		while (args[0][i])
+		{
+			if (ft_isalpha(args[0][i++]))
+				return (0);
+		}
+	}
+	return (1);
+}
+
 int	exit_command(char **args, t_minishell *main)
 {
 	int	words;
@@ -25,15 +38,9 @@ int	exit_command(char **args, t_minishell *main)
 		free_all(main);
 		exit_error("", 0, 0);
 	}
-	if (words >= 1)
-	{
-		while (args[0][i])
-		{
-			if (ft_isalpha(args[0][i++]))
-				return (free_all(main), exit_error(ERROR_NUM_ARGS, 0, 2), 1);
-		}
-	}
 	i = (unsigned char)ft_atoi(args[0]);
+	if (!exit_num_args(words, args, i))
+		return (free_all(main), exit_error(ERROR_NUM_ARGS, 0, 2), 1);
 	if (words == 1)
 	{
 		free_all(main);

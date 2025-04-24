@@ -31,7 +31,7 @@ int	redir_in(t_minishell *main, char *file)
 int	redir_out(t_minishell *main, char *file)
 {
 	int	fd;
-	
+
 	if (access(file, F_OK) == 0 && access(file, W_OK) != 0)
 		return (handle_error(main, ERR_PERMISSION_DENIED, file));
 	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0664);
@@ -45,7 +45,7 @@ int	redir_out(t_minishell *main, char *file)
 int	redir_append(t_minishell *main, char *file)
 {
 	int	fd;
-	
+
 	if (access(file, F_OK) == 0 && access(file, W_OK) != 0)
 		return (handle_error(main, ERR_PERMISSION_DENIED, file));
 	fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0664);
