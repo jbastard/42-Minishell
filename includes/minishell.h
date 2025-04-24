@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 13:10:34 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:09:11 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ int			unset_command(char **args, t_minishell *main);
 void		add_node_env(char *env, t_minishell *main);
 t_env		*create_env_node(char *env);
 void		print_locals(t_minishell *main);
+int			close_pipes(t_cmd **cmd, int *prev_pipe, int *pipefd);
 	//BI_UTILS_ENV1.C
 int			check_env(char *env, t_minishell *main);
 char		**ft_realloc_tab(char **args, char *env);
@@ -259,7 +260,7 @@ char		*ft_getenv(char *env, t_minishell *main);
 int			get_equals(char *env);
 void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
-//QUOTES_LEXER.C
+	//QUOTES_LEXER.C
 void		error_var(t_lexer *lexer,
 				t_minishell *main,
 				char *env_value,

@@ -90,23 +90,21 @@ int	export_command(char	**args, t_minishell *main)
 		print_locals(main);
 	while (args[i])
 	{
+		if (!is_valid_identifier(args[i]))
+			return (ft_dprintf(2, "minishell : export: "
+					"'%s': not a valid identifier\n", args[i]), 1);
+		if (ft_strchr(args[i], '='))
 		{
-			if (!is_valid_identifier(args[i]))
-				return (printf("minishell : export: "
-						"'%s': not a valid identifier\n", args[i]), 1);
-			if (ft_strchr(args[i], '='))
-			{
-				if (!check_env(args[i], main))
-					main->env = ft_realloc_tab(main->env, args[i]);
-				else
-					main->env = change_env(args[i], main);
-			}
-			if (!find_node_env(args[i], main))
-				add_node_env(args[i], main);
-			else if (ft_strchr(args[i], '='))
-				replace_value_env(args[i], main);
-			i++;
+			if (!check_env(args[i], main))
+				main->env = ft_realloc_tab(main->env, args[i]);
+			else
+				main->env = change_env(args[i], main);
 		}
+		if (!find_node_env(args[i], main))
+			add_node_env(args[i], main);
+		else if (ft_strchr(args[i], '='))
+			replace_value_env(args[i], main);
+		i++;
 	}
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 11:37:10 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:08:40 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
 	if (i >= 0 && !cmd->redir)
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
+	if (!cmd->path)
+		return (ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]), 0);
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
-		if (!cmd->path)
-			return (ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]), 0);
 		pid = fork();
 		if (pid == 0)
 		{
@@ -96,15 +96,7 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 			j = 0;
 		if (cmds->pid > 0)
 		{
-			if (cmds->next && cmds->next->path)
-				close(pipefd[1]);
-			if (prev_pipe != -1)
-				close(prev_pipe);
-			if (pipefd[0])
-				prev_pipe = pipefd[0];
-			if (cmds->next)
-				cmds = cmds->next;
-			else
+			if (!close_pipes(&cmds, &prev_pipe, pipefd))
 				break ;
 		}
 		else if (cmds->pid == -1)

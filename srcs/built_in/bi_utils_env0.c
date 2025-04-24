@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils1.c                                           :+:      :+:    :+:   */
+/*   bi_utils_env0.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 16:56:46 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/14 15:31:48 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:08:32 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,19 @@ void	print_locals(t_minishell *main)
 			printf("declare -x %s\n", test->key);
 		test = test->next;
 	}
+}
+
+int	close_pipes(t_cmd **cmd, int *prev_pipe, int *pipefd)
+{
+	if ((*cmd)->next && (*cmd)->next->path)
+		close(pipefd[1]);
+	if (*prev_pipe != -1)
+		close(*prev_pipe);
+	if (pipefd[0])
+		*prev_pipe = pipefd[0];
+	if ((*cmd)->next)
+		(*cmd) = (*cmd)->next;
+	else
+		return (0);
+	return (1);
 }
