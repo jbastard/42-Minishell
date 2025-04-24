@@ -16,6 +16,8 @@ int	redir_in(t_minishell *main, char *file)
 {
 	int	fd;
 
+	if (access(file, F_OK))
+		return (handle_error(main, ERR_FILE_NOT_FOUND, file));
 	if (access(file, R_OK))
 		return (handle_error(main, ERR_PERMISSION_DENIED, file));
 	fd = open(file, O_RDONLY);
