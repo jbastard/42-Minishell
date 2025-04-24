@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/24 14:08:40 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:41:49 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 	cmd_count = count_commands(cmds);
 	preprocess_heredocs(main, main->cmd);
 	if (cmd_count == 1)
-		exec_one_cmd(cmds, main);
+	{
+		if (exec_one_cmd(cmds, main) == 127)
+			main->last_status = 127;
+	}
 	else
 		exec_multiple_cmds(cmds, main, prev_pipe);
 	cleanup_heredoc_files(cmds);
@@ -62,8 +65,8 @@ int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
 	if (i >= 0 && !cmd->redir)
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	if (!cmd->path)
-		return (ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]), 0);
+	if (!cmd->path && ft_strncmp(cmd->cmd_args[0], "mordex", 7))
+		return (ft_dprintf(2, "%s%s", cmd->cmd_args[0], CNT), 127);
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
 		pid = fork();
@@ -91,9 +94,9 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 	pipefd[0] = 0;
 	while (cmds)
 	{
-		j = 1;
-		if (!create_pipe_and_fork(cmds, main, prev_pipe, pipefd))
-			j = 0;
+		j = create_pipe_and_fork(cmds, main, prev_pipe, pipefd);
+		if (j == 127)
+			main->last_status = 127;
 		if (cmds->pid > 0)
 		{
 			if (!close_pipes(&cmds, &prev_pipe, pipefd))
@@ -102,12 +105,12 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 		else if (cmds->pid == -1)
 			cmds = cmds->next;
 	}
-	if (j)
+	if (j != 127)
 		waitpid(cmds->pid, &main->last_status, 0);
-	if (WIFEXITED(main->last_status))
+	if (WIFEXITED(main->last_status) && j != 127)
 		main->last_status = WEXITSTATUS(main->last_status);
-	else if (WIFSIGNALED(main->last_status))
+	else if (WIFSIGNALED(main->last_status) && j != 127)
 		main->last_status = 128 + WTERMSIG(main->last_status);
-	if (prev_pipe != -1)
+	if (prev_pipe != -1 && j != 127)
 		close(prev_pipe);
 }

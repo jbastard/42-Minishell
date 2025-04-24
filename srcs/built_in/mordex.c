@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 14:08:06 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/10 17:15:02 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:19:20 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ int	mordex_command(char **args, t_minishell *main)
 	while (line)
 	{
 		printf("%s", line);
+		free(line);
 		line = get_next_line(fd);
 	}
 	printf("\n");
+	free(line);
 	close(fd);
 	return (1);
 }

@@ -75,8 +75,9 @@ int	create_pipe_and_fork(t_cmd *cmd,
 							int pipefd[2])
 {
 	cmd->pid = -1;
-	if (!cmd->path)
-		return (ft_dprintf(2, "%s: command not found\n", cmd->cmd_args[0]), 0);
+	if (!cmd->path && ft_strncmp(cmd->cmd_args[0], "mordex", 7))
+		return (ft_dprintf(2, "%s: command not found\n",
+				cmd->cmd_args[0]), 127);
 	if (cmd->next && pipe(pipefd) == -1)
 		perror("pipe");
 	cmd->pid = fork();

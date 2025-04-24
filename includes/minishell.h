@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:26:12 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/24 14:09:11 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:41:17 by nlecreux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define SIG_EXEC 2
 # define SIG_CHILD 3 
 # define ERROR_NUM_ARGS "minishell: exit: numeric argument required\n"
+# define CNT ": command not found\n"
 
 typedef enum e_token_type
 {
