@@ -60,16 +60,17 @@ int	check_cmd(t_minishell *main)
 	temp = main->cmd;
 	while (temp)
 	{
-		if (!access(temp->cmd_args[0], X_OK | F_OK))
+		if (temp->cmd_args && !access(temp->cmd_args[0], X_OK | F_OK))
 		{
 			temp->path = ft_strdup(temp->cmd_args[0]);
 			temp = temp->next;
 			continue ;
 		}
-		else if (temp->cmd_args[0][0] == '/')
+		else if (temp->cmd_args&& temp->cmd_args[0][0] == '/')
 			return (handle_error(main, ERR_FILE_NOT_FOUND,
 					temp->cmd_args[0]));
-		temp->path = find_cmd_path(temp->cmd_args[0], main->env);
+		if (temp->cmd_args)
+			temp->path = find_cmd_path(temp->cmd_args[0], main->env);
 		temp = temp->next;
 	}
 	return (0);

@@ -6,11 +6,28 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/24 14:41:49 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:40:51 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void		no_args_redirs(t_minishell main)
+{
+	t_cmd *cmds = main.cmd;
+	int		fd;
+
+	cmds = main.cmd;
+	fd = 0;
+	while (cmds)
+	{
+		if (!cmds->cmd_args && cmds->redir && (cmds->redir->type == TOKEN_REDIR_OUT || cmds->redir->type == TOKEN_APPEND))
+			fd = open(cmds->redir->file, O_CREAT, 0777);
+		cmds = cmds->next;
+		if (fd)
+			close(fd);
+	}
+}
 
 void	handle_commands(t_cmd *cmds, t_minishell *main)
 {
@@ -20,12 +37,13 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 	prev_pipe = -1;
 	cmd_count = count_commands(cmds);
 	preprocess_heredocs(main, main->cmd);
-	if (cmd_count == 1)
+	no_args_redirs(*main);
+	if (main->cmd->cmd_args && cmd_count == 1)
 	{
 		if (exec_one_cmd(cmds, main) == 127)
 			main->last_status = 127;
 	}
-	else
+	else if (main->cmd->cmd_args)
 		exec_multiple_cmds(cmds, main, prev_pipe);
 	cleanup_heredoc_files(cmds);
 }
@@ -94,6 +112,12 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 	pipefd[0] = 0;
 	while (cmds)
 	{
+		if (!cmds->cmd_args)
+		{
+			cmds = cmds->next ;
+			j = 126;
+			continue ;
+		}
 		j = create_pipe_and_fork(cmds, main, prev_pipe, pipefd);
 		if (j == 127)
 			main->last_status = 127;
@@ -105,7 +129,7 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 		else if (cmds->pid == -1)
 			cmds = cmds->next;
 	}
-	if (j != 127)
+	if (j != 127 && j != 126)
 		waitpid(cmds->pid, &main->last_status, 0);
 	if (WIFEXITED(main->last_status) && j != 127)
 		main->last_status = WEXITSTATUS(main->last_status);
