@@ -108,6 +108,7 @@ int	heredoc(t_minishell *main, char *eof, char *filename)
 		free(line);
 	}
 	close(fd);
+	signal(SIGQUIT, SIG_DFL);
 	g_signal = SIG_EXEC;
 	return (0);
 }

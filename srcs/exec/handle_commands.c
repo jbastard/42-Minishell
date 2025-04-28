@@ -70,7 +70,9 @@ void	exec_cmd_child(t_cmd *cmd, t_minishell *main, int i)
 		free_all(main);
 		exit(j);
 	}
+	signal(SIGQUIT, SIG_DFL);
 	execute_external_command(cmd, main);
+	signal(SIGQUIT, SIG_IGN);
 	free_all(main);
 	exit(main->last_status);
 }
