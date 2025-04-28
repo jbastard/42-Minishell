@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:35:52 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/26 12:15:39 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/28 09:16:57 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ void	add_token(t_token **head, char *value, int type)
 
 void	handle_buffer(t_lexer	*lexer)
 {
-	if (lexer->j > 0)
+	if (lexer->j == 0 && (lexer->input[lexer->i] == '\"' || lexer->input[lexer->i] == '\''))
+	{
+		add_token(&(lexer->tokens), "", TOKEN_WORD);
+		lexer->i++;
+	}
+	else if (lexer->j > 0)
 	{
 		lexer->buffer[lexer->j] = '\0';
 		add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
@@ -102,6 +107,7 @@ t_token	*lexer(char *line, t_minishell *main)
 		else
 			lexer.buffer[lexer.j++] = lexer.input[lexer.i++];
 	}
-	handle_buffer(&lexer);
+	if (lexer.i <= (int)lexer.input_len)
+		handle_buffer(&lexer);
 	return (lexer.tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:50:58 by jbastard          #+#    #+#             */
-/*   Updated: 2025/03/28 11:08:19 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/28 09:18:42 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	handle_env_var(t_lexer *lexer, t_minishell *main)
 int	handle_single_quotes(t_lexer *lexer)
 {
 	lexer->i++;
+	if (lexer->input[lexer->i] == '\'')
+		return (handle_buffer(lexer), 1);
 	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\'')
 		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	if (lexer->input[lexer->i] != '\'')
@@ -79,6 +81,8 @@ int	handle_single_quotes(t_lexer *lexer)
 int	handle_double_quotes(t_lexer *lexer, t_minishell *main)
 {
 	lexer->i++;
+	if (lexer->input[lexer->i] == '\"')
+		return (handle_buffer(lexer), 1);
 	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\"')
 	{
 		if (lexer->input[lexer->i] == '$'
@@ -98,6 +102,5 @@ int	handle_double_quotes(t_lexer *lexer, t_minishell *main)
 	lexer->i++;
 	while (!is_whitespaces(lexer->input[lexer->i]))
 		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
-	handle_buffer(lexer);
-	return (1);
+	return (handle_buffer(lexer), 1);
 }

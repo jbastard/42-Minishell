@@ -66,7 +66,7 @@ int	check_cmd(t_minishell *main)
 			temp = temp->next;
 			continue ;
 		}
-		else if (temp->cmd_args&& temp->cmd_args[0][0] == '/')
+		else if (temp->cmd_args && temp->cmd_args[0][0] == '/')
 			return (handle_error(main, ERR_FILE_NOT_FOUND,
 					temp->cmd_args[0]));
 		if (temp->cmd_args)
