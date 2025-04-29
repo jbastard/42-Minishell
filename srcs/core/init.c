@@ -12,6 +12,17 @@
 
 #include "../../includes/minishell.h"
 
+int is_history(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+		if (line[i++] != ' ')
+			return (1);
+	return (0);
+}
+
 t_minishell	init_minishell(void)
 {
 	t_minishell	main;

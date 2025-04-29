@@ -196,6 +196,7 @@ t_builtin	*init_builtins(void);
 void		init_local_env(t_minishell *main);
 t_minishell	init_minishell(void);
 void		init_lexer(t_lexer *lexer, const char *input);
+int			is_history(char *line);
 	//PROMPT.C
 char		*better_join(char **tabl, char sep);
 int			count_chars_tab(char **tabl);
