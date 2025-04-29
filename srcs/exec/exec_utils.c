@@ -75,7 +75,7 @@ int	create_pipe_and_fork(t_cmd *cmd,
 							int pipefd[2])
 {
 	cmd->pid = -1;
-	if (!cmd->path)
+	if (!cmd->path && 0 > is_builtin(main->builtins, cmd->cmd_args[0]))
 		return (ft_dprintf(2, "%s: command not found\n",
 				cmd->cmd_args[0]), 127);
 	if (cmd->next && pipe(pipefd) == -1)
