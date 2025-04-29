@@ -91,7 +91,7 @@ int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
 	if (i >= 0 && !cmd->redir)
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	if (!cmd->path)
+	if (!cmd->path && i < 0)
 		return (ft_dprintf(2, "%s%s", cmd->cmd_args[0], CNT), 127);
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
