@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:14:44 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/28 10:42:09 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:36:34 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	handle_error1(t_minishell *main, t_error_type type, char *info)
 	{
 		ft_dprintf(2, "minishell:"
 			" no such file or directory: %s\n", info);
-		main->last_status = 127;
+		main->last_status = 1;
 	}
 	else if (type == ERR_PERMISSION_DENIED)
 	{

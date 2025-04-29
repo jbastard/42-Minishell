@@ -6,21 +6,27 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 08:58:04 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/25 11:40:51 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:23:06 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void		no_args_redirs(t_minishell main)
+void		no_args_redirs(t_minishell *main)
 {
-	t_cmd *cmds = main.cmd;
+	t_cmd *cmds;
 	int		fd;
 
-	cmds = main.cmd;
 	fd = 0;
+	cmds = main->cmd;
 	while (cmds)
 	{
+		if (cmds->redir && cmds->redir->type == TOKEN_REDIR_IN &&
+			access(cmds->redir->file, F_OK))
+			handle_error(main, ERR_FILE_NOT_FOUND, cmds->redir->file);
+		else if (cmds->redir && cmds->redir->type == TOKEN_REDIR_IN &&
+			access(cmds->redir->file, R_OK))
+			handle_error(main, ERR_PERMISSION_DENIED, cmds->redir->file);
 		if (!cmds->cmd_args && cmds->redir && (cmds->redir->type == TOKEN_REDIR_OUT || cmds->redir->type == TOKEN_APPEND))
 			fd = open(cmds->redir->file, O_CREAT, 0777);
 		cmds = cmds->next;
@@ -37,7 +43,7 @@ void	handle_commands(t_cmd *cmds, t_minishell *main)
 	prev_pipe = -1;
 	cmd_count = count_commands(cmds);
 	preprocess_heredocs(main, main->cmd);
-	no_args_redirs(*main);
+	no_args_redirs(main);
 	if (main->cmd->cmd_args && cmd_count == 1)
 	{
 		if (exec_one_cmd(cmds, main) == 127)
@@ -85,7 +91,7 @@ int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	i = is_builtin(main->builtins, cmd->cmd_args[0]);
 	if (i >= 0 && !cmd->redir)
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
-	if (!cmd->path && ft_strncmp(cmd->cmd_args[0], "mordex", 7))
+	if (!cmd->path)
 		return (ft_dprintf(2, "%s%s", cmd->cmd_args[0], CNT), 127);
 	if ((i < 0 || cmd->redir) && bi_has_output(i, cmd->cmd_args + 1))
 	{
@@ -99,7 +105,7 @@ int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 		if (WIFEXITED(main->last_status))
 			main->last_status = WEXITSTATUS(main->last_status);
 		else if (WIFSIGNALED(main->last_status))
-			main->last_status = 128 + WTERMSIG(main->last_status);
+			main->last_status = 130;
 	}
 	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
@@ -110,14 +116,17 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 {
 	int		pipefd[2];
 	int		j;
+	t_cmd	*cmd;
+	int		last_status;
 
+	last_status = -1;
+	cmd = cmds;
 	pipefd[0] = 0;
 	while (cmds)
 	{
 		if (!cmds->cmd_args)
 		{
 			cmds = cmds->next ;
-			j = 126;
 			continue ;
 		}
 		j = create_pipe_and_fork(cmds, main, prev_pipe, pipefd);
@@ -131,12 +140,16 @@ void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
 		else if (cmds->pid == -1)
 			cmds = cmds->next;
 	}
-	if (j != 127 && j != 126)
-		waitpid(cmds->pid, &main->last_status, 0);
-	if (WIFEXITED(main->last_status) && j != 127)
-		main->last_status = WEXITSTATUS(main->last_status);
-	else if (WIFSIGNALED(main->last_status) && j != 127)
-		main->last_status = 128 + WTERMSIG(main->last_status);
-	if (prev_pipe != -1 && j != 127)
+	while (cmd)
+	{
+		last_status = -1;
+		waitpid(cmd->pid, &last_status, 0);
+		if (WIFEXITED(last_status))
+			main->last_status = WEXITSTATUS(last_status);
+		else if (WIFSIGNALED(last_status))
+				main->last_status = 128 + WTERMSIG(last_status);
+		cmd = cmd->next;
+	}
+	if (prev_pipe != -1)
 		close(prev_pipe);
 }
