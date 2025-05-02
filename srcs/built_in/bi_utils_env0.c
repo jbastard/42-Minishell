@@ -41,9 +41,9 @@ t_env	*create_env_node(char *env)
 	if (!new_node)
 		return (NULL);
 	equal_pos = ft_strchr(env, '=');
+	key_len = equal_pos - env;
 	if (equal_pos)
 	{
-		key_len = equal_pos - env;
 		new_node->key = malloc(key_len + 1);
 		if (!new_node->key)
 			return (free(new_node), NULL);

@@ -33,23 +33,11 @@ char	**change_env(char *env, t_minishell *main)
 int	find_node_env(char *env, t_minishell *main)
 {
 	t_env	*current;
-	char	*temp;
-	int		i;
 
 	current = main->local_vars;
-	temp = ft_strchr(env, '=');
 	while (current)
 	{
-		if (temp)
-			i = ft_strlen(env) - ft_strlen(temp) - 1;
-		else
-		{
-			if (ft_strlen(env) > ft_strlen(current->key))
-				i = ft_strlen(env);
-			else
-				i = ft_strlen(current->key);
-		}
-		if (!ft_strncmp(current->key, env, i))
+		if (!ft_strncmp(current->key, env, len_equal(env)))
 			return (1);
 		current = current->next;
 	}
@@ -64,7 +52,7 @@ void	replace_value_env(char *env, t_minishell *main)
 	current = main->local_vars;
 	while (current)
 	{
-		if (!ft_strncmp(current->key, env, ft_strlen(current->key)))
+		if (!ft_strncmp(current->key, env, ft_strlen(current->key) + 1))
 		{
 			if (current->value)
 				free(current->value);
@@ -101,7 +89,10 @@ int	export_command(char	**args, t_minishell *main)
 				main->env = change_env(args[i], main);
 		}
 		if (!find_node_env(args[i], main))
+		{
+			ft_dprintf(1,"test\n");
 			add_node_env(args[i], main);
+		}
 		else if (ft_strchr(args[i], '='))
 			replace_value_env(args[i], main);
 		i++;

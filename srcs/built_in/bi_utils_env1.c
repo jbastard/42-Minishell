@@ -18,7 +18,7 @@ int	check_env(char *env, t_minishell *main)
 	int	j;
 
 	i = 0;
-	j = len_equal(env) + 1;
+	j = len_equal(env);
 	while (main->env[i])
 	{
 		if (!ft_strncmp(env, main->env[i], j))
