@@ -50,6 +50,7 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(LEXING_DIR)quotes_lexer.c \
 				$(LEXING_DIR)utils_lexer.c \
 				$(LEXING_DIR)lexer_main_loop.c \
+				$(LEXING_DIR)handle_env_var.c \
 				$(BUILT-IN_DIR)cd.c \
 				$(BUILT-IN_DIR)echo.c \
 				$(BUILT-IN_DIR)env.c \

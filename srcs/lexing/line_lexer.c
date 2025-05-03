@@ -48,9 +48,12 @@ void	add_token(t_token **head, char *value, int type)
 
 void	handle_buffer(t_lexer *lexer)
 {
+	if (lexer->j == 0 && !lexer->force_token)
+		return ;
 	lexer->buffer[lexer->j] = '\0';
 	add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
 	lexer->j = 0;
+	lexer->force_token = 0;
 }
 
 void	add_redirection_token(t_lexer *lexer, char c)

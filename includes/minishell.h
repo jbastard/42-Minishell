@@ -136,6 +136,7 @@ struct s_lexer
 	char		buffer[1024];
 	int			i;
 	int			j;
+	int			force_token;
 	char		quote;
 	int			error;
 };
@@ -263,10 +264,7 @@ int			get_equals(char *env);
 void		add_double_token(t_lexer *lexer, char c);
 void		handle_special_char_op(t_lexer *lexer);
 	//QUOTES_LEXER.C
-void		error_var(t_lexer *lexer,
-				t_minishell *main,
-				char *env_value,
-				int k);
+void		error_var(t_lexer *lexer, t_minishell *main);
 void		handle_env_var(t_lexer *lexer, t_minishell *main);
 int			handle_single_quotes(t_lexer *lexer);
 int			handle_double_quotes(t_lexer *lexer, t_minishell *main);

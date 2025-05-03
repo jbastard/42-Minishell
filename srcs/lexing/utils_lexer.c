@@ -12,36 +12,39 @@
 
 #include "../../includes/minishell.h"
 
-char	*ft_getenv(char *env, t_minishell *main)
+char	*ft_getenv(char *name, t_minishell *main)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		len;
 
+	if (!main || !main->env || !name)
+		return (NULL);
+	len = ft_strlen(name);
 	i = 0;
 	while (main->env[i])
 	{
-		j = len_equal(main->env[i]);
-		if (j < len_equal(env))
-			j = len_equal(env);
-		if (!ft_strncmp(env, main->env[i], j))
+		if (!ft_strncmp(main->env[i], name, len)
+			&& main->env[i][len] == '=')
 			return (main->env[i]);
 		i++;
 	}
 	return (NULL);
 }
 
-int	get_equals(char *env)
+int	get_equals(char *str)
 {
 	int	i;
 
+	if (!str)
+		return (-1);
 	i = 0;
-	while (env[i])
+	while (str[i])
 	{
-		if (env[i] == '=')
+		if (str[i] == '=')
 			return (i + 1);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 void	add_double_token(t_lexer *lexer, char c)

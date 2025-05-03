@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 11:58:57 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/05/03 09:32:21 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/05/03 12:11:48 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	echo_command(char **args, t_minishell *main)
 		{
 			printf("%s", args[i]);
 			if (args[i + 1])
-				printf("_");
+				printf(" ");
 			i++;
 		}
 	}
