@@ -20,7 +20,6 @@ int	echo_command(char **args, t_minishell *main)
 	(void)main;
 	newl = 1;
 	i = 0;
-
 	if (args[0])
 	{
 		if (!(ft_strncmp(args[i], "-n", 2)))

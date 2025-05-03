@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int is_history(char *line)
+int	is_history(char *line)
 {
 	int	i;
 

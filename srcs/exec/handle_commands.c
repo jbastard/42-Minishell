@@ -12,22 +12,24 @@
 
 #include "../../includes/minishell.h"
 
-void		no_args_redirs(t_minishell *main)
+void	no_args_redirs(t_minishell *main)
 {
-	t_cmd *cmds;
+	t_cmd	*cmds;
 	int		fd;
 
 	fd = 0;
 	cmds = main->cmd;
 	while (cmds)
 	{
-		if (cmds->redir && cmds->redir->type == TOKEN_REDIR_IN &&
-			access(cmds->redir->file, F_OK))
+		if (cmds->redir && cmds->redir->type == TOKEN_REDIR_IN
+			&& access(cmds->redir->file, F_OK))
 			handle_error(main, ERR_FILE_NOT_FOUND, cmds->redir->file);
-		else if (cmds->redir && cmds->redir->type == TOKEN_REDIR_IN &&
-			access(cmds->redir->file, R_OK))
+		else if (cmds->redir && cmds->redir->type == TOKEN_REDIR_IN
+			&& access(cmds->redir->file, R_OK))
 			handle_error(main, ERR_PERMISSION_DENIED, cmds->redir->file);
-		if (!cmds->cmd_args && cmds->redir && (cmds->redir->type == TOKEN_REDIR_OUT || cmds->redir->type == TOKEN_APPEND))
+		if (!cmds->cmd_args && cmds->redir
+			&& (cmds->redir->type == TOKEN_REDIR_OUT
+				|| cmds->redir->type == TOKEN_APPEND))
 			fd = open(cmds->redir->file, O_CREAT, 0777);
 		cmds = cmds->next;
 		if (fd)
@@ -110,46 +112,4 @@ int	exec_one_cmd(t_cmd *cmd, t_minishell *main)
 	else if (i >= 0 && cmd->redir && !bi_has_output(i, cmd->cmd_args + 1))
 		main->last_status = main->builtins[i].cmd(cmd->cmd_args + 1, main);
 	return (1);
-}
-
-void	exec_multiple_cmds(t_cmd *cmds, t_minishell *main, int prev_pipe)
-{
-	int		pipefd[2];
-	int		j;
-	t_cmd	*cmd;
-	int		last_status;
-
-	last_status = -1;
-	cmd = cmds;
-	pipefd[0] = 0;
-	while (cmds)
-	{
-		if (!cmds->cmd_args)
-		{
-			cmds = cmds->next ;
-			continue ;
-		}
-		j = create_pipe_and_fork(cmds, main, prev_pipe, pipefd);
-		if (j == 127)
-			main->last_status = 127;
-		if (cmds->pid > 0)
-		{
-			if (!close_pipes(&cmds, &prev_pipe, pipefd))
-				break ;
-		}
-		else if (cmds->pid == -1)
-			cmds = cmds->next;
-	}
-	while (cmd)
-	{
-		last_status = -1;
-		waitpid(cmd->pid, &last_status, 0);
-		if (WIFEXITED(last_status))
-			main->last_status = WEXITSTATUS(last_status);
-		else if (WIFSIGNALED(last_status))
-				main->last_status = 128 + WTERMSIG(last_status);
-		cmd = cmd->next;
-	}
-	if (prev_pipe != -1)
-		close(prev_pipe);
 }

@@ -38,6 +38,7 @@ C_FILES		=	$(CORE_DIR)init.c \
 				$(EXEC_DIR)heredoc.c \
 				$(EXEC_DIR)handle_redir.c \
 				$(EXEC_DIR)exec_utils.c \
+				$(EXEC_DIR)exec_multiple_cmd.c \
 				$(ERROR_DIR)error_handler.c \
 				$(ERROR_DIR)all_kinds_of_free.c \
 				$(PARSING_DIR)signal_handler.c \
