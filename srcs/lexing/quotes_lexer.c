@@ -61,28 +61,22 @@ void	handle_env_var(t_lexer *lexer, t_minishell *main)
 int	handle_single_quotes(t_lexer *lexer)
 {
 	lexer->i++;
-	if (lexer->input[lexer->i] == '\'')
-		return (handle_buffer(lexer), 1);
 	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\'')
 		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
 	if (lexer->input[lexer->i] != '\'')
 	{
 		ft_dprintf(2, "minishell: syntax error: unclosed single quote\n");
 		lexer->error = 2;
+		lexer->i = (int)lexer->input_len;
 		return (0);
 	}
 	lexer->i++;
-	while (!is_whitespaces(lexer->input[lexer->i]))
-		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
-	handle_buffer(lexer);
 	return (1);
 }
 
 int	handle_double_quotes(t_lexer *lexer, t_minishell *main)
 {
 	lexer->i++;
-	if (lexer->input[lexer->i] == '\"')
-		return (handle_buffer(lexer), 1);
 	while (lexer->input[lexer->i] && lexer->input[lexer->i] != '\"')
 	{
 		if (lexer->input[lexer->i] == '$'
@@ -97,10 +91,9 @@ int	handle_double_quotes(t_lexer *lexer, t_minishell *main)
 	{
 		ft_dprintf(2, "minishell: syntax error: unclosed double quote\n");
 		lexer->error = 2;
+		lexer->i = (int)lexer->input_len;
 		return (0);
 	}
 	lexer->i++;
-	while (!is_whitespaces(lexer->input[lexer->i]))
-		lexer->buffer[lexer->j++] = lexer->input[lexer->i++];
-	return (handle_buffer(lexer), 1);
+	return (1);
 }

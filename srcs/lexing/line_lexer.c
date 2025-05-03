@@ -46,19 +46,11 @@ void	add_token(t_token **head, char *value, int type)
 	}
 }
 
-void	handle_buffer(t_lexer	*lexer)
+void	handle_buffer(t_lexer *lexer)
 {
-	if (lexer->j == 0 && (lexer->input[lexer->i] == '\"' || lexer->input[lexer->i] == '\''))
-	{
-		add_token(&(lexer->tokens), "", TOKEN_WORD);
-		lexer->i++;
-	}
-	else if (lexer->j > 0)
-	{
-		lexer->buffer[lexer->j] = '\0';
-		add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
-		lexer->j = 0;
-	}
+	lexer->buffer[lexer->j] = '\0';
+	add_token(&(lexer->tokens), lexer->buffer, TOKEN_WORD);
+	lexer->j = 0;
 }
 
 void	add_redirection_token(t_lexer *lexer, char c)
@@ -80,34 +72,4 @@ void	add_redirection_token(t_lexer *lexer, char c)
 	else if (c == '|')
 		add_token(&(lexer->tokens), buffer, TOKEN_PIPE);
 	lexer->i++;
-}
-
-t_token	*lexer(char *line, t_minishell *main)
-{
-	t_lexer	lexer;
-
-	init_lexer(&lexer, line);
-	while ((size_t)lexer.i < lexer.input_len)
-	{
-		if (lexer.input[lexer.i] == '\'')
-			if (!handle_single_quotes(&lexer))
-				return (free_lexer(lexer.tokens), NULL);
-		if (lexer.input[lexer.i] == '\"')
-			if (!handle_double_quotes(&lexer, main))
-				return (free_lexer(lexer.tokens), NULL);
-		if (is_special_char(lexer.input[lexer.i]) && !lexer.quote)
-			handle_special_char_op(&lexer);
-		else if (lexer.input[lexer.i] == '$' && !lexer.quote)
-			handle_env_var(&lexer, main);
-		else if (is_whitespaces(lexer.input[lexer.i]) && !lexer.quote)
-		{
-			handle_buffer(&lexer);
-			lexer.i++;
-		}
-		else
-			lexer.buffer[lexer.j++] = lexer.input[lexer.i++];
-	}
-	if (lexer.i <= (int)lexer.input_len)
-		handle_buffer(&lexer);
-	return (lexer.tokens);
 }

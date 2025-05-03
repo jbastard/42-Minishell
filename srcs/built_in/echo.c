@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 11:58:57 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/02/25 15:08:30 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/05/03 09:32:21 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	echo_command(char **args, t_minishell *main)
 	(void)main;
 	newl = 1;
 	i = 0;
+
 	if (args[0])
 	{
 		if (!(ft_strncmp(args[i], "-n", 2)))
@@ -31,7 +32,7 @@ int	echo_command(char **args, t_minishell *main)
 		{
 			printf("%s", args[i]);
 			if (args[i + 1])
-				printf(" ");
+				printf("_");
 			i++;
 		}
 	}
