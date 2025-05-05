@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 12:15:00 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/03/10 17:14:08 by nlecreux         ###   ########.fr       */
+/*   Updated: 2025/05/05 09:42:20 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	exit_num_args(int words, char **args, int i)
 {
 	i = 0;
-
 	if (words >= 1)
 	{
 		while (args[0][i])

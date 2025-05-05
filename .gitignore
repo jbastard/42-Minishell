@@ -3,3 +3,5 @@ heredoc.tmp
 objs/
 .idea/
 .vscode/
+libft/src/*/*.o
+libft/libft.a

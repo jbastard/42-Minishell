@@ -6,7 +6,7 @@
 /*   By: jbastard <jbastard@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 08:42:36 by jbastard          #+#    #+#             */
-/*   Updated: 2025/04/18 11:42:17 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/05/05 09:51:53 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*generate_tmp_name(int i)
 	char	*tmpname;
 
 	num = ft_itoa(i);
-	tmpname = ft_strjoin("heredoc_", num);
+	tmpname = ft_strjoin("/tmp/heredoc_", num);
 	free(num);
 	return (tmpname);
 }

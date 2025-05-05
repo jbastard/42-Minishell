@@ -6,7 +6,7 @@
 /*   By: nlecreux <nlecreux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 11:37:51 by nlecreux          #+#    #+#             */
-/*   Updated: 2025/04/28 07:49:00 by jbastard         ###   ########.fr       */
+/*   Updated: 2025/05/05 09:46:43 by jbastard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	cd_command(char **args, t_minishell *main)
 	if (!args || !args[0] || args[0][0] == 0)
 	{
 		path = getenv("HOME");
-		if (!chdir(path))
+		if (path && !chdir(path))
 			return (0);
 		else
 			return (printf("minishell: cd: HOME not set\n"), 1);
