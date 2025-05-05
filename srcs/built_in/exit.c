@@ -14,6 +14,8 @@
 
 int	exit_num_args(int words, char **args, int i)
 {
+	i = 0;
+
 	if (words >= 1)
 	{
 		while (args[0][i])
