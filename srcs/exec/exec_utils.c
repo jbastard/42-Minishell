@@ -65,7 +65,9 @@ void	exec_pipe_child(t_cmd *cmd,
 		free_all(main);
 		exit(j);
 	}
+	signal(SIGQUIT, SIG_DFL);
 	execute_external_command(cmd, main);
+	signal(SIGQUIT, SIG_IGN);
 	exit(main->last_status);
 }
 
